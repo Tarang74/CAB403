@@ -1,20 +1,18 @@
-# QUT-Notes-Template - Unit name
+# CAB403 - Systems Programming
 
-## Unit coordinator name
+## Dr Timothy Chappell
 
-### 
+### Semester 2, 2023
 
 ---
 
 ## Downloads
 
-Lecture notes download: [QUT-Notes-Template Lecture Notes PDF](https://www.github.com/Tarang74/QUT-Notes-Template/raw/main/QUT-Notes-Template%20Lecture%20Notes.pdf)
-
-Exam notes download: [QUT-Notes-Template Exam Notes PDF](https://www.github.com/Tarang74/QUT-Notes-Template/raw/main/QUT-Notes-Template%20Exam%20Notes.pdf)
+Lecture notes download: [CAB403 Lecture Notes PDF](https://www.github.com/Tarang74/CAB403/raw/main/CAB403%20Lecture%20Notes.pdf)
 
 ---
 
-This repository provides **lecture notes** and **exam notes** for **QUT-Notes-Template - Unit name**.
+This repository provides **lecture notes** for **CAB403 - Systems Programming**.
 
 *The contents of the lecture notes are described below.*
 
