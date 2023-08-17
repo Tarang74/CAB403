@@ -5,6 +5,7 @@
 
 % Additional packages & macros
 \usepackage[skip=8pt]{parskip}
+\usepackage{multirow}
 
 % Header and footer
 \newcommand{\unitName}{Systems Programming}
@@ -381,7 +382,7 @@ There are two types of multiprocessor systems:
     Multicore systems:
     \begin{itemize}
         \item are more efficient than systems with multiple chips with single cores,
-            because on-chip communication is faster than between-chip communication.
+              because on-chip communication is faster than between-chip communication.
         \item use significantly less power than multiple single core chips.
     \end{itemize}
     Each core has its own local cache, known as \textbf{level-1}, or \textbf{L1 cache}.
@@ -416,9 +417,9 @@ There are two types of multiprocessor systems:
 \end{tcolorboxlarge}
 
 \begin{tcolorboxlarge}[title={Blade Servers}, parbox=false]
-Blade servers are systems in which multiple processor boards, I/O boards, and \linebreak networking boards are
-placed in the same chassis. These servers consist of multiple independent multiprocessor systems,
-that runs its own operating system.
+    Blade servers are systems in which multiple processor boards, I/O boards, and \linebreak networking boards are
+    placed in the same chassis. These servers consist of multiple independent multiprocessor systems,
+    that runs its own operating system.
 \end{tcolorboxlarge}
 
 \subsubsection{Clustered Systems}
@@ -446,11 +447,11 @@ and are usually connected via a \textbf{local-area network} (LAN).
     Clustering can be structured asymmetrically or symmetrically:
     \begin{itemize}
         \item \textbf{Asymmetric clustering} has one machine in \textbf{hot-standby mode},
-        while the other runs applications. The hot-standby host machine monitors the active server,
-        so that if it fails, it will become the active server.
+              while the other runs applications. The hot-standby host machine monitors the active server,
+              so that if it fails, it will become the active server.
         \item \textbf{Symmetric clustering} has multiple hosts running applications, while monitoring each other.
-        This structure is more efficient as it uses all available hardware, but only if more than one
-        application is running.
+              This structure is more efficient as it uses all available hardware, but only if more than one
+              application is running.
     \end{itemize}
 \end{tcolorboxlarge}
 
@@ -514,8 +515,8 @@ For processes that are larger than \textbf{physical memory}, \textbf{virtual mem
 This arrangement of memories addresses memory usage constraints.
 
 \emph{Both multiprogramming and multitasking systems must provide a \textbf{file system} to allow processes to access data stored on secondary storage.
-In addition to this, they must \textbf{protect resources} from inappropriate use, provide mechanisms to process \textbf{synchronisation and communication}, and
-ensure that processes do not get stuck in a \textbf{deadlock}.}
+    In addition to this, they must \textbf{protect resources} from inappropriate use, provide mechanisms to process \textbf{synchronisation and communication}, and
+    ensure that processes do not get stuck in a \textbf{deadlock}.}
 \subsection{Dual-Mode Operation}
 As the operating system and users share hardware and software resources, the operating system must ensure that
 malicious programs cannot cause other programs (or the operating system itself) to execute incorrectly.
@@ -533,6 +534,13 @@ returning control to the user program.
 
 This also allows us to designate certain machine instructions as \textbf{privileged instructions}, which can only be executed in kernel mode.
 For example, the instruction to switch from user mode to kernel mode is a privileged instruction.
+
+An example is shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{figures/dual_mode.pdf}
+    % \caption{} % \label{}
+\end{figure}
 \subsection{Multi-Mode Operation}
 The dual-mode concept can be extended to include multiple modes of operation, where each mode has a different level of privilege.
 One such example of this is with CPUs that support virtualisation, where a separate mode is used to indicate when the \textbf{virtual machine manager} (VMM)
@@ -544,5 +552,431 @@ To ensure that the operating system maintains control over the CPU, a \textbf{ti
     \item The timer is decremented for every clock tick
     \item An interrupt is generated when the timer reaches 0
     \item The operating system decides whether to regain control of the CPU, or allow the program to continue running
+\end{itemize}
+\section{Operating System Structures}
+An operating system provides an environment for executing programs and services to programs and users.
+One set of operating system services provides functions that are helpful to the \textbf{user}:
+\begin{itemize}
+    \item \textbf{User interface} --- almost all operating systems have a \textbf{user interface} (UI) that is either \textbf{command-line} or \textbf{graphical}.
+          This interface can be interacted with via the keyboard or mouse. Touchscreens also provide \textbf{touch screen interfaces}.
+    \item \textbf{Program execution} --- The system must be able to load programs into memory to run them, and also end their execution, either normally, or abnormally (due to an error).
+    \item \textbf{I/O operations} --- A running program may require I/O, which may involve a file or an I/O device. The operating system provides a uniform interface to I/O devices.
+    \item \textbf{File-system manipulation} --- Programs need to read and write files or directories, create or delete them by name, search for files, list file information, and manage permissions and ownership.
+    \item \textbf{Communications} --- Processes may exchange information, on the same computer or between computers over a network. Communications may be via \textbf{shared memory}, in which two or more processes read and write to a shared section of memory, or through \textbf{message passing}, where packets of information in predefined formats are moved between processes by the operating system.
+    \item \textbf{Error detection} --- The operating system must detect and correct errors constantly.
+          \begin{itemize}
+              \item Errors may occur in the CPU and memory hardware (memory errors or power failures), I/O devices (parity errors or connection failures on a network, or lack of paper in a printer), and in user programs (division by zero or invalid memory access).
+              \item The operating system must take the appropriate action to ensure correct and consistent computing.
+              \item Debugging facilities can enhance the user's and programmer's abilities to efficiently use the system.
+          \end{itemize}
+\end{itemize}
+Another set of operating system functions exist to ensure efficient operation of the system via resource sharing:
+\begin{itemize}
+    \item \textbf{Resource allocation} --- When multiple users or multiple jobs running concurrently, resources must be allocated to each of them.
+          \begin{itemize}
+              \item some resources (CPU cycles, main memory, and file storage), may have a special allocation code
+              \item others (such as I/O devices) may have general request and release codes
+          \end{itemize}
+    \item \textbf{Accounting} (\textbf{logging}) --- Keeping track of which programs use how much and what kinds of computer resources.
+          This is valuable for system administration where a system can be fine-tuned to improve performance.
+    \item \textbf{Protection and security} --- The owners of information stored in a multi-user or networked system must be able to control access to that information.
+          \begin{itemize}
+              \item Concurrent processes should not interfere with each other or the operating system itself
+              \item \textbf{Protection} ensures that all access to system resources is controlled
+              \item \textbf{Security} requires authentication from external users. This extends to defending external I/O devices from invalid access attempts
+              \item If a system is to be protected and secure, precautions must be instituted throughout it. A chain is only as strong as its weakest link.
+          \end{itemize}
+\end{itemize}
+\subsection{User and Operating System Interface}
+There are many ways for users to interface with the operating system.
+\subsubsection{Command Interpreters}
+Most operating systems, including, Linux, UNIX, and Windows, treat command interpreters as a \textbf{special program} that is running when a process is initiated. On systems with multiple command interpreters, these are known as \textbf{shells}.
+
+For example, on UNIX and Linux systems, users may choose among several shells including the \textbf{C shell}, \textbf{Bourne-Again shell}, \textbf{Korn shell}, and others.
+
+The main function of a command interpreter is to fetch and execute user-specified commands.
+These commands can be implemented in two general ways:
+\begin{itemize}
+    \item \textbf{Built-in commands} --- Commands that are interpreted directly by the command interpreter and do not require the execution of another program.
+    \item \textbf{System programs} --- The command interpreter does not understand the command, and uses the command to identify a file to be loaded into memory and executed.
+\end{itemize}
+If the latter, adding new commands to the system is as simple as writing a new program, and modifying existing programs does not require shell modification.
+\subsubsection{Graphical User Interface}
+Rather than entering commands directly via a command-line interface, users can use the mouse, keyboard, and monitor to interact with
+images and icons on the screen (the desktop). Clicking mouse buttons may invoke additional actions that can provide information, display options,
+execute functions, open directories (folders), and so on.
+
+Many systems now include both a CLI and GUI:
+\begin{itemize}
+    \item \textbf{macOS} is implemented on the UNIX kernel, and provides an \textit{Aqua} GUI and a command-line interface
+    \item \textbf{Windows} provides a standard GUI and a CLI
+    \item \textbf{UNIX and Linux} provide CLI shells with optional GUIs such as \textit{K Desktop Environment} (KDE), or the GNOME desktop by the GNU project.
+\end{itemize}
+\subsubsection{Touch Screen Interface}
+As a command-line or mouse-and-keyboard system is impractical for mobile systems, phones, tablets, and other mobile devices use a touch screen interface.
+These devices require the user to interact with the screen directly using gestures and a virtual keyboard.
+\subsection{System Calls}
+System calls provide an interface to the services made available by an operating system.
+These calls are generally available as functions written in C and C++, or sometimes Assembly.
+
+These functions are typically accessed via a high-level \textbf{application programming interface} (API),
+rather than direct system calls.
+
+Observe the following example of a system call sequence where we wish to copy a file's contents into another file:
+\begin{minted}{text}
+Acquire input file name
+  Write prompt to screen
+  Accept input
+Acquire output file name
+  Write prompt to screen
+  Accept input
+Open the input file
+  if file doesn't exist, abort
+Create output file
+  if file exists, abort
+Loop
+  Read from input file
+  Write to output file
+Until read fails
+Close output file
+Write completion message to screen
+Terminate normally
+\end{minted}
+\subsection{Application Programming Interface}
+Even a simple program makes heavy use of the operating system.
+For this reason, application programmers design programs according to an
+\textbf{application programming interface} (API). This API specifies a set of functions
+that are available to an application programmer, including the parameters that are passed to each function
+and the return values the programmer can expect. On UNIX systems, we can use the \mintinline{text}|man|
+command to view the API for a given function.
+
+Some examples of APIs include:
+\begin{itemize}
+    \item the \textbf{Windows API} for Windows systems
+    \item the \textbf{POSIX API} for UNIX, Linux, and macOS
+\end{itemize}
+A programmer accesses an API via a \textbf{library} of code, provided by the operating system.
+In the case of UNIX and Linux, programs written in the C language use a library called \textbf{libc}.
+
+There are two main reasons for programming according to an API:
+\begin{itemize}
+    \item \textbf{Program portability} --- a program written to an API can be compiled on any system that supports that API
+    \item \textbf{Ease of implementation} --- making system calls manually may require more work and a deeper understanding of system functions
+\end{itemize}
+\subsubsection{System Call Interface}
+An important factor in handling system calls is the \textbf{run-time environment} (RTE),
+which is a suite of software needed to execute applications written in a particular programming language,
+including compilers, interpreters, libraries and loaders. The RTE provides a \textbf{system-call interface}
+that serves as a link to system calls made available by the operating system.
+
+The system-call interface \textbf{intercepts} function calls in the API and invokes the necessary system calls
+within the operating system. Typically a number is associated with each system call, and the system-call interface
+maintains a table indexed according to these numbers. The system-call interface invokes the intended system call
+in the operating system kernel and returns the status of the system call with any return values.
+
+Thus, the caller does not need to know anything about how the system call is implemented, rather it only needs to
+know obey the API and understand what the operating system will do as a result of this call. Below is an example
+of a user application invoking the \mintinline{text}|open()| system call:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/system_call_open.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{System Call Parameter Passing}
+Often more information is required than simply the identity of the desired system call.
+There are three general methods used to pass parameters to the operating system:
+\begin{itemize}
+    \item \textbf{Registers} --- pass parameters to registers
+    \item \textbf{Blocks} --- parameters are stored in a block, or table, in memory, and the address of the block is passed as a parameter in a register
+    \item \textbf{Stack} --- parameters are pushed onto the stack, and popped by the operating system
+\end{itemize}
+The latter two approaches are preferred as they do not limit the number or length of parameters being passed.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/system_call_param_pass.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsection{Types of System Calls}
+System calls can be grouped into six major categories:
+\begin{itemize}
+    \item Process control
+    \item File management
+    \item Device management
+    \item Information maintenance
+    \item Communications
+    \item Protection
+\end{itemize}
+Some examples of these types of system calls are shown in the following sections.
+\subsubsection{Process Control}
+% A running program needs to be able to halt its execution either normally (\mintinline{text}|end()|)
+% or abnormally (\mintinline{text}|abort()|). If a system call is made to terminate a program abnormally,
+% or if the program causes an error trap, an error is displayed, and a dump of memory is written
+% to a special log file on disk to be examined by a \textbf{debugger}, which is a system program designed
+% to aid the programmer in finding and correcting \textbf{bugs}.
+
+% Some systems may allow for special recovery actions by defining an error level. More severe errors can
+% be indicated by a higher-level error parameter. Normal termination can then be defined as an error at
+% level 0. The command interpreter can use this error level to determine the next action automatically.
+
+% A process may wish to load or execute another program, which can be achieved via the \mintinline{text}|exec()|
+
+% Summary of process control system calls:
+\begin{itemize}
+    \item create process, terminate process
+    \item load, execute
+    \item get process attributes, set process attributes
+    \item wait event, signal event
+    \item allocate and free memory
+\end{itemize}
+\subsubsection{File Management}
+\begin{itemize}
+    \item create file, delete file
+    \item open, close
+    \item read, write, reposition
+    \item get file attributes, set file attributes
+\end{itemize}
+\subsubsection{Device Management}
+\begin{itemize}
+    \item request device, release device
+    \item read, write, reposition
+    \item get device attributes, set device attributes
+    \item logically attach or detach devices
+\end{itemize}
+\subsubsection{Information Maintenance}
+\begin{itemize}
+    \item get time or date, set time or date
+    \item get system data, set system data
+    \item get process, file, or device attributes
+    \item set process, file, or device attributes
+\end{itemize}
+\subsubsection{Communications}
+\begin{itemize}
+    \item create, delete communication connection
+    \item send, receive messages
+    \item transfer status information
+    \item attach or detach remote devices
+\end{itemize}
+\subsubsection{Protection}
+\begin{itemize}
+    \item get file permissions
+    \item set file permissions
+\end{itemize}
+\subsubsection{Examples of Windows and UNIX System Calls}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l c c}
+        \toprule
+                                                          & \textbf{Windows}                                  & \textbf{UNIX}                 \\
+        \midrule
+        \multirow{3}{*}{\textbf{Process Control}}         & \mintinline{text}|CreateProcess()|                & \mintinline{text}|fork()|     \\
+                                                          & \mintinline{text}|ExitProcess()|                  & \mintinline{text}|exit()|     \\
+                                                          & \mintinline{text}|WaitForSingleObject()|          & \mintinline{text}|wait()|     \\[1em]
+
+        \multirow{4}{*}{\textbf{File Management}}         & \mintinline{text}|CreateFile()|                   & \mintinline{text}|open()|     \\
+                                                          & \mintinline{text}|ReadFile()|                     & \mintinline{text}|read()|     \\
+                                                          & \mintinline{text}|WriteFile()|                    & \mintinline{text}|write()|    \\
+                                                          & \mintinline{text}|CloseHandle()|                  & \mintinline{text}|close()|    \\[1em]
+
+        \multirow{3}{*}{\textbf{Device Management}}       & \mintinline{text}|SetConsoleMode()|               & \mintinline{text}|ioctl()|    \\
+                                                          & \mintinline{text}|ReadConsole()|                  & \mintinline{text}|read()|     \\
+                                                          & \mintinline{text}|WriteConsole()|                 & \mintinline{text}|write()|    \\[1em]
+
+        \multirow{3}{*}{\textbf{Information Maintenance}} & \mintinline{text}|GetCurrentProcessID()|          & \mintinline{text}|getpid()|   \\
+                                                          & \mintinline{text}|SetTimer()|                     & \mintinline{text}|alarm()|    \\
+                                                          & \mintinline{text}|Sleep()|                        & \mintinline{text}|sleep()|    \\[1em]
+
+        \multirow{3}{*}{\textbf{Communications}}          & \mintinline{text}|CreatePipe()|                   & \mintinline{text}|pipe()|     \\
+                                                          & \mintinline{text}|CreateFileMapping()|            & \mintinline{text}|shm_open()| \\
+                                                          & \mintinline{text}|MapViewOfFile()|                & \mintinline{text}|mmap()|     \\[1em]
+
+        \multirow{3}{*}{\textbf{Protection}}              & \mintinline{text}|SetFileSecurity()|              & \mintinline{text}|chmod()|    \\
+                                                          & \mintinline{text}|InitializeSecurityDescriptor()| & \mintinline{text}|umask()|    \\
+                                                          & \mintinline{text}|SetSecurityDescriptorGroup()|   & \mintinline{text}|chown()|    \\
+        \bottomrule
+    \end{tabular}
+    % \caption{} % \label{}
+\end{table}
+\subsection{System Services}
+System services, also known as system programs or utilities, provide a convenient environment for program development and execution.
+Some are simply user interfaces to system calls, while others are considerably more complex.
+Most users' view of the operating system is defined by system programs, not the actual system calls.
+\begin{itemize}
+    \item \textbf{File management}. Programs that create, delete, copy, rename, print, list, or access and manipulate, files and directories.
+    \item \textbf{Status information}. Programs that ask the system for the date,
+          time, amount of available memory or disk space, number of users, or
+          similar status information. Other programs provide detailed
+          performance, logging, and debugging information.
+          This information is typically formatted and outputted to the user.
+
+          Some systems also support a \textbf{registry},
+          which is used to store and retrieve configuration information.
+    \item \textbf{File modification}. Text editors may create and modify
+          the content of files stored on disk. There may
+          be special commands to search files or perform transformations
+          of the text.
+    \item \textbf{Programming-language support}. Compilers, assemblers, debuggers, and
+          interpreters for common programming languages (such as C, C++, Java,
+          and Python) are often provided with the operating system or available to
+          download.
+    \item \textbf{Program loading and execution}. Once a program is assembled or compiled,
+          it must be loaded into memory to be executed. The system may
+          provide absolute loaders, relocatable loaders, linkage editors, and overlay
+          loaders.
+
+          Debugging systems for either higher-level languages or machine
+          language are needed as well.
+    \item \textbf{Communications}. These programs provide the mechanism for creating
+          virtual connections among processes, users, and computer systems. They
+          also allow users to send information to other machines.
+    \item \textbf{Background services}. All general-purpose systems have methods for
+          launching certain system-program processes at boot time. Some of these
+          processes terminate after completing their tasks, while others continue to
+          run until the system is halted. Constantly running processes are called
+          services, subsystems, or daemons.
+\end{itemize}
+Along with these system programs, most operating systems are supplied with
+application programs that are designed to perform common operations.
+\subsection{Operating System Design and Implementation}
+\subsubsection{Mechanisms and Policies}
+An important principle is the separation of \textbf{policy} from \textbf{mechanism}.
+Policies determine \textit{what} will be done, and mechanisms determine \textit{how}
+to do something.
+
+The separation of policy and mechanism is important for \textbf{flexibility}. Policies
+are likely to change over time, and should not require a change in the underlying mechanism.
+
+Microkernel based systems take this principle to the extreme, by only implementing a
+basic set of policy-free building blocks, so that more advanced mechanisms and policies
+can be added via user-created kernel modules.
+
+In contrast, the Windows operating system and macOS, closely encode both mechanism and policy
+into the system to enforce a global look and feel across the system. All applications
+will therefore have similar interfaces, because the interface itself is built into the kernel and
+system libraries.
+\subsubsection{Implementation}
+Operating systems are typically implemented using several \textbf{high-level languages} such as
+C, C++, and assembly.
+While the kernel might be written assembly and C, higher-level routines and system libraries
+may be written using C++.
+
+Some reasons for using higher-level languages are described below:
+\begin{itemize}
+    \item Code is faster to write
+    \item Code is more compact
+    \item Code is easier to understand
+    \item Code is easier to debug
+\end{itemize}
+In addition to this, improvements in compiler technology will improve the generated code for the
+entire operating system.
+
+Another advantage is that operating systems can be \textbf{ported} to other
+hardware if they are written in a higher-level language. This is particularly important
+for operating systems intended to run on different hardware systems, such as embedded devices,
+Intel x86 systems, and ARM chips in mobile devices.
+\subsection{Operating System Structure}
+A system as large and complex as an operating system must be engineered carefully if it is to function properly and be modified easily.
+We will discuss the evolution of various structures in the following sections.
+\subsubsection{Monolithic Structures}
+The monolithic structure is the \textbf{simplest} structure for organising an operating system, as it uses \textbf{no structure} at all.
+All functionality of the kernel is placed into a single, static binary file, that runs in a single address space.
+
+An example of such a structure is the original UNIX operating system, which consists of two separable parts:
+\begin{itemize}
+    \item the kernel
+    \item system programs
+\end{itemize}
+The kernel represents everything \underline{below the system-call interface} and \underline{above the physical hardware}.
+It provides the file system, CPU scheduling, memory management, and other operating-system functions through system calls.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/UNIX_structure.pdf}
+    % \caption{} % \label{}
+\end{figure}
+The Linux operating system is based on UNIX and is structured similarly. Applications
+typically use the \mintinline{text}|glibc| standard C library when communicating with the kernel (through the system-call interface).
+The Linux kernel is monolithic, but has a \textbf{modular design} that allows the kernel to be modified during runtime.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 4cm]{figures/linux_structure.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Monolithic kernels introduce very little overhead in the system-call interface,
+and communication within the kernel is very fast. Despite their simplicity,
+monolithic kernels are however difficult to implement and extend.
+\subsubsection{Layered Structures}
+The monolithic approach is a \textbf{tightly coupled} system because changes to one part of the system
+have widespread effects on other parts of the system. Alternatively, we may consider a
+\textbf{loosely coupled} system which is divided into separate, smaller components
+that have specific and limited functionality. All these components comprise the kernel.
+
+One way to achieve modularity is to use a \textbf{layered approach},
+where the operating system is divided into a number of layers (levels).
+The bottom layer (layer 0) is the hardware, and the highest (layer N) is the user interface.
+This is shown below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/layered_structure.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Each layer uses functions (operations) and services of only \textbf{lower-level layers}. This simplifies
+debugging and system verification.
+
+Layered systems are used in computer networks (such as TCP/IP) and web applications, however
+relatively few operating systems use a purely layered approach due to the challenges of
+appropriately defining the functionality of each layer.
+\subsubsection{Microkernel Structures}
+As UNIX expanded, the kernel became large and difficult to manage, and thus a system called
+\textbf{Mach} was developed to modularise the kernel using the \textbf{microkernel} approach.
+The Mac OS X kernel, Darwin, is a well-known example of a microkernel operating system based on Mach.
+
+In a microkernel structure, \textbf{all nonessential components} are removed from the kernel
+and are instead implemented as \textbf{user-level programs} that reside in separate address spaces.
+Typically, microkernels provide minimal process and memory management, in addition to a communication facility,
+resulting in a small (micro) kernel.
+
+The main function of the microkernel is to provide communication
+between the client program and the various services that are also running in
+user space, using \textbf{message passing}.
+
+There are several benefits of using a microkernel system:
+\begin{itemize}
+    \item Easy to extend --- new services added to the user space rarely require modification to the kernel. Changes to the kernel are also smaller
+    \item Easy to port to new architectures
+    \item More reliable and secure --- most services are running as user processes, rather than kernel processes
+\end{itemize}
+One of the main disadvantages of microkernels is the \textbf{performance overhead} associated with
+user space to kernel space communication. Communication between two user processes
+requires messages to be copied twice; once from the sending process to the kernel, and again from the kernel
+to the receiving process.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/microkernel_structure.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Modules}
+Most modern operating systems use \textbf{loadable kernel modules} (LKMs). Here, the kernel has a set of
+core components and can link in additional services via modules, either at boot time, or during run time.
+This design is common to modern implementatios of UNIX, such as Linux, macOS, and Solaris, and also Windows.
+
+In this structure, the kernel only provides core services, while other services are implemented \textbf{dynamically},
+as the kernel is running. Linking services dynamically is preferable to adding new features directly to the
+kernel, as the latter requires recompiling the kernel every time a change is made.
+
+The overall result resembles a layered system as each kernel section has defined, protected interfaces; however,
+it is more flexible than a layered system, as any module can call any other module.
+
+This approach is also similar to the microkernel approach in that the primary module has only core functions and
+knowledge of how to load and communicate with other modules; but it is more efficient as modules do not need to
+invoke message passing in order to communicate.
+
+Linux uses loadable kernel modules, primarily for device drivers. LKMs can be ``inserted'' into the kernel
+as the system is \textbf{booted} or during run time. If a device is not present, it can be dynamically loaded.
+\subsubsection{Hybrid Structures}
+Most modern systems combine several of the above approaches, resulting in hybrid systems that address performance,
+security, and usability issues. For example,
+\begin{itemize}
+    \item Linux is monolithic to provide performance, and modular to allow dynamic loading of kernel services
+    \item Windows is also monotlithic, but retains the behaviour of a microkernel system, including support for separate subsystem \textit{personalities} that run as user-mode processes
+    \item Mac OS X is based on the Mach microkernel, and includes dynamically loadable modules called \textbf{kernel extensions}
 \end{itemize}
 \end{document}
