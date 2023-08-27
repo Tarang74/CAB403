@@ -1841,5 +1841,8 @@ POSIX API.\ POSIX shared memory is organised using
 \textbf{memory-mapped} files that associate a region of shared memory
 with a file. A process must first create a shared-memory object using
 the \mintinline{text}|shm_open()| system call:
-\inputminted{c}{code/posix_shared_memory.c}
+\inputminted{c}{code/posix_shared_memory_producer.c}
+The consuming process can then read the contents of this shared memory
+using the code below.
+\inputminted{c}{code/posix_shared_memory_consumer.c}
 \end{document}
