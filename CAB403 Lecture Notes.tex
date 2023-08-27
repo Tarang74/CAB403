@@ -7,6 +7,10 @@
 \usepackage[skip=8pt]{parskip}
 \usepackage{multirow}
 
+\setminted[c]{
+    linenos, frame=lines, breaklines
+}
+
 % Header and footer
 \newcommand{\unitName}{Systems Programming}
 \newcommand{\unitTime}{Semester 2, 2023}
@@ -48,10 +52,10 @@
 \newpage
 %
 \section{Operating Systems Overview}
-An operating system is software that manages a computer's hardware.
-It also provides a basis for application programs and acts as an
-intermediary between the computer user and the computer hardware.
-The purpose of an operating system is to:
+An operating system is software that manages a computer's hardware. It
+also provides a basis for application programs and acts as an
+intermediary between the computer user and the computer hardware. The
+purpose of an operating system is to:
 \begin{itemize}
     \item execute user programs and make solving user problems easier
     \item make the computer system convenient to use
@@ -60,84 +64,127 @@ The purpose of an operating system is to:
 \subsection{What Operating Systems Do}
 A computer system is divided into four components:
 \begin{itemize}
-    \item Hardware that provides basic computing resources, i.e., the CPU, memory, and I/O devices
-    \item An operating system which controls and coordinates the use of hardware for applications and users
-    \item Application programs that define how system resources are used to solve user computing problems
-    \item Users that make use of the computer system. This includes people, machines, or other computers
+    \item Hardware that provides basic computing resources, i.e., the
+          CPU, memory, and I/O devices
+    \item An operating system which controls and coordinates the use of
+          hardware for applications and users
+    \item Application programs that define how system resources are
+          used to solve user computing problems
+    \item Users that make use of the computer system. This includes
+          people, machines, or other computers
 \end{itemize}
-We can also view a computer system as consisting of hardware, software, and data.
+We can also view a computer system as consisting of hardware, software,
+and data.
 
-This hierarchy of components is layered such that users cannot directly access the hardware.
-As there are multiple different types of computer hardware, applications will typically rely on the operating system
-to manage the use of computer hardware so that applications can designed to operate on any hardware. Due to this,
-the operating system will typically restrict direct access to hardware resources.
+This hierarchy of components is layered such that users cannot directly
+access the hardware. As there are multiple different types of computer
+hardware, applications will typically rely on the operating system to
+manage the use of computer hardware so that applications can designed
+to operate on any hardware. Due to this, the operating system will
+typically restrict direct access to hardware resources.
 
-The task of an operating system is to provide convenience, such that users do not have to worry about resource utilisation.
-Depending on the type of user, a computer system will prioritise one of the following:
+The task of an operating system is to provide convenience, such that
+users do not have to worry about resource utilisation. Depending on the
+type of user, a computer system will prioritise one of the following:
 \begin{itemize}
-    \item Shared computers such as mainframes or minicomputers are required to distribute resources to multiple users.
-    \item Dedicated systems such as workstations have dedicated resources for a single user, but will frequently use shared resources (such as CPU cores or memory) from servers.
-    \item Handheld devices (such as phones, tablets, and laptops) are resource poor in comparison to desktop devices, and are optimised for usability, portability, and battery life.
-    \item Embedded devices often have little or no user interface, but access computing resources via alternate means, such as sensors in vehicles.
+    \item Shared computers such as mainframes or minicomputers are
+          required to distribute resources to multiple users.
+    \item Dedicated systems such as workstations have dedicated
+          resources for a single user, but will frequently use shared
+          resources (such as CPU cores or memory) from servers.
+    \item Handheld devices (such as phones, tablets, and laptops) are
+          resource poor in comparison to desktop devices, and are
+          optimised for usability, portability, and battery life.
+    \item Embedded devices often have little or no user interface, but
+          access computing resources via alternate means, such as
+          sensors in vehicles.
 \end{itemize}
 \begin{definition}[Operating System]
-    An Operating System (OS) is a \textbf{resource allocator} that manages all resources in a computer system
-    that resolves conflicting requests of resources by efficiently and fairly distributing resources.
+    An Operating System (OS) is a \textbf{resource allocator} that
+    manages all resources in a computer system that resolves conflicting
+    requests of resources by efficiently and fairly distributing
+    resources.
 
-    An OS is also a \textbf{control program} that controls the execution of programs to prevent errors and improper use of it's system.
-    The OS acts as a security layer between applications, such that one application cannot interfere with another, or bring down the entire system.
+    An OS is also a \textbf{control program} that controls the
+    execution of programs to prevent errors and improper use of it's
+    system. The OS acts as a security layer between applications, such
+    that one application cannot interfere with another, or bring down
+    the entire system.
 
-    An OS must therefore be robust and reliable\footnote{This is far less onerous than requiring \underline{all applications} to be error-free.}.
+    An OS must therefore be robust and reliable\footnote{This is far
+    less onerous than requiring \underline{all applications} to be
+    error-free. }.
 \end{definition}
-A more common definition is that the OS is the one program that runs at all times on the computer, which is known as the \textbf{kernel},
-and is the core of the operating system. Everything else is either a \textbf{system program}, which are associated with the OS, or an \textbf{application program}.
+A more common definition is that the OS is the one program that runs
+at all times on the computer, which is known as the \textbf{kernel},
+and is the core of the operating system.
+Everything else is either a \textbf{system program}, which are
+associated with the OS, or an \textbf{application program}.
 \subsection{Computer System Organisation}
 \subsubsection{Device Controllers}
-A computer system consists of one or more CPUs and a number of \textbf{device controllers}
-connected through a common \textbf{bus} that provides access between components and shared memory.
-This bus is responsible for concurrent communication between the CPU and other devices.
+A computer system consists of one or more CPUs and a number of
+\textbf{device controllers} connected through a common \textbf{bus}
+that provides access between components and shared memory. This bus is
+responsible for concurrent communication between the CPU and other
+devices.
 
-Each device controller is responsible for a specific type of device, and depending on the device,
-may have more than one device attached. A device controller maintains a \textbf{local buffer}
-and a set of \textbf{special-purpose registers}.
-The device controller is responsible for moving data between the device and its local buffer,
+Each device controller is responsible for a specific type of device,
+and depending on the device, may have more than one device attached. A
+device controller maintains a \textbf{local buffer} and a set of
+\textbf{special-purpose registers}. The device controller is
+responsible for moving data between the device and its local buffer,
 which is then moved to/from main memory by the CPU.
 
-Typically, operating systems have a \textbf{device driver} for each device controller. This
-device driver understands the device controller and provides a uniform interface to the rest of the operating system.
+Typically, operating systems have a \textbf{device driver} for each
+device controller. This device driver understands the device controller
+and provides a uniform interface to the rest of the operating system.
 
-Device controllers inform the CPU that they have finished their operation by causing an \textbf{interrupt}.
+Device controllers inform the CPU that they have finished their
+operation by causing an \textbf{interrupt}.
 \subsection{Computer Operation}
 Consider a typical computer operation of performing I/O.
 \begin{enumerate}
-    \item To start the operation, the device driver loads the appropriate registers within the device controller.
-    \item The device controller examines the contents of these registers to determine what actions to take.
-    \item The device controller will then start the transfer of data from the device to its local buffer.
-    \item Once the transfer is complete, the device controller informs the device driver that it has finished its operation.
-    \item The device driver then gives control back to the operating system, through an interrupt.
+    \item To start the operation, the device driver loads the
+          appropriate registers within the device controller.
+    \item The device controller examines the contents of these
+          registers to determine what actions to take.
+    \item The device controller will then start the transfer of data
+          from the device to its local buffer.
+    \item Once the transfer is complete, the device controller informs
+          the device driver that it has finished its operation.
+    \item The device driver then gives control back to the operating
+          system, through an interrupt.
 \end{enumerate}
 \subsection{Interrupts}
-Operating systems are \textbf{interrupt driven}, and will respond to events as they occur.
+Operating systems are \textbf{interrupt driven}, and will respond to
+events as they occur.
 
-Interrupts \textbf{transfer control} to an \textbf{interrupt service routine} (ISR) through the
-\textbf{interrupt vector}, which contains the address of all service routines, stored in low memory for
-quick access.
-A serice routine is simply a function, or piece of code, that is executed when an interrupt occurs.
+Interrupts \textbf{transfer control} to an \textbf{interrupt service
+routine} (ISR) through the \textbf{interrupt vector}, which contains
+the address of all service routines, stored in low memory for quick
+access. A serice routine is simply a function, or piece of code, that
+is executed when an interrupt occurs.
 
-Hardware may trigger an interrupt at any time by sending a signal to the CPU, usually through the system bus.
+Hardware may trigger an interrupt at any time by sending a signal to
+the CPU, usually through the system bus.
 
-When an interrupt occurs, the CPU halts it's current execution and the interrupt architecture saves the address
-of the interrupted instruction, so that it can be resumed once the ISR has finished. The CPU then jumps to a
-fixed location in memory, which is the starting address of the ISR.
+When an interrupt occurs, the CPU halts it's current execution and the
+interrupt architecture saves the address of the interrupted
+instruction, so that it can be resumed once the ISR has finished. The
+CPU then jumps to a fixed location in memory, which is the starting
+address of the ISR.
 
-The interrupt architecture must also save the state information of the interrupted process, so that it can be
-restored once the ISR has finished.
+The interrupt architecture must also save the state information of the
+interrupted process, so that it can be restored once the ISR has
+finished.
 \subsubsection{Implementation}
 The basic interrupt mechanism is described below.
 
-The CPU has an \textbf{interrupt-request line} that the CPU sense after executing
-every instruction. When the CPU detects that a controller has \textit{asserted} a signal
-onto this line, it reads the interrupt number and jumps to the corresponding \textbf{interrupt-handler routine}.
+The CPU has an \textbf{interrupt-request line} that the CPU sense after
+executing every instruction. When the CPU detects that a controller has
+\textit{asserted} a signal onto this line, it reads the interrupt
+number and jumps to the corresponding \textbf{interrupt-handler
+routine}.
 
 The interrupt handler:
 \begin{itemize}
@@ -145,120 +192,160 @@ The interrupt handler:
     \item determines the cause of the interrupt
     \item performs the necessary processing
     \item restores the saved state
-    \item executes a \textbf{return from interrupt} instruction, which returns the CPU to the execution state,
-          prior to the interrupt
+    \item executes a \textbf{return from interrupt} instruction, which
+          returns the CPU to the execution state, prior to the
+          interrupt
 \end{itemize}
-A device controller \textbf{raises} an interrupt by asserting a signal on the interrupt-request line,
-and the CPU \textbf{catches} the interrupt and \textbf{dispatches} it to the interrupt handler, which
+A device controller \textbf{raises} an interrupt by asserting a signal
+on the interrupt-request line, and the CPU \textbf{catches} the
+interrupt and \textbf{dispatches} it to the interrupt handler, which
 then \textbf{clears} the interrupt by servicing the device.
 \subsubsection{Types of Interrupts}
-A \textbf{trap} or \textbf{exception} is a software-generated interrupt caused by an error or a user request,
-and is often used to communicate with the operating system. Software can trigger an interrupt through a special
-operation called a \textbf{system call} (or monitor call).
+A \textbf{trap} or \textbf{exception} is a software-generated interrupt
+caused by an error or a user request, and is often used to communicate
+with the operating system. Software can trigger an interrupt through a
+special operation called a \textbf{system call} (or monitor call).
 
-An operating system also makes a distinction between the following types of interrupts:
+An operating system also makes a distinction between the following
+types of interrupts:
 \begin{itemize}
-    \item For a \textbf{polled} interrupt, the operating system periodically queries a queue of interrupts, to see if one needs to be serviced.
-    \item In a \textbf{vectored} interrupt system, the interrupt vector table will interrupt the CPU to service the necessary interrupt.
+    \item For a \textbf{polled} interrupt, the operating system
+          periodically queries a queue of interrupts, to see if one
+          needs to be serviced.
+    \item In a \textbf{vectored} interrupt system, the interrupt vector
+          table will interrupt the CPU to service the necessary
+          interrupt.
 \end{itemize}
 \subsection{Storage Structure}
 \subsubsection{Main Memory}
-The CPU can only load instructions from memory, and therefore programs must first be
-loaded into memory before they can be executed. Computers run most of their programs
-from rewritable memory, called \textbf{main memory} (or \textbf{random-access memory} (RAM)), which
-means that it can both read and write to any location in memory.
+The CPU can only load instructions from memory, and therefore programs
+must first be loaded into memory before they can be executed. Computers
+run most of their programs from rewritable memory, called \textbf{main
+memory} (or \textbf{random-access memory} (RAM)), which means that it
+can both read and write to any location in memory.
 
-Main memory is \textbf{volatile} and will lose its content when power is lost.
+Main memory is \textbf{volatile} and will lose its content when power
+is lost.
 \subsubsection{Registers}
-All forms of memory provide an array of \textbf{bytes} (or words) that can be individually accessed by
-a \textbf{memory address}. The CPU interacts with these memory locations through \textbf{load} or \textbf{store}
-instructions.
+All forms of memory provide an array of \textbf{bytes} (or words) that
+can be individually accessed by a \textbf{memory address}. The CPU
+interacts with these memory locations through \textbf{load} or
+\textbf{store} instructions.
 \begin{itemize}
-    \item A \textbf{load} instruction moves data from main memory into an internal register in the CPU
-    \item A \textbf{store} instruction moves data from an internal register in the CPU to main memory
+    \item A \textbf{load} instruction moves data from main memory into
+          an internal register in the CPU
+    \item A \textbf{store} instruction moves data from an internal
+          register in the CPU to main memory
 \end{itemize}
-The operating system preserves the state of the CPU through \textbf{registers}.
-Registers can store data within the CPU, and are the fastest form of memory available to the CPU.
+The operating system preserves the state of the CPU through
+\textbf{registers}.
+Registers can store data within the CPU, and are the fastest form of
+memory available to the CPU.
 
-Registers are often used to carry out operations such as addition, where the two operands
-are stored in two registers, before their sum can be computed and saved to another register or in memory.
+Registers are often used to carry out operations such as addition,
+where the two operands are stored in two registers, before their sum
+can be computed and saved to another register or in memory.
 
-The CPU also uses registers for storing other information such as the status of an operation,
-and the program counter, which is the address of the next instruction to be executed.
+The CPU also uses registers for storing other information such as the
+status of an operation, and the program counter, which is the address
+of the next instruction to be executed.
 \subsubsection{Cache Management}
-Caching is an important principle in computer systems, and is used to improve performance
-at many levels of a computer system. Caching refers to the temporary copying of data from a
-slower storage system into a faster storage system, where it can be accessed more quickly.
+Caching is an important principle in computer systems, and is used to
+improve performance at many levels of a computer system. Caching refers
+to the temporary copying of data from a slower storage system into a
+faster storage system, where it can be accessed more quickly.
 
-When some piece of information is required, we first check whether
-a copy of that data is in the cache.
+When some piece of information is required, we first check whether a
+copy of that data is in the cache.
 \begin{itemize}
     \item If so, we use the information directly from the cache
-    \item If not, we use the information from the source, while placing a copy of that data into the cache, under
-          the assumption that it will be needed again soon
+    \item If not, we use the information from the source, while placing
+          a copy of that data into the cache, under the assumption that
+          it will be needed again soon
 \end{itemize}
-Internal programmable registers provide high-speed cache for main memory. The programmer (or compiler)
-implements register allocation and replacement algorithms to decide which information is kept in
-registers and which is kept in main memory.
+Internal programmable registers provide high-speed cache for main
+memory.
+The programmer (or compiler) implements register allocation and
+replacement algorithms to decide which information is kept in registers
+and which is kept in main memory.
 
-Other caches are implemented in hardware. For example, most systems have an \textbf{instruction cache}
-to hold instructions expected to be executed next. Without this cache, the CPU would have to wait
-several cycles for the instruction to be fetched from main memory. For similar reasons, most
-systems have one or more high-speed data caches in the memory hierarchy.
+Other caches are implemented in hardware. For example, most systems
+have an \textbf{instruction cache} to hold instructions expected to be
+executed next. Without this cache, the CPU would have to wait several
+cycles for the instruction to be fetched from main memory. For similar
+reasons, most systems have one or more high-speed data caches in the
+memory hierarchy.
 
-Because caches have limited size, \textbf{cache management} is an important design problem.
-Careful selection of cache size and of a replacement policy can significantly improve performance.
+Because caches have limited size, \textbf{cache management} is an
+important design problem. Careful selection of cache size and of a
+replacement policy can significantly improve performance.
 
-The movement of information between levels of a storage hierarchy may be either \textbf{explicit} or \textbf{implicit}.
-For instance, data transfer from cache to the CPU and registers is usually a hardware function, with no operating system intervention.
-In contrast, transfer of data from disk to memory is usually controlled by the operating system.
+The movement of information between levels of a storage hierarchy may
+be either \textbf{explicit} or \textbf{implicit}. For instance, data
+transfer from cache to the CPU and registers is usually a hardware
+function, with no operating system intervention. In contrast, transfer
+of data from disk to memory is usually controlled by the operating
+system.
 \paragraph{An Example}
-
-Consider the following example where an integer \(A\) is to be incremented by 1, and is located in file \(B\) which resides on hard disk.
+Consider the following example where an integer \(A\) is to be
+incremented by 1, and is located in file \(B\) which resides on hard
+disk.
 \begin{enumerate}
-    \item The operating system loads the file \(B\) from disk into main memory.
-    \item The operating system then load the integer \(A\) from main memory into the cache of an internal register.
-    \item The CPU performs the increment operation on the internal register.
-    \item The operating system then updates value of \(A\) from internal memory to the file \(B\) in main memory.
-    \item The operating system then writes the updated value of \(B\) back to disk.
+    \item The operating system loads the file \(B\) from disk into main
+          memory.
+    \item The operating system then load the integer \(A\) from main
+          memory into the cache of an internal register.
+    \item The CPU performs the increment operation on the internal
+          register.
+    \item The operating system then updates value of \(A\) from
+          internal memory to the file \(B\) in main memory.
+    \item The operating system then writes the updated value of \(B\)
+          back to disk.
 \end{enumerate}
 \paragraph{Implications of Various Environments}
+In a single processor system, where only one process executes at a
+time, this hierarchy poses no difficulties, as access to the integer
+\(A\) will always be to the copy at the \textbf{highest level} of the
+hierarchy.
 
-In a single processor system, where only one process executes at a time,
-this hierarchy poses no difficulties, as access to the integer \(A\) will
-always be to the copy at the \textbf{highest level} of the hierarchy.
+In a \textbf{multitasking environment}, where multiple processes
+execute concurrently, extreme care must be taken to ensure that, if two
+or more processes are accessing the same data, then each process must
+access the \textbf{most recently updated} copy of the data.
 
-In a \textbf{multitasking environment}, where multiple processes execute concurrently,
-extreme care must be taken to ensure that, if two or more processes are accessing the same data,
-then each process must access the \textbf{most recently updated} copy of the data.
+Furthermore, in a \textbf{multiprocessor environment}, each CPU also
+contains a local cache. In such an environment, a copy of data may
+exist simultaneously in several caches. As these CPUs can execute in
+parallel, we must ensure that an update to data is propagated to all
+copies of the data in all caches.
 
-Furthermore, in a \textbf{multiprocessor environment}, each CPU also contains a local cache.
-In such an environment, a copy of data may exist simultaneously
-in several caches. As these CPUs can execute in parallel, we must ensure that
-an update to data is propagated to all copies of the data in all caches.
-
-This is known as \textbf{cache coherency}, and is usually a hardware level problem.
+This is known as \textbf{cache coherency}, and is usually a hardware
+level problem.
 \subsubsection{Secondary Storage}
-Systems with a \textbf{von Neumann architecture} fetch instructions from memory and
-store them in the \textbf{instruction register}. When this instruction is decoded,
-it may require addition operands to be fetched from memory, and stored into internal
-registers.
+Systems with a \textbf{von Neumann architecture} fetch instructions
+from memory and store them in the \textbf{instruction register}. When
+this instruction is decoded, it may require addition operands to be
+fetched from memory, and stored into internal registers.
 
-Ideally, we want programs and data to be stored in main memory permanently, to allow
-for fast access. However, main memory is usually too small to store all necessary
-programs and data permanently, and volatile.
+Ideally, we want programs and data to be stored in main memory
+permanently, to allow for fast access. However, main memory is usually
+too small to store all necessary programs and data permanently, and
+volatile.
 
-Thus, most computer systems provide \textbf{secondary storage} as an extension of
-main memory. Secondary storage is nonvolatile and is used to store large amounts
-of data permanently. It is usually much slower than main memory.
+Thus, most computer systems provide \textbf{secondary storage} as an
+extension of main memory. Secondary storage is nonvolatile and is used
+to store large amounts of data permanently. It is usually much slower
+than main memory.
 
-Programs are stored in secondary storage until they are loaded into memory.
-The most common forms of secondary storage are \textbf{hard-disk drives} (HDDs) and
-\textbf{nonvolatile memory} (NVM) \textbf{devices}.
+Programs are stored in secondary storage until they are loaded into
+memory. The most common forms of secondary storage are
+\textbf{hard-disk drives} (HDDs) and \textbf{nonvolatile memory} (NVM)
+\textbf{devices}.
 \subsubsection{Tertiary Storage}
-Large storage capacities can also be achieved through \textbf{tertiary storage}, which
-is used for data that is not frequently accessed, such as in archival storage, or
-for backup. Examples of this type of storage includes \textbf{magnetic tape} and \textbf{optical disk} storage.
+Large storage capacities can also be achieved through \textbf{tertiary
+storage}, which is used for data that is not frequently accessed, such
+as in archival storage, or for backup. Examples of this type of storage
+includes \textbf{magnetic tape} and \textbf{optical disk} storage.
 \subsubsection{Summary}
 A summary of the storage hierarchy is shown below.
 \begin{figure}[H]
@@ -266,8 +353,9 @@ A summary of the storage hierarchy is shown below.
     \includegraphics[height = 6cm]{figures/storage_hierarchy.pdf}
     % \caption{} % \label{}
 \end{figure}
-From here onwards, the term \textbf{memory} will be used to refer to volatile storage,
-while \textbf{nonvolatile storage} (NVS) will be used to refer to nonvolatile storage.
+From here onwards, the term \textbf{memory} will be used to refer to
+volatile storage, while \textbf{nonvolatile storage} (NVS) will be
+used to refer to nonvolatile storage.
 
 The design of a complete storage system must balance,
 \begin{itemize}
@@ -275,36 +363,48 @@ The design of a complete storage system must balance,
     \item Performance: memory is faster than NVS
     \item Volatility: memory loses its contents when power is lost
 \end{itemize}
-\subsection{I/O Structure}
+\subsection{I/O	Structure}
 I/O is structured in one of two ways:
 \begin{enumerate}
-    \item After I/O starts, control returns to the user program only upon I/O completion.
+    \item After I/O starts, control returns to the user program only
+          upon I/O completion.
           \begin{itemize}
-              \item \textbf{Wait instructions} idle the CPU until the next interrupt
-              \item At most one I/O request is outstanding at a time, and no simultaneous I/O processing is possible
+              \item \textbf{Wait instructions} idle the CPU until the
+                    next interrupt
+              \item At most one I/O request is outstanding at a time,
+                    and no simultaneous I/O processing is possible
           \end{itemize}
-    \item After I/O starts, control returns to the user program without waiting for I/O completion.
+    \item After I/O starts, control returns to the user program without
+          waiting for I/O completion.
           \begin{itemize}
-              \item \textbf{System calls} request the OS to allow the user to wait for I/O completion
-              \item A \textbf{device-state table} contains entries for each I/O device, indicating its type, address, and state
-              \item The OS indexes into this table to determine the device status and modifies the table entry to include interrupt information
+              \item \textbf{System calls} request the OS to allow the
+                    user to wait for I/O completion
+              \item A \textbf{device-state table} contains entries for
+                    each I/O device, indicating its type, address, and
+                    state
+              \item The OS indexes into this table to determine the
+                    device status and modifies the table entry to
+                    include interrupt information
           \end{itemize}
 \end{enumerate}
 \subsubsection{Direct Memory Access}
 The form of interrupt-driven I/O described above is sufficient for
-moving small amounts of data, but can produce high \textbf{overhead} when used for bulk data transfer.
+moving small amounts of data, but can produce high \textbf{overhead}
+when used for bulk data transfer.
 
-To solve this problem, \textbf{direct memory access} (DMA) is used. This allows device controllers to transfer
-entire blocks of data directly to or from the device and main memory, without CPU intervention.
-Only one interrupt is generated per block, to indicate the operation has completed, rather than one interrupt per byte.
+To solve this problem, \textbf{direct memory access} (DMA) is used.
+This allows device controllers to transfer entire blocks of data
+directly to or from the device and main memory, without CPU
+intervention. Only one interrupt is generated per block, to indicate
+the operation has completed, rather than one interrupt per byte.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/dma.pdf}
     % \caption{} % \label{}
 \end{figure}
-While the device controller is performing these operations, the CPU is idle, and can be used by another process.
+While the device controller is performing these operations, the CPU is
+idle, and can be used by another process.
 \subsection{Computer-System Architecture}
-
 \begin{tcolorboxlarge}[title={Definitions}, parbox=false]
     This section will use the following definitions:
     \begin{description}
@@ -315,65 +415,78 @@ While the device controller is performing these operations, the CPU is idle, and
         \item[Multiprocessor] Multiple processors
     \end{description}
 \end{tcolorboxlarge}
-
 \subsubsection{Single-Processor Systems}
-A single processor system is one which contains a single general purpose CPU with a single processing core.
+A single processor system is one which contains a single general
+purpose CPU with a single processing core.
 
-Older computer systems used a single processor containing one CPU with a single processing core.
-The \textbf{core} is the component that executes instructions and accesses registers for storing data locally.
-The \textbf{CPU} is capable of executing a \textbf{general-purpose} instruction set, including instructions from
-processes.
+Older computer systems used a single processor containing one CPU with
+a single processing core. The \textbf{core} is the component that
+executes instructions and accesses registers for storing data locally.
+The \textbf{CPU} is capable of executing a \textbf{general-purpose}
+instruction set, including instructions from processes.
 
-These systems also have other \textbf{special-purpose} processors such as device-specific processors for
-disk, keyboard, and graphics controllers. These processors run a limited instruction set and
-cannot run processes.
+These systems also have other \textbf{special-purpose} processors such
+as device-specific processors for disk, keyboard, and graphics
+controllers. These processors run a limited instruction set and cannot
+run processes.
 
 Sometimes these processors are managed by the OS, which sends them
 information about the next task and monitors their status.
 
-In other systems, special-purpose processors are low-level components built into the hardware.
-The OS cannot communicate with these processors, as they execute jobs autonomously.
+In other systems, special-purpose processors are low-level components
+built into the hardware. The OS cannot communicate with these
+processors, as they execute jobs autonomously.
 \subsubsection{Multiprocessor Systems}
-Multiprocessor systems (or \textbf{parallel (tightly-coupled) systems}),
-are systems with two or more processors.
+Multiprocessor systems (or \textbf{parallel (tightly-coupled)
+systems}), are systems with two or more processors.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/multiprocessing.pdf}
     % \caption{} % \label{}
 \end{figure}
-Multiprocessor systems have several advantages over
-single processor systems:
+Multiprocessor systems have several advantages over single processor
+systems:
 \begin{itemize}
-    \item \textbf{Increased throughput}: More work can be accomplished in less time
-    \item \textbf{Economy of scale}: Multiprocessor systems are cheaper than equivalent multiple single processor systems
-    \item \textbf{Increased reliability}: Graceful degradation or fault tolerance --- if one CPU fails, the system can continue to operate
+    \item \textbf{Increased throughput}: More work can be accomplished
+          in less time
+    \item \textbf{Economy of scale}: Multiprocessor systems are cheaper
+          than equivalent multiple single processor systems
+    \item \textbf{Increased reliability}: Graceful degradation or fault
+          tolerance --- if one CPU fails, the system can continue to
+          operate
 \end{itemize}
 There are two types of multiprocessor systems:
 \begin{itemize}
-    \item \textbf{Asymmetric multiprocessing}: Each processor is assigned a specific task, such as I/O or process scheduling
-    \item \textbf{Symmetric multiprocessing}: Each processor performs all tasks, including OS activities
+    \item \textbf{Asymmetric multiprocessing}: Each processor is
+          assigned a specific task, such as I/O or process scheduling
+    \item \textbf{Symmetric multiprocessing}: Each processor performs
+          all tasks, including OS activities
 \end{itemize}
-
 \begin{tcolorboxlarge}[title={Symmetric Multiprocessing}, parbox=false]
-    The most common multiprocessor systems use symmetric multiprocessing (SMP),
-    where each CPU performs all tasks, including operating system functions and user
-    processes. Each CPU has its own registers and cache, but all processors share
-    physical memory over the \textbf{same bus}.
+    The most common multiprocessor systems use symmetric multiprocessing
+    (SMP), where each CPU performs all tasks, including operating system
+    functions and user processes. Each CPU has its own registers and
+    cache, but all processors share physical memory over the
+    \textbf{same bus}.
 
-    The benefit of this model is that many processes can be run \textbf{simultaneously},
-    without performance degradation. However, since CPUs are separate, one
-    may be idle which another is busy, resulting in inefficiencies.
+    The benefit of this model is that many processes can be run
+    \textbf{simultaneously}, without performance degradation. However,
+    since CPUs are separate, one may be idle which another is busy,
+    resulting in inefficiencies.
 
-    One solution to this problem is to share certain \textbf{data structures} between processors.
-    This will allow processors and resources (such as memory) to be shared
-    dynamically amongst processors, reducing workload variation between processors.
+    One solution to this problem is to share certain \textbf{data
+    structures} between processors. This will allow processors and
+    resources (such as memory) to be shared dynamically amongst
+    processors, reducing workload variation between processors.
 
-    Such systems must properly \textbf{schedule} and \textbf{synchronise} access to shared resources,
-    to avoid conflicts between processors.
+    Such systems must properly \textbf{schedule} and
+    \textbf{synchronise} access to shared resources, to avoid conflicts
+    between processors.
 \end{tcolorboxlarge}
 
 \begin{tcolorboxlarge}[title={Multicore Systems}, parbox=false]
-    Multicore systems are systems with multiple computing cores on the same chip (processor).
+    Multicore systems are systems with multiple computing cores on the
+    same chip (processor).
     \begin{figure}[H]
         \centering
         \includegraphics[height = 6cm]{figures/multicore.pdf}
@@ -381,159 +494,225 @@ There are two types of multiprocessor systems:
     \end{figure}
     Multicore systems:
     \begin{itemize}
-        \item are more efficient than systems with multiple chips with single cores,
-              because on-chip communication is faster than between-chip communication.
-        \item use significantly less power than multiple single core chips.
+        \item are more efficient than systems with multiple chips with
+              single cores, because on-chip communication is faster
+              than between-chip communication.
+        \item use significantly less power than multiple single core
+              chips.
     \end{itemize}
-    Each core has its own local cache, known as \textbf{level-1}, or \textbf{L1 cache}.
-    In addition to this, each core shares a \textbf{level-2}, or \textbf{L2 cache}, that is local to the chip.
-    Lower levels of cache are generally smaller, but have faster access times than higher level shared caches.
+    Each core has its own local cache, known as \textbf{level-1}, or
+    \textbf{L1 cache}.
+    In addition to this, each core shares a \textbf{level-2}, or
+    \textbf{L2 cache}, that is local to the chip.
+    Lower levels of cache are generally smaller, but have faster access
+    times than higher level shared caches.
 
-    A multicore processor with \(N\) cores appears to the operating system as \(N\) standard CPUs. This
-    requires operating system designers and application programmers to make efficient use of these additional
-    processing cores.
+    A multicore processor with \(N\) cores appears to the operating
+    system as \(N\) standard CPUs. This requires operating system
+    designers and application programmers to make efficient use of
+    these additional processing cores.
 \end{tcolorboxlarge}
-
 \begin{tcolorboxlarge}[title={Non-Uniform Memory Access Multiprocessing Systems}, parbox=false]
-    While adding additional CPUs to multiprocessor systems increases computing power, contention for
-    the system bus creates a bottleneck and limits performance. An alternative approach is to provide
-    each CPU (or groups of CPUs) with its own \textbf{local memory} that is accessed via a small but fast, local bus.
-    These CPUs are connected by a \textbf{shared system interconnect}, so that all CPUs share one
+    While adding additional CPUs to multiprocessor systems increases
+    computing power, contention for the system bus creates a bottleneck
+    and limits performance. An alternative approach is to provide each
+    CPU (or groups of CPUs) with its own \textbf{local memory} that is
+    accessed via a small but fast, local bus. These CPUs are connected
+    by a \textbf{shared system interconnect}, so that all CPUs share one
     physical address space.
 
-    This is known as a \textbf{non-uniform memory access} (NUMA) architecture.
+    This is known as a \textbf{non-uniform memory access} (NUMA)
+    architecture.
     \begin{figure}[H]
         \centering
         \includegraphics[height = 6cm]{figures/numa.pdf}
         % \caption{} % \label{}
     \end{figure}
-    The advantages and disadvantages of NUMA multiprocessing architectures are as follows:
+    The advantages and disadvantages of NUMA multiprocessing
+    architectures are as follows:
     \begin{itemize}
-        \item CPUs have fast access to local memory and require no contention over the system interconnect
-        \item NUMA can be scaled more effectively as more CPUs are added
-        \item There is increased \textbf{latency} when accessing \textbf{remote memory} across the system interconnect
+        \item CPUs have fast access to local memory and require no
+              contention over the system interconnect
+        \item NUMA can be scaled more effectively as more CPUs are
+              added
+        \item There is increased \textbf{latency} when accessing
+              \textbf{remote memory} across the system interconnect
     \end{itemize}
-    Due to their excellent scalability, NUMA systems are very popular on servers and high-performance computing systems.
+    Due to their excellent scalability, NUMA systems are very popular
+    on servers and high-performance computing systems.
 \end{tcolorboxlarge}
 
 \begin{tcolorboxlarge}[title={Blade Servers}, parbox=false]
-    Blade servers are systems in which multiple processor boards, I/O boards, and \linebreak networking boards are
-    placed in the same chassis. These servers consist of multiple independent multiprocessor systems,
-    that runs its own operating system.
+    Blade servers are systems in which multiple processor boards, I/O
+    boards, and \linebreak networking boards are placed in the same
+    chassis. These servers consist of multiple independent multiprocessor
+    systems, that runs its own operating system.
 \end{tcolorboxlarge}
-
 \subsubsection{Clustered Systems}
-Clustered systems are another type of multiprocessor system that are composed of two or more
-individual systems, called \textbf{nodes}. Each system is typically a multicore system, and
-the system is \textbf{loosely coupled}. Clustered computers share storage via a \textbf{storage-area network} (SAN)
-and are usually connected via a \textbf{local-area network} (LAN).
+Clustered systems are another type of multiprocessor system that are
+composed of two or more individual systems, called \textbf{nodes}. Each
+system is typically a multicore system, and the system is
+\textbf{loosely coupled}. Clustered computers share storage via a
+\textbf{storage-area network} (SAN) and are usually connected via a
+\textbf{local-area network} (LAN).
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/clustered_system.pdf}
     % \caption{} % \label{}
 \end{figure}
-
 \begin{tcolorboxlarge}[title={High-Availability Service}, parbox=false]
-    The purpose of a clustered system is to provide a \textbf{high availability service}, that is,
-    the ability to operate even if one or more nodes fail. This is achieved by adding a level of redundancy in
-    the system. In this system, a layer of cluster software runs on the cluster nodes to monitor one or more
-    nodes, such that if the monitored machine fails, the monitoring machine can take ownership of its resources.
+    The purpose of a clustered system is to provide a \textbf{high
+        availability service}, that is,	the ability to operate even if one
+    or more nodes fail.	This is achieved by adding a level of redundancy
+    in the system. In this system, a layer of cluster software runs on
+    the cluster nodes to monitor one or more nodes, such that if the
+    monitored machine fails, the monitoring machine can take ownership
+    of its resources.
 
-    The ability to continue providing service proportional to the level of surviving hardware is called
-    \textbf{graceful degradation}. Some systems are called \textbf{fault tolerant} if they can suffer
-    a failure of a single component and still continue operation. Fault tolerance requires a
-    mechanism to allow the failure to be detected, diagnosed, and corrected.
+    The ability to continue providing service proportional to the level
+    of surviving hardware is called \textbf{graceful degradation}. Some
+    systems are called \textbf{fault tolerant} if they can suffer a
+    failure of a single component and still continue operation. Fault
+    tolerance requires a mechanism to allow the failure to be detected,
+    diagnosed, and corrected.
 
     Clustering can be structured asymmetrically or symmetrically:
     \begin{itemize}
-        \item \textbf{Asymmetric clustering} has one machine in \textbf{hot-standby mode},
-              while the other runs applications. The hot-standby host machine monitors the active server,
-              so that if it fails, it will become the active server.
-        \item \textbf{Symmetric clustering} has multiple hosts running applications, while monitoring each other.
-              This structure is more efficient as it uses all available hardware, but only if more than one
-              application is running.
+        \item \textbf{Asymmetric clustering} has one
+              machine in \textbf{hot-standby mode}, while the other runs
+              applications. The hot-standby host machine monitors the
+              active server, so that if it fails, it will become the
+              active server.
+        \item \textbf{Symmetric clustering} has multiple hosts running
+              applications, while monitoring each other. This structure
+              is more efficient as it uses all available hardware, but
+              only if more than one application is running.
     \end{itemize}
 \end{tcolorboxlarge}
 
 \begin{tcolorboxlarge}[title={High-Performance Computing}, parbox=false]
-    As a cluster consists of several computer systems connected via a network, clusters
-    can also provide \textbf{high-performance computing} (HPC) environments.
-    Such systems supply significantly greater computational power because they can run applications
+    As a cluster consists of several computer systems connected via a
+    network, clusters can also provide \textbf{high-performance
+        computing} (HPC) environments. Such systems supply significantly
+    greater computational power because they can run applications
     concurrently on several computers.
 
     This is primarily useful for applications that utilise
-    \textbf{parallelisation}, which is the process of breaking down a large task into smaller
-    components that run on individual cores in a computer. These tasks are designed to then be
-    recombined to produce the final result.
+    \textbf{parallelisation}, which is the process of breaking down a
+    large task into smaller components that run on individual cores in
+    a computer. These tasks are designed to then be recombined to
+    produce the final result.
 \end{tcolorboxlarge}
 
 \begin{tcolorboxlarge}[title={Parallel Clustering}, parbox=false]
-    Parallel clusters allow multiple hosts to access the same data on a shared storage over
-    a \textbf{wide-area network} (WAN). Such systems require specialised versions
-    of software that can support simultaneous data access by multiple hosts, to ensure
-    that no conflicting operations occur. This function, commonly known as a
-    \textbf{distributed lock manager} (DLM), is included in some cluster technologies.
+    Parallel clusters allow multiple hosts to access the same data on a
+    shared storage over a \textbf{wide-area network} (WAN).
+    Such systems require specialised versions of software that can
+    support simultaneous data access by multiple hosts, to ensure that
+    no conflicting operations occur.
+    This function, commonly known as a \textbf{distributed lock
+        manager} (DLM), is included in some cluster technologies.
 \end{tcolorboxlarge}
 \subsection{Operating System Operations}
 \subsubsection{Computer Startup}
-When a computer is turned on or rebooted, the first program it runs is a \textbf{bootstrap program} (\textbf{firmware}), which
-then loads the operating system. This program is stored in \textbf{read only memory} (ROM)
-or \textbf{electrically erasable programmable read only memory} (EEPROM).
-This storage is infrequently written to and is nonvolatile.
+When a computer is turned on or rebooted, the first program it runs is
+a \textbf{bootstrap program} (\textbf{firmware}), which then loads the
+operating system. This program is stored in \textbf{read only memory}
+(ROM) or \textbf{electrically erasable programmable read only memory}
+(EEPROM). This storage is infrequently written to and is nonvolatile.
 
-This program will search for an operating system kernel within all connected hard disks, optical drives, or USBs, and load the first one it finds into memory.
-The order in which this search is conducted is known as the \textbf{boot sequence}, and can be configured in the \textbf{basic input/output system} (BIOS).
+This program will search for an operating system kernel within all
+connected hard disks, optical drives, or USBs, and load the first one
+it finds into memory. The order in which this search is conducted is
+known as the \textbf{boot sequence}, and can be configured in the
+\textbf{basic input/output system} (BIOS).
 
-Some services are provided outside of the kernel, by system programs, that are loaded into memory at boot time to become \textbf{system daemons},
-which run while the kernel is running. On Linux, the first system program is ``\mintinline{text}|systemd|'', and it starts many other daemons.
+Some services are provided outside of the kernel, by system programs,
+that are loaded into memory at boot time to become \textbf{system
+daemons}, which run while the kernel is running. On Linux, the first
+system program is ``\mintinline{text}|systemd|'', and it starts many
+other daemons.
 
-Once this is completed, the system is fully booted, and waits for some event to occur. As discussed earlier, events are signalled
-via interrupts.
+Once this is completed, the system is fully booted, and waits for some
+event to occur. As discussed earlier, events are signalled via
+interrupts.
 \subsubsection{Multiprogramming}
-Users of a system typically want to run multiple programs at the same time, rather than having one program keeping the CPU or I/O devices busy at all times.
-\textbf{Multiprogramming} allows an operating system to increase CPU utilisation, and satisfy user requirements,
-by organising jobs (code and data) such that the CPU always has one to execute.
-In such a system, a program in execution is called a \textbf{process}.
+Users of a system typically want to run multiple programs at the same
+time, rather than having one program keeping the CPU or I/O devices
+busy at all times. \textbf{Multiprogramming} allows an operating system
+to increase CPU utilisation, and satisfy user requirements, by
+organising jobs (code and data) such that the CPU always has one to
+execute. In such a system, a program in execution is called a
+\textbf{process}.
 
-The operating system keeps a subset of processes in memory, where the CPU executes processes one at a time, switching between processes
-when the current process no longer requires the CPU or is waiting for I/O. This ensures the CPU is never idle as long as there are processes to execute.
-This is known as \textbf{process scheduling}.
+The operating system keeps a subset of processes in memory, where the
+CPU executes processes one at a time, switching between processes when
+the current process no longer requires the CPU or is waiting for I/O.
+This ensures the CPU is never idle as long as there are processes to
+execute. This is known as \textbf{process scheduling}.
 \subsubsection{Multitasking}
-Multitasking (or \textbf{timesharing}) is a logical extension of multiprogramming, in which a CPU switches between multiple processes
-frequently, providing the illusion that multiple processes are executing simultaneously.
-For instance, the time a user takes to type a command or click a mouse is incredibly slow for a computer,
-and hence the CPU may switch to another process while waiting for the user to provide input.
+Multitasking (or \textbf{timesharing}) is a logical extension of
+multiprogramming, in which a CPU switches between multiple processes
+frequently, providing the illusion that multiple processes are
+executing simultaneously. For instance, the time a user takes to type a
+command or click a mouse is incredibly slow for a computer, and hence
+the CPU may switch to another process while waiting for the user to
+provide input.
 
 Multitasked systems require additional considerations:
 \begin{itemize}
-    \item \textbf{Interactive} systems require fast \textbf{response times} (less than 1s), so that users do not have to wait for long periods of time.
-    \item Having several processes in memory requires \textbf{memory management}.
-    \item If several processes are ready to be executed, \textbf{CPU scheduling} is required to decide which process to execute next.
-    \item If multiple processes are executing concurrently, \textbf{process synchronisation} is required to ensure that processes do not interfere with each other.
+    \item \textbf{Interactive} systems require fast
+          \textbf{response times} (less than 1s), so that
+          users do not have to wait for long periods of time.
+    \item Having several processes in memory requires \textbf{memory
+          management}.
+    \item If several processes are ready to be executed, \textbf{CPU
+          scheduling} is required to decide which process to execute
+          next.
+    \item If multiple processes are executing concurrently,
+          \textbf{process synchronisation} is required to ensure that
+          processes do not interfere with each other.
 \end{itemize}
-For processes that are larger than \textbf{physical memory}, \textbf{virtual memory} may be used to execute processes that are stored partially in memory.
+For processes that are larger than \textbf{physical memory},
+\textbf{virtual memory} may be used to execute processes that are
+stored partially in memory.
 This arrangement of memories addresses memory usage constraints.
 
-\emph{Both multiprogramming and multitasking systems must provide a \textbf{file system} to allow processes to access data stored on secondary storage.
-    In addition to this, they must \textbf{protect resources} from inappropriate use, provide mechanisms to process \textbf{synchronisation and communication}, and
-    ensure that processes do not get stuck in a \textbf{deadlock}.}
+\emph{Both multiprogramming and multitasking systems must provide a
+    \textbf{file system} to allow processes to access data stored on
+    secondary storage. In addition to this, they must \textbf{protect
+        resources} from inappropriate use, provide mechanisms to process
+    \textbf{synchronisation and communication}, and ensure that
+    processes do not get stuck in a \textbf{deadlock}.
+}
 \subsection{Dual-Mode Operation}
-As the operating system and users share hardware and software resources, the operating system must ensure that
-malicious programs cannot cause other programs (or the operating system itself) to execute incorrectly.
-To distinguish between the execution of operating system code and user-defined code, we can use
-\textbf{dual-mode} operation:
+As the operating system and users share hardware and software
+resources, the operating system must ensure that malicious programs
+cannot cause other programs (or the operating system itself) to execute
+incorrectly. To distinguish between the execution of operating system
+code and user-defined code, we can use \textbf{dual-mode} operation:
 \begin{itemize}
-    \item \textbf{User mode} --- used for executing user-defined code, and restricts direct access to hardware and special instructions.
-    \item \textbf{Kernel mode} --- used for executing operating system code, and allows direct access to hardware and all privileged instructions.
+    \item \textbf{User mode} --- used for executing
+          user-defined code, and restricts direct access to hardware and
+          special instructions.
+    \item \textbf{Kernel mode} --- used for executing operating system
+          code, and allows direct access to hardware and all privileged
+          instructions.
 \end{itemize}
-A \textbf{mode bit} is used to indicate the current mode of operation; 0, when the system is in kernel mode, and 1, when the system is in user mode.
-At system boot time, hardware starts in kernel mode, and the operating system (when it is loaded), starts user applications in user mode.
+A \textbf{mode bit} is used to indicate the current mode of operation;
+0, when the system is in kernel mode, and 1, when the system is in
+user mode.
+At system boot time, hardware starts in kernel mode, and the operating
+system (when it is loaded), starts user applications in user mode.
 
-When a trap or interrupt occurs, the hardware switches from user mode to kernel mode, and always switches to user mode \textit{before}
+When a trap or interrupt occurs, the hardware switches from user mode
+to kernel mode, and always switches to user mode \textit{before}
 returning control to the user program.
 
-This also allows us to designate certain machine instructions as \textbf{privileged instructions}, which can only be executed in kernel mode.
-For example, the instruction to switch from user mode to kernel mode is a privileged instruction.
+This also allows us to designate certain machine instructions as
+\textbf{privileged instructions}, which can only be executed in kernel
+mode. For example, the instruction to switch from user mode to kernel
+mode is a privileged instruction.
 
 An example is shown in the figure below.
 \begin{figure}[H]
@@ -542,87 +721,161 @@ An example is shown in the figure below.
     % \caption{} % \label{}
 \end{figure}
 \subsection{Multi-Mode Operation}
-The dual-mode concept can be extended to include multiple modes of operation, where each mode has a different level of privilege.
-One such example of this is with CPUs that support virtualisation, where a separate mode is used to indicate when the \textbf{virtual machine manager} (VMM)
-is in control of the system.
+The dual-mode concept can be extended to include multiple modes of
+operation, where each mode has a different level of privilege. One such
+example of this is with CPUs that support virtualisation, where a
+separate mode is used to indicate when the \textbf{virtual machine
+manager} (VMM) is in control of the system.
 \subsection{Timers}
-To ensure that the operating system maintains control over the CPU, a \textbf{timer} is used to prevent a user program from running indefinitely.
+To ensure that the operating system maintains control over the CPU, a
+\textbf{timer} is used to prevent a user program from running
+indefinitely.
 \begin{itemize}
-    \item The operating system configures a timer to interrupt the CPU after a specific period of time, before transferring control to the user
+    \item The operating system configures a timer to interrupt the CPU
+          after a specific period of time, before transferring control
+          to the user
     \item The timer is decremented for every clock tick
     \item An interrupt is generated when the timer reaches 0
-    \item The operating system decides whether to regain control of the CPU, or allow the program to continue running
+    \item The operating system decides whether to regain control of the
+          CPU, or allow the program to continue running
 \end{itemize}
 \section{Operating System Structures}
-An operating system provides an environment for executing programs and services to programs and users.
-One set of operating system services provides functions that are helpful to the \textbf{user}:
+An operating system provides an environment for executing programs and
+services to programs and users. One set of operating system services
+provides functions that are helpful to the \textbf{user}:
 \begin{itemize}
-    \item \textbf{User interface} --- almost all operating systems have a \textbf{user interface} (UI) that is either \textbf{command-line} or \textbf{graphical}.
-          This interface can be interacted with via the keyboard or mouse. Touchscreens also provide \textbf{touch screen interfaces}.
-    \item \textbf{Program execution} --- The system must be able to load programs into memory to run them, and also end their execution, either normally, or abnormally (due to an error).
-    \item \textbf{I/O operations} --- A running program may require I/O, which may involve a file or an I/O device. The operating system provides a uniform interface to I/O devices.
-    \item \textbf{File-system manipulation} --- Programs need to read and write files or directories, create or delete them by name, search for files, list file information, and manage permissions and ownership.
-    \item \textbf{Communications} --- Processes may exchange information, on the same computer or between computers over a network. Communications may be via \textbf{shared memory}, in which two or more processes read and write to a shared section of memory, or through \textbf{message passing}, where packets of information in predefined formats are moved between processes by the operating system.
-    \item \textbf{Error detection} --- The operating system must detect and correct errors constantly.
+    \item \textbf{User
+              interface} --- almost all operating systems have a \textbf{user
+              interface} (UI) that is either \textbf{command-line} or
+          \textbf{graphical}.
+          This interface can be interacted with via the keyboard or
+          mouse.
+          Touchscreens also provide \textbf{touch screen interfaces}.
+    \item \textbf{Program execution} --- The system must be able to load
+          programs into memory to run them, and also end their execution,
+          either normally, or abnormally (due to an error).
+    \item \textbf{I/O operations} --- A running program may require I/O,
+          which may involve a file or an I/O device.
+          The operating system provides a uniform interface to I/O
+          devices.
+    \item \textbf{File-system manipulation} --- Programs need to read
+          and write files or directories, create or delete them by
+          name, search for files, list file information, and manage
+          permissions and ownership.
+    \item \textbf{Communications} --- Processes may exchange
+          information, on the same computer or between computers over a
+          network.
+          Communications may be via \textbf{shared memory}, in which
+          two or more processes read and write to a shared section of
+          memory, or through \textbf{message passing}, where packets of
+          information in predefined formats are moved between processes
+          by the operating system.
+    \item \textbf{Error detection} --- The operating system must detect
+          and correct errors constantly.
           \begin{itemize}
-              \item Errors may occur in the CPU and memory hardware (memory errors or power failures), I/O devices (parity errors or connection failures on a network, or lack of paper in a printer), and in user programs (division by zero or invalid memory access).
-              \item The operating system must take the appropriate action to ensure correct and consistent computing.
-              \item Debugging facilities can enhance the user's and programmer's abilities to efficiently use the system.
+              \item Errors may occur in the CPU and memory hardware
+                    (memory errors or power failures), I/O devices
+                    (parity errors or connection failures on a network,
+                    or lack of paper in a printer), and in user
+                    programs (division by zero or invalid memory
+                    access).
+              \item The operating system must take the appropriate
+                    action to ensure correct and consistent computing.
+              \item Debugging facilities can enhance the user's and
+                    programmer's abilities to efficiently use the
+                    system.
           \end{itemize}
 \end{itemize}
-Another set of operating system functions exist to ensure efficient operation of the system via resource sharing:
+Another set of operating system functions exist to ensure efficient
+operation of the system via resource sharing:
 \begin{itemize}
-    \item \textbf{Resource allocation} --- When multiple users or multiple jobs running concurrently, resources must be allocated to each of them.
+    \item \textbf{Resource allocation} --- When multiple users or
+          multiple jobs running concurrently, resources must be
+          allocated to each of them.
           \begin{itemize}
-              \item some resources (CPU cycles, main memory, and file storage), may have a special allocation code
-              \item others (such as I/O devices) may have general request and release codes
+              \item some resources (CPU cycles, main memory, and file
+                    storage), may have a special allocation code
+              \item others (such as I/O devices) may have general
+                    request and release codes
           \end{itemize}
-    \item \textbf{Accounting} (\textbf{logging}) --- Keeping track of which programs use how much and what kinds of computer resources.
-          This is valuable for system administration where a system can be fine-tuned to improve performance.
-    \item \textbf{Protection and security} --- The owners of information stored in a multi-user or networked system must be able to control access to that information.
+    \item \textbf{Accounting} (\textbf{logging}) --- Keeping track of
+          which programs use how much and what kinds of computer
+          resources. This is valuable for system administration where a
+          system can be fine-tuned to improve performance.
+    \item \textbf{Protection and security} --- The owners of information
+          stored in a multi-user or networked system must be able to
+          control access to that information.
           \begin{itemize}
-              \item Concurrent processes should not interfere with each other or the operating system itself
-              \item \textbf{Protection} ensures that all access to system resources is controlled
-              \item \textbf{Security} requires authentication from external users. This extends to defending external I/O devices from invalid access attempts
-              \item If a system is to be protected and secure, precautions must be instituted throughout it. A chain is only as strong as its weakest link.
+              \item Concurrent processes should not interfere with each
+                    other or the operating system itself
+              \item \textbf{Protection} ensures that all access to
+                    system resources is controlled
+              \item \textbf{Security} requires authentication from
+                    external users. This extends to defending external
+                    I/O devices from invalid access attempts
+              \item If a system is to be protected and secure,
+                    precautions must be instituted throughout it. A
+                    chain is only as strong as its weakest link.
           \end{itemize}
 \end{itemize}
 \subsection{User and Operating System Interface}
 There are many ways for users to interface with the operating system.
 \subsubsection{Command Interpreters}
-Most operating systems, including, Linux, UNIX, and Windows, treat command interpreters as a \textbf{special program} that is running when a process is initiated. On systems with multiple command interpreters, these are known as \textbf{shells}.
+Most operating systems, including, Linux, UNIX, and Windows, treat
+command interpreters as a \textbf{special program} that is running when
+a process is initiated. On systems with multiple command interpreters,
+these are known as \textbf{shells}.
 
-For example, on UNIX and Linux systems, users may choose among several shells including the \textbf{C shell}, \textbf{Bourne-Again shell}, \textbf{Korn shell}, and others.
+For example, on UNIX and Linux systems, users may choose among several
+shells including the \textbf{C shell}, \textbf{Bourne-Again shell},
+\textbf{Korn shell}, and others.
 
-The main function of a command interpreter is to fetch and execute user-specified commands.
-These commands can be implemented in two general ways:
+The main function of a command interpreter is to fetch and execute
+user-specified commands. These commands can be implemented in two
+general ways:
 \begin{itemize}
-    \item \textbf{Built-in commands} --- Commands that are interpreted directly by the command interpreter and do not require the execution of another program.
-    \item \textbf{System programs} --- The command interpreter does not understand the command, and uses the command to identify a file to be loaded into memory and executed.
+    \item \textbf{Built-in commands} --- Commands that are interpreted
+          directly by the command interpreter and do not require the
+          execution of another program.
+    \item \textbf{System programs} --- The command interpreter does not
+          understand the command, and uses the command to identify a file
+          to be loaded into memory and executed.
 \end{itemize}
-If the latter, adding new commands to the system is as simple as writing a new program, and modifying existing programs does not require shell modification.
+If the latter, adding new commands to the system is as simple as
+writing a new program, and modifying existing programs does not
+require shell modification.
 \subsubsection{Graphical User Interface}
-Rather than entering commands directly via a command-line interface, users can use the mouse, keyboard, and monitor to interact with
-images and icons on the screen (the desktop). Clicking mouse buttons may invoke additional actions that can provide information, display options,
-execute functions, open directories (folders), and so on.
+Rather than entering commands directly via a command-line interface,
+users can use the mouse, keyboard, and monitor to interact with images
+and icons on the screen (the desktop). Clicking mouse buttons may
+invoke additional actions that can provide information, display
+options, execute functions, open directories (folders), and so on.
 
 Many systems now include both a CLI and GUI:
 \begin{itemize}
-    \item \textbf{macOS} is implemented on the UNIX kernel, and provides an \textit{Aqua} GUI and a command-line interface
+    \item \textbf{macOS} is implemented on the UNIX kernel, and provides
+          an \textit{Aqua} GUI and a command-line interface
     \item \textbf{Windows} provides a standard GUI and a CLI
-    \item \textbf{UNIX and Linux} provide CLI shells with optional GUIs such as \textit{K Desktop Environment} (KDE), or the GNOME desktop by the GNU project.
+    \item \textbf{UNIX and Linux} provide CLI shells with optional GUIs
+          such as \textit{K Desktop Environment} (KDE), or the GNOME
+          desktop by the GNU project.
 \end{itemize}
 \subsubsection{Touch Screen Interface}
-As a command-line or mouse-and-keyboard system is impractical for mobile systems, phones, tablets, and other mobile devices use a touch screen interface.
-These devices require the user to interact with the screen directly using gestures and a virtual keyboard.
+As a command-line or mouse-and-keyboard system is impractical for
+mobile systems, phones, tablets, and other mobile devices use a touch
+screen interface. These devices require the user to interact with the
+screen directly using gestures and a virtual keyboard.
 \subsection{System Calls}
-System calls provide an interface to the services made available by an operating system.
-These calls are generally available as functions written in C and C++, or sometimes Assembly.
+System calls provide an interface to the services made available by an
+operating system. These calls are generally available as functions
+written in C and C++, or sometimes Assembly.
 
-These functions are typically accessed via a high-level \textbf{application programming interface} (API),
-rather than direct system calls.
+These functions are typically accessed via a high-level
+\textbf{application programming interface} (API), rather than direct
+system calls.
 
-Observe the following example of a system call sequence where we wish to copy a file's contents into another file:
+Observe the following example of a system call sequence where we wish
+to copy a file's contents into another file:
 \begin{minted}{text}
 Acquire input file name
   Write prompt to screen
@@ -643,54 +896,72 @@ Write completion message to screen
 Terminate normally
 \end{minted}
 \subsection{Application Programming Interface}
-Even a simple program makes heavy use of the operating system.
-For this reason, application programmers design programs according to an
-\textbf{application programming interface} (API). This API specifies a set of functions
-that are available to an application programmer, including the parameters that are passed to each function
-and the return values the programmer can expect. On UNIX systems, we can use the \mintinline{text}|man|
-command to view the API for a given function.
+Even a simple program makes heavy use of the operating system. For this
+reason, application programmers design programs according to an
+\textbf{application programming interface} (API). This API specifies a
+set of functions that are available to an application programmer,
+including the parameters that are passed to each function and the
+return values the programmer can expect. On UNIX systems, we can use
+the \mintinline{text}|man| command to view the API for a given
+function.
 
 Some examples of APIs include:
 \begin{itemize}
     \item the \textbf{Windows API} for Windows systems
     \item the \textbf{POSIX API} for UNIX, Linux, and macOS
 \end{itemize}
-A programmer accesses an API via a \textbf{library} of code, provided by the operating system.
-In the case of UNIX and Linux, programs written in the C language use a library called \textbf{libc}.
+A programmer accesses an API via a \textbf{library} of code, provided by
+the operating system.
+In the case of UNIX and Linux, programs written in the C language use a
+library called \textbf{libc}.
 
 There are two main reasons for programming according to an API:
 \begin{itemize}
-    \item \textbf{Program portability} --- a program written to an API can be compiled on any system that supports that API
-    \item \textbf{Ease of implementation} --- making system calls manually may require more work and a deeper understanding of system functions
+    \item \textbf{Program portability} --- a program written to an API
+          can be compiled on any system that supports that API
+    \item \textbf{Ease of implementation} --- making system
+          calls manually may require more work and a deeper
+          understanding of system functions
 \end{itemize}
 \subsubsection{System Call Interface}
-An important factor in handling system calls is the \textbf{run-time environment} (RTE),
-which is a suite of software needed to execute applications written in a particular programming language,
-including compilers, interpreters, libraries and loaders. The RTE provides a \textbf{system-call interface}
-that serves as a link to system calls made available by the operating system.
+An important factor in handling system calls is the \textbf{run-time
+environment} (RTE), which is a suite of software needed to execute
+applications written in a particular programming language, including
+compilers, interpreters, libraries and loaders. The RTE provides a
+\textbf{system-call interface} that serves as a link to system calls
+made available by the operating system.
 
-The system-call interface \textbf{intercepts} function calls in the API and invokes the necessary system calls
-within the operating system. Typically a number is associated with each system call, and the system-call interface
-maintains a table indexed according to these numbers. The system-call interface invokes the intended system call
-in the operating system kernel and returns the status of the system call with any return values.
+The system-call interface \textbf{intercepts} function calls in the API
+and invokes the necessary system calls within the operating system.
+Typically a number is associated with each system call, and the
+system-call interface maintains a table indexed according to these
+numbers. The system-call interface invokes the intended system call in
+the operating system kernel and returns the status of the system call
+with any return values.
 
-Thus, the caller does not need to know anything about how the system call is implemented, rather it only needs to
-know obey the API and understand what the operating system will do as a result of this call. Below is an example
-of a user application invoking the \mintinline{text}|open()| system call:
-\begin{figure}[H]
-    \centering
+Thus, the caller does not need to know anything about how the system
+call is implemented, rather it only needs to know obey the API and
+understand what the operating system will do as a result of this call.
+Below is an example of a user application invoking the
+\mintinline{text}|open()| system call:
+\begin{figure}[H] \centering
     \includegraphics[height = 6cm]{figures/system_call_open.pdf}
     % \caption{} % \label{}
 \end{figure}
 \subsubsection{System Call Parameter Passing}
-Often more information is required than simply the identity of the desired system call.
-There are three general methods used to pass parameters to the operating system:
+Often more information is required than simply the identity of the
+desired system call. There are three general methods used to pass
+parameters to the operating system:
 \begin{itemize}
     \item \textbf{Registers} --- pass parameters to registers
-    \item \textbf{Blocks} --- parameters are stored in a block, or table, in memory, and the address of the block is passed as a parameter in a register
-    \item \textbf{Stack} --- parameters are pushed onto the stack, and popped by the operating system
+    \item \textbf{Blocks} --- parameters are stored in a block, or
+          table, in memory, and the address of the block is passed as a
+          parameter in a register
+    \item \textbf{Stack} --- parameters are pushed onto the stack, and
+          popped by the operating system
 \end{itemize}
-The latter two approaches are preferred as they do not limit the number or length of parameters being passed.
+The latter two approaches are preferred as they do not limit the number
+or length of parameters being passed.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/system_call_param_pass.pdf}
@@ -706,7 +977,8 @@ System calls can be grouped into six major categories:
     \item Communications
     \item Protection
 \end{itemize}
-Some examples of these types of system calls are shown in the following sections.
+Some examples of these types of system calls are shown
+in the following sections.
 \subsubsection{Process Control}
 % A running program needs to be able to halt its execution either normally (\mintinline{text}|end()|)
 % or abnormally (\mintinline{text}|abort()|). If a system call is made to terminate a program abnormally,
@@ -797,67 +1069,85 @@ Some examples of these types of system calls are shown in the following sections
     % \caption{} % \label{}
 \end{table}
 \subsection{System Services}
-System services, also known as system programs or utilities, provide a convenient environment for program development and execution.
-Some are simply user interfaces to system calls, while others are considerably more complex.
-Most users' view of the operating system is defined by system programs, not the actual system calls.
+System services, also known as system programs or utilities, provide a
+convenient environment for program development and execution. Some are
+simply user interfaces to system calls, while others are considerably
+more complex. Most users' view of the operating system is defined by
+system programs, not the actual system calls.
 \begin{itemize}
-    \item \textbf{File management}. Programs that create, delete, copy, rename, print, list, or access and manipulate, files and directories.
-    \item \textbf{Status information}. Programs that ask the system for the date,
-          time, amount of available memory or disk space, number of users, or
-          similar status information. Other programs provide detailed
-          performance, logging, and debugging information.
-          This information is typically formatted and outputted to the user.
+    \item \textbf{File management}.
+          Programs that create, delete, copy, rename, print, list, or
+          access and manipulate, files and directories.
+    \item \textbf{Status information}.
+          Programs that ask the system for the date, time, amount of
+          available memory or disk space, number of users, or similar
+          status information.
+          Other programs provide detailed performance, logging, and
+          debugging information.
+          This information is typically formatted and outputted to the
+          user.
 
-          Some systems also support a \textbf{registry},
-          which is used to store and retrieve configuration information.
-    \item \textbf{File modification}. Text editors may create and modify
-          the content of files stored on disk. There may
-          be special commands to search files or perform transformations
-          of the text.
-    \item \textbf{Programming-language support}. Compilers, assemblers, debuggers, and
-          interpreters for common programming languages (such as C, C++, Java,
-          and Python) are often provided with the operating system or available to
+          Some systems also support a \textbf{registry}, which is used
+          to store and retrieve configuration information.
+    \item \textbf{File modification}.
+          Text editors may create and modify the content of files
+          stored on disk.
+          There may be special commands to search files or perform
+          transformations of the text.
+    \item \textbf{Programming-language support}.
+          Compilers, assemblers, debuggers, and interpreters for common
+          programming languages (such as C, C++, Java, and Python) are
+          often provided with the operating system or available to
           download.
-    \item \textbf{Program loading and execution}. Once a program is assembled or compiled,
-          it must be loaded into memory to be executed. The system may
-          provide absolute loaders, relocatable loaders, linkage editors, and overlay
-          loaders.
+    \item \textbf{Program loading and execution}.
+          Once a program is assembled or compiled, it must be loaded
+          into memory to be executed.
+          The system may provide absolute loaders, relocatable loaders,
+          linkage editors, and overlay loaders.
 
-          Debugging systems for either higher-level languages or machine
-          language are needed as well.
-    \item \textbf{Communications}. These programs provide the mechanism for creating
-          virtual connections among processes, users, and computer systems. They
-          also allow users to send information to other machines.
-    \item \textbf{Background services}. All general-purpose systems have methods for
-          launching certain system-program processes at boot time. Some of these
-          processes terminate after completing their tasks, while others continue to
-          run until the system is halted. Constantly running processes are called
-          services, subsystems, or daemons.
+          Debugging systems for either higher-level languages or
+          machine language are needed as well.
+    \item \textbf{Communications}.
+          These programs provide the mechanism for creating virtual
+          connections among processes, users, and computer systems.
+          They also allow users to send information to other machines.
+    \item \textbf{Background services}.
+          All general-purpose systems have methods for launching
+          certain system-program processes at boot time.
+          Some of these processes terminate after completing their
+          tasks, while others continue to run until the system is
+          halted.
+          Constantly running processes are called services, subsystems,
+          or daemons.
 \end{itemize}
-Along with these system programs, most operating systems are supplied with
-application programs that are designed to perform common operations.
+Along with these system programs, most operating systems are supplied
+with application programs that are designed to perform common
+operations.
 \subsection{Operating System Design and Implementation}
 \subsubsection{Mechanisms and Policies}
-An important principle is the separation of \textbf{policy} from \textbf{mechanism}.
-Policies determine \textit{what} will be done, and mechanisms determine \textit{how}
-to do something.
+An important principle is the separation of \textbf{policy} from
+\textbf{mechanism}. Policies determine \textit{what} will be done, and
+mechanisms determine \textit{how} to do something.
 
-The separation of policy and mechanism is important for \textbf{flexibility}. Policies
-are likely to change over time, and should not require a change in the underlying mechanism.
+The separation of policy and mechanism is important for
+\textbf{flexibility}. Policies are likely to change over time, and
+should not require a change in the underlying mechanism.
 
-Microkernel based systems take this principle to the extreme, by only implementing a
-basic set of policy-free building blocks, so that more advanced mechanisms and policies
-can be added via user-created kernel modules.
+Microkernel based systems take this principle to the extreme, by only
+implementing a basic set of policy-free building blocks, so that more
+advanced mechanisms and policies can be added via user-created kernel
+modules.
 
-In contrast, the Windows operating system and macOS, closely encode both mechanism and policy
-into the system to enforce a global look and feel across the system. All applications
-will therefore have similar interfaces, because the interface itself is built into the kernel and
+In contrast, the Windows operating system and macOS, closely encode
+both mechanism and policy into the system to enforce a global look and
+feel across the system. All applications will therefore have similar
+interfaces, because the interface itself is built into the kernel and
 system libraries.
 \subsubsection{Implementation}
-Operating systems are typically implemented using several \textbf{high-level languages} such as
-C, C++, and assembly.
-While the kernel might be written assembly and C, higher-level routines and system libraries
-may be written using C++.
+Operating systems are typically implemented using several
+\textbf{high-level languages} such as C, C++, and assembly. While the
+kernel might be written assembly and C, higher-level routines and
+system libraries may be written using C++.
 
 Some reasons for using higher-level languages are described below:
 \begin{itemize}
@@ -866,117 +1156,690 @@ Some reasons for using higher-level languages are described below:
     \item Code is easier to understand
     \item Code is easier to debug
 \end{itemize}
-In addition to this, improvements in compiler technology will improve the generated code for the
-entire operating system.
+In addition to this,
+improvements in compiler technology will improve the
+generated code for the entire operating system.
 
-Another advantage is that operating systems can be \textbf{ported} to other
-hardware if they are written in a higher-level language. This is particularly important
-for operating systems intended to run on different hardware systems, such as embedded devices,
-Intel x86 systems, and ARM chips in mobile devices.
+Another advantage is that operating systems can be \textbf{ported} to
+other hardware if they are written in a higher-level language. This is
+particularly important for operating systems intended to run on
+different hardware systems, such as embedded devices, Intel x86
+systems, and ARM chips in mobile devices.
 \subsection{Operating System Structure}
-A system as large and complex as an operating system must be engineered carefully if it is to function properly and be modified easily.
-We will discuss the evolution of various structures in the following sections.
+A system as large and complex as an operating system must be engineered
+carefully if it is to function properly and be modified easily. We will
+discuss the evolution of various structures in the following sections.
 \subsubsection{Monolithic Structures}
-The monolithic structure is the \textbf{simplest} structure for organising an operating system, as it uses \textbf{no structure} at all.
-All functionality of the kernel is placed into a single, static binary file, that runs in a single address space.
+The monolithic structure is the \textbf{simplest} structure for
+organising an operating system, as it uses \textbf{no structure} at
+all. All functionality of the kernel is placed into a single, static
+binary file, that runs in a single address space.
 
-An example of such a structure is the original UNIX operating system, which consists of two separable parts:
+An example of such a structure is the original UNIX operating system,
+which consists of two separable parts:
 \begin{itemize}
     \item the kernel
     \item system programs
 \end{itemize}
-The kernel represents everything \underline{below the system-call interface} and \underline{above the physical hardware}.
-It provides the file system, CPU scheduling, memory management, and other operating-system functions through system calls.
+The kernel represents everything \underline{below the system-call
+    interface} and \underline{above the physical hardware}.
+It provides the file system, CPU scheduling, memory management, and
+other operating-system functions through system calls.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/UNIX_structure.pdf}
     % \caption{} % \label{}
 \end{figure}
-The Linux operating system is based on UNIX and is structured similarly. Applications
-typically use the \mintinline{text}|glibc| standard C library when communicating with the kernel (through the system-call interface).
-The Linux kernel is monolithic, but has a \textbf{modular design} that allows the kernel to be modified during runtime.
+The Linux operating system is based on UNIX and is structured
+similarly.
+Applications typically use the \mintinline{text}|glibc| standard C
+library when communicating with the kernel (through the system-call
+interface).
+The Linux kernel is monolithic, but has a \textbf{modular design} that
+allows the kernel to be modified during runtime.
 \begin{figure}[H]
     \centering
-    \includegraphics[height = 4cm]{figures/linux_structure.pdf}
+    \includegraphics[height = 6cm]{figures/linux_structure.pdf}
     % \caption{} % \label{}
 \end{figure}
-Monolithic kernels introduce very little overhead in the system-call interface,
-and communication within the kernel is very fast. Despite their simplicity,
-monolithic kernels are however difficult to implement and extend.
+Monolithic kernels introduce very little overhead in the system-call
+interface, and communication within the kernel is very fast.
+Despite their simplicity, monolithic kernels are however difficult to
+implement and extend.
 \subsubsection{Layered Structures}
-The monolithic approach is a \textbf{tightly coupled} system because changes to one part of the system
-have widespread effects on other parts of the system. Alternatively, we may consider a
-\textbf{loosely coupled} system which is divided into separate, smaller components
-that have specific and limited functionality. All these components comprise the kernel.
+The monolithic approach is a \textbf{tightly coupled} system because
+changes to one part of the system have widespread effects on other
+parts of the system. Alternatively, we may consider a \textbf{loosely
+coupled} system which is divided into separate, smaller components that
+have specific and limited functionality. All these components comprise
+the kernel.
 
 One way to achieve modularity is to use a \textbf{layered approach},
 where the operating system is divided into a number of layers (levels).
-The bottom layer (layer 0) is the hardware, and the highest (layer N) is the user interface.
-This is shown below.
+The bottom layer (layer 0) is the hardware, and the highest (layer N)
+is the user interface. This is shown below.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/layered_structure.pdf}
     % \caption{} % \label{}
 \end{figure}
-Each layer uses functions (operations) and services of only \textbf{lower-level layers}. This simplifies
-debugging and system verification.
+Each layer uses functions (operations) and services of only
+\textbf{lower-level layers}.
+This simplifies debugging and system verification.
 
-Layered systems are used in computer networks (such as TCP/IP) and web applications, however
-relatively few operating systems use a purely layered approach due to the challenges of
-appropriately defining the functionality of each layer.
+Layered systems are used in computer networks (such as TCP/IP) and web
+applications, however relatively few operating systems use a purely
+layered approach due to the challenges of appropriately defining the
+functionality of each layer.
 \subsubsection{Microkernel Structures}
-As UNIX expanded, the kernel became large and difficult to manage, and thus a system called
-\textbf{Mach} was developed to modularise the kernel using the \textbf{microkernel} approach.
-The Mac OS X kernel, Darwin, is a well-known example of a microkernel operating system based on Mach.
+As UNIX expanded, the kernel became large and difficult to manage, and
+thus a system called \textbf{Mach} was developed to modularise the
+kernel using the \textbf{microkernel} approach. The Mac OS X kernel,
+Darwin, is a well-known example of a microkernel operating system based
+on Mach.
 
-In a microkernel structure, \textbf{all nonessential components} are removed from the kernel
-and are instead implemented as \textbf{user-level programs} that reside in separate address spaces.
-Typically, microkernels provide minimal process and memory management, in addition to a communication facility,
-resulting in a small (micro) kernel.
+In a microkernel structure, \textbf{all nonessential components} are
+removed from the kernel and are instead implemented as
+\textbf{user-level programs} that reside in separate address spaces.
+Typically, microkernels provide minimal process and memory management,
+in addition to a communication facility, resulting in a small (micro)
+kernel.
 
 The main function of the microkernel is to provide communication
-between the client program and the various services that are also running in
-user space, using \textbf{message passing}.
+between the client program and the various services that are also
+running in user space, using \textbf{message passing}.
 
 There are several benefits of using a microkernel system:
 \begin{itemize}
-    \item Easy to extend --- new services added to the user space rarely require modification to the kernel. Changes to the kernel are also smaller
+    \item Easy to extend --- new services added to the user space
+          rarely require modification to the kernel. Changes to the
+          kernel are also smaller
     \item Easy to port to new architectures
-    \item More reliable and secure --- most services are running as user processes, rather than kernel processes
+    \item More reliable and secure --- most services are running as
+          user processes, rather than kernel processes
 \end{itemize}
-One of the main disadvantages of microkernels is the \textbf{performance overhead} associated with
-user space to kernel space communication. Communication between two user processes
-requires messages to be copied twice; once from the sending process to the kernel, and again from the kernel
-to the receiving process.
+One of the main disadvantages of
+microkernels is the \textbf{performance overhead} associated
+with user space to kernel space communication.
+Communication between two user processes requires messages to be copied
+twice; once from the sending process to the kernel, and again from the
+kernel to the receiving process.
 \begin{figure}[H]
     \centering
     \includegraphics[height = 6cm]{figures/microkernel_structure.pdf}
     % \caption{} % \label{}
 \end{figure}
 \subsubsection{Modules}
-Most modern operating systems use \textbf{loadable kernel modules} (LKMs). Here, the kernel has a set of
-core components and can link in additional services via modules, either at boot time, or during run time.
-This design is common to modern implementatios of UNIX, such as Linux, macOS, and Solaris, and also Windows.
+Most modern operating systems use \textbf{loadable kernel modules}
+(LKMs). Here, the kernel has a set of core components and can link in
+additional services via modules, either at boot time, or during run
+time. This design is common to modern implementatios of UNIX, such as
+Linux, macOS, and Solaris, and also Windows.
 
-In this structure, the kernel only provides core services, while other services are implemented \textbf{dynamically},
-as the kernel is running. Linking services dynamically is preferable to adding new features directly to the
-kernel, as the latter requires recompiling the kernel every time a change is made.
+In this structure, the kernel only provides core services, while other
+services are implemented \textbf{dynamically}, as the kernel is
+running. Linking services dynamically is preferable to adding new
+features directly to the kernel, as the latter requires recompiling the
+kernel every time a change is made.
 
-The overall result resembles a layered system as each kernel section has defined, protected interfaces; however,
-it is more flexible than a layered system, as any module can call any other module.
+The overall result resembles a layered system as each kernel section
+has defined, protected interfaces; however, it is more flexible than a
+layered system, as any module can call any other module.
 
-This approach is also similar to the microkernel approach in that the primary module has only core functions and
-knowledge of how to load and communicate with other modules; but it is more efficient as modules do not need to
-invoke message passing in order to communicate.
+This approach is also similar to the microkernel approach in that the
+primary module has only core functions and knowledge of how to load and
+communicate with other modules; but it is more efficient as modules do
+not need to invoke message passing in order to communicate.
 
-Linux uses loadable kernel modules, primarily for device drivers. LKMs can be ``inserted'' into the kernel
-as the system is \textbf{booted} or during run time. If a device is not present, it can be dynamically loaded.
+Linux uses loadable kernel modules, primarily for device drivers. LKMs
+can be ``inserted'' into the kernel as the system is \textbf{booted} or
+during run time. If a device is not present, it can be dynamically
+loaded.
 \subsubsection{Hybrid Structures}
-Most modern systems combine several of the above approaches, resulting in hybrid systems that address performance,
-security, and usability issues. For example,
+Most modern systems combine several of the above approaches, resulting
+in hybrid systems that address performance, security, and usability
+issues. For example,
 \begin{itemize}
-    \item Linux is monolithic to provide performance, and modular to allow dynamic loading of kernel services
-    \item Windows is also monotlithic, but retains the behaviour of a microkernel system, including support for separate subsystem \textit{personalities} that run as user-mode processes
-    \item Mac OS X is based on the Mach microkernel, and includes dynamically loadable modules called \textbf{kernel extensions}
+    \item Linux is monolithic to provide performance, and modular to
+          allow dynamic loading of kernel services
+    \item Windows is also monotlithic, but retains the behaviour of a
+          microkernel system, including support for separate subsystem
+          \textit{personalities} that run as user-mode processes
+    \item Mac OS X is based on the Mach microkernel, and includes
+          dynamically loadable modules called \textbf{kernel
+          extensions}
 \end{itemize}
+\section{Processes}
+A \textbf{process} is a program in execution, and is the unit of work
+in a modern computing system. Processes need resources to accomplish
+their task, including CPU time, memory, files, and I/O devices. These
+are typically allocated to processes while it is executing.
+
+Modern operating systems support processes having multiple
+\textbf{threads} of control. On systems with multiple hardware
+processing cores, these threads can run in \textbf{parallel}. An
+important aspect of an operating system is how it \textbf{schedules}
+threads onto available processing cores.
+\subsection{Process Concept}
+Early computers were batch systems that executed \textbf{jobs},
+followed by time-shared systems that ran \textbf{user programs} or
+\textbf{tasks}. On single-user systems, a user may be able to run
+several programs at one time, and even if that is not possible, the
+operating system may need to support internal programmed activities,
+such as memory management. Thus, the concept of a \textbf{process} was
+introduced to encapsulate these activities.
+\subsubsection{The Process}
+A process is a program in execution. The status of the current activity
+of a process is represented by the value of the \textbf{prorgam
+counter} and the contents of a processor's registers. The memory layout
+of a process is divided into multiple sections, as shown in the figure
+below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/process_memory_layout.pdf}
+    % \caption{} % \label{}
+\end{figure}
+To summarise, these sections include:
+\begin{itemize}
+    \item \textbf{Text} --- the executable code
+    \item \textbf{Data} --- global variables
+    \item \textbf{Heap} --- memory dynamically allocated during run time
+    \item \textbf{Stack} --- temporary data storage such as function
+          parameters, return addresses, and local variables
+\end{itemize}
+Notice how the sizes of the text and data sections are
+\textbf{fixed}, while the sizes of the heap and stack sections may
+\textbf{shrink and grow dynamically} during program execution.
+
+When a function is called, an \textbf{activation record} containing
+function parameters, local variables, and the return address is pushed
+onto the stack. When control is returned from the function, this
+activation record is popped off the stack. Similarly, the heap will
+grow as memory is dynamically allocated, and will shrink when memory is
+returned to the system.
+
+The operating system must ensure that the stack and heap do not
+\textbf{overlap} in memory.
+
+It is important to note that a program itself is not a process, but
+rather a \textbf{passive entity}, such as an \textbf{executable file},
+that contains a list of instructions stored on disk. A process is an
+\textbf{active entity} with a program counter specifying the next
+instruction to execute, and a set of associated resources.
+
+A \textbf{program} \textit{becomes} a process when an executable file
+is loaded into memory, either through a GUI (i.e., mouse double-click),
+or through a command line interface. While \textbf{multiple processes}
+may be associated with the \textbf{same program}, these are considered
+as \textbf{separate} execution sequences, as they may have different
+data, heap, and stack sections. A process may also \textbf{spawn} many
+other processes as it runs.
+\subsubsection{Process State}
+As a process executes, it changes \textbf{state} according to its
+current activity:
+\begin{itemize}
+    \item \textbf{New} --- the process is being created
+    \item \textbf{Running} --- instructions are being executed
+    \item \textbf{Waiting} --- the process is waiting for some event to
+          occur (such as an I/O completion or reception of a signal)
+    \item \textbf{Ready} --- the process is waiting to be assigned to a
+          processor
+    \item \textbf{Terminated} --- the process has finished execution
+\end{itemize}
+It is important to realise that only one
+process can be \textbf{running} on any processor at any instant.
+A state diagram corresponding to these states is shown below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 4cm]{figures/process_state_diagram.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Process Control Block}
+Each process is represented in the operating system by a
+\textbf{process control block} (PCB) (also called a \textbf{task
+control block}). It contains many pieces of information associated with
+a specific process, including:
+\begin{itemize}
+    \item \textbf{Process state} --- new, ready, running, waiting, halted
+    \item \textbf{Program counter} --- the address of the next
+          instruction to be executed
+    \item \textbf{CPU registers} --- contents of all process-centric
+          registers (accumulators, index registers, stack pointers, etc.)
+    \item \textbf{CPU-scheduling information} --- process priority, pointers to scheduling queues, etc.
+    \item \textbf{Memory-management information} --- memory allocated to the process: base and limit registers, page tables, segment tables
+    \item \textbf{Accounting information} --- amount of CPU and real time used, time limits, account numbers, job or process numbers, etc.
+    \item \textbf{I/O status information} --- devices allocated to the process, list of open files, etc.
+\end{itemize}
+To summarise, the PCB serves as the \textbf{repository} for all
+information needed to start, or restart, a process.
+\subsubsection{Threads}
+The process model described above implies that a process is a program
+that performs a \textbf{single thread of execution}. This single thread
+of control allows the process to perform only one task at a time. Most
+modern operating systems have extended the process model to allow a
+process to have multiple threads of execution, and thus perform more
+than one task at a time. This is especially beneficial on multicore
+systems, where multiple threads can run in parallel. On such systems,
+the PCB is expanded to include information for each thread.
+\subsubsection{Process Representation in Linux}
+In Linux, a process is represented by a \mintinline{text}|task_struct|
+structure, which is defined in the \mintinline{text}|<linux/sched.h>|
+header file. This structure contains a large number of fields,
+including:
+\begin{minted}{c}
+long state;                 /* state of the process */
+struct sched entity se;     /* scheduling information */
+struct task struct *parent; /* this process’s parent */
+struct list head children;  /* this process’s children */
+struct files struct *files; /* list of open files */
+struct mm struct *mm;       /* address space */
+\end{minted}
+\subsection{Process Scheduling}
+The objective of \textbf{multiprogramming} is to have some process
+running at all times, to maximise CPU utilisation. The objective of
+\textbf{time sharing} is to switch a CPU core among processes so
+frequently that users can interact with each program while it is
+running.
+
+To meet these objectives, the \textbf{process scheduler} select an
+available process for execution on a core. Each CPU core runs one
+process at a time. If there are more processes than cores, the
+scheduler must wait until a core is free and can be rescheduled. The
+number of processes currently in memory is known as \textbf{degree of
+multiprogramming}
+
+Balancing these objectives requires taking the general behaviour of the
+process into account.
+\begin{itemize}
+    \item A process that spends more time doing I/O, is an \textbf{I/O
+          bound process}
+    \item A process that spends more time doing computation, is an
+          \textbf{CPU bound process}
+\end{itemize}
+\subsubsection{Scheduling Queues}
+The process scheduler maintains a set of \textbf{scheduling queues} for
+processes awaiting allocation of CPU time. These queues are typically
+implemented as \textbf{linked lists} of PCBs, with each queue having
+its own priority.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/scheduler_queues.pdf}
+    % \caption{} % \label{}
+\end{figure}
+These queues include:
+\begin{itemize}
+    \item \textbf{Job queue} --- The set of \textbf{all} processes in the system
+    \item \textbf{Ready queue} --- As processes enter the system, they
+          are placed in this queue which resides in main memory, where
+          they are ready and waiting to execute
+    \item \textbf{Wait queue} --- The set of processes waiting for the
+          occurrenece of an event, such as I/O completion
+\end{itemize}
+Processes are initially placed in the \textbf{ready queue} where they
+wait to be selected by scheduler, or are \textbf{dispatched}.
+When a processes is allocated to a CPU core, and is executing, one of
+several events may occur:
+\begin{itemize}
+    \item The process may issue an I/O request and be placed in the
+          \textit{wait queue}
+    \item The process may create a new child process and be placed in
+          the \textit{wait queue} while awaiting the child's
+          termination
+    \item The process may be removed forcibly from the CPU by the
+          scheduler, either due to an interrupt or because that
+          process's time slice has expired, and be placed back in the
+          \textit{ready queue}
+\end{itemize}
+In the first two cases, the process eventually returns to the ready queue.
+A process continutes this cycle until it terminates, at which point, it
+is removed from all queues and has its PCB and resources deallocated.
+
+This is shown in the queueing diagram below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/queueing_diagram}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{CPU Scheduling}
+Processes migrate between the ready and wait queues throughout their
+lifetimes. The role of the \textbf{CPU scheduler} is to select from
+among the processes that are in the ready queue, and allocate a CPU
+core to one of them. This is known as \textbf{CPU scheduling}.
+
+These schedulers are invoked at a different rate,
+\begin{itemize}
+    \item The process scheduler is a \textbf{long-term scheduler}, as
+          it is not invoked very frequently (seconds to minutes).
+    \item The CPU scheduler is a \textbf{short-term scheduler}, as it
+          is invoked frequently to prevent a single process from using
+          a core for an extended period of time. The CPU scheduler
+          often forcibly removes the CPU from a process every 100ms or
+          faster.
+\end{itemize}
+Some operating systems have an intermediate form of scheduling known
+as \textbf{swapping}.
+This is a form of \textbf{medium-term scheduling}, where a process is
+removed from memory to reduce the degree of multiprogramming.
+This process can be reintroduced into memory later.
+A processes state is ``swapped-out'' from memory to disk, where its
+current status is saved, and later ``swapped-in'' to memory, with its
+status restored.
+This is useful when memory has been overcommitted and needs to be freed
+up.
+\subsubsection{Context Switch}
+When the CPU switches to another process, the kernel performs a
+\textbf{state save} of the \textbf{current context} of the running
+process, then perform a \textbf{state restore} of that context when
+processing is complete. The \textbf{context} of a process is
+represented in the PCB of that process.
+
+This process is known as a \textbf{context switch}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/context_switching.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Context switch time is pure overhead, as the system does no useful
+work while switching.
+More complex operating systems may require more information to be
+stored during a context switch, requiring more advanced
+memory-management techniques to be implemented.
+\subsection{Operations on Processes}
+The processes in most systems can execute concurrently, and may be
+created and deleted dynamically. These systems must provide a mechanism
+for process creation and termination.
+\subsubsection{Process Creation}
+During execution, a process may create several new processes. The
+creating process is called the \textbf{parent process} and the new
+processes are known as \textbf{child processes}. Each of these new
+processes may in turn create other processes, forming a \textbf{tree}
+of processes.
+
+Most operating systems (including UNIX, Linux, and Windows) identify
+processes using a \textbf{process identifier} (pid), represented by an
+integer. The pid is unique for each process in the system, and can be
+used as an index to access various attributes of a process within the
+kernel.
+
+In Linux, the \mintinline{text}|systemd| process is the first process
+to be created, and has a pid of 1. This process is responsible for
+starting all other processes in the system, such as the
+\mintinline{text}|logind| and \mintinline{text}|sshd| processes.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/linux_process_tree.pdf}
+    % \caption{} % \label{}
+\end{figure}
+In general, when a process creates a child process, the child will
+need certain resources to accomplish its task.
+This process may be able to obtain these resources directly from the
+operating system, or be constrained to a subset of the parent's
+resources.
+In addition to supplying physical and logical resources, the parent
+process may pass initialisation data (input) to the child process.
+
+When a process creates a new process, two possibilities for execution
+exist:
+\begin{itemize}
+    \item The parent continues to execute concurrently with its
+          children
+    \item The parent waits until some or all of its children have
+          terminated
+\end{itemize}
+There are also two address-space possibilites for
+the new process:
+\begin{itemize}
+    \item The child process is a duplicate of the parent process (both
+          share the same data)
+    \item The child process has a new program loaded into it
+\end{itemize}
+In UNIX,
+the \mintinline{text}|fork()| system call is used to
+duplicate the calling process and create a new
+process.
+This allows the parent process to easily communicate with its child
+process.
+The child may then use the \mintinline{text}|exec()| system call to
+replace its memory space with a new program.
+
+The parent process can either create more children, or issue a
+\mintinline{text}|wait()| system call to wait for a child to terminate.
+
+When the \mintinline{text}|fork()| system call is invoked, the function
+returns the child processes pid to the parent process, but returns 0 to
+the child process. This allows us to distinguish between the parent and
+child process.
+
+Consider the following code: \inputminted{c}{code/create_process.c}
+This program forks the parent process on line 11, and then waits for
+the child process to terminate. This program outputs the following:
+\begin{minted}{text}
+Child:  fork() returned     0 PID 15515
+create_process.c  create_process
+Parent: fork() returned 15515 PID 15514
+\end{minted}
+After the child process is created, the
+\mintinline{text}|exec()|\footnote{Note that \mintinline{text}|exec()|
+is often used to refer to a family of functions in C. While these
+functions refer to the same system call, they differ in the arguments
+they can accept. See the manpage for \mintinline{text}|exec| for more
+information.} system call is used to replace the child's memory space
+with the \mintinline{text}|ls| program, causing the second print
+statement to not be executed.
+
+The parent process can use the \mintinline{text}|wait()| system call to
+remove itself from the ready queue until the termination of the child
+process, after which the parent process can resume from where it left
+off.
+\subsubsection{Process Termination}
+A process terminates when it finishes executing its final statement,
+and asks the operating system to delete it by using the
+\mintinline{text}|exit()| system call. At this point, the process may
+return a status value to its parent, which is used to determine if the
+child process completed successfully. All resources allocated to the
+process are then deallocated and reclaimed by the operating system.
+
+A parent may terminate the execution of one or more of its children by
+using the \mintinline{text}|abort()| system call. This may be done for
+several reasons, including:
+\begin{itemize}
+    \item The child process exceeded allocated resources
+    \item The task assigned to the child is no longer required
+    \item The parent is exiting, and the operating system does not
+          allow a child to continue if its parent terminates. As a
+          result, all child processes are terminated ---
+          \textbf{cascading termination}
+\end{itemize}
+The following
+example demonstrates how a parent process might see the exit
+status of a child process.
+\inputminted{c}{code/terminate_process.c}
+This program outputs the following:
+\begin{minted}{text}
+Child PID 28453
+PID 28453 exited with status 0x100
+Exit code: 1
+\end{minted}
+When a process terminates, its resources are deallocated by the
+operating system. However, its entry in the process table must remain
+until the parent calls \mintinline{text}|wait()|, because the process
+table contains the process's exit status.
+\begin{itemize}
+    \item A process that has terminated but whose parent has not yet
+          called \mintinline{text}|wait()| is known as a \textbf{zombie
+          process} All processes transition to this state when they
+          terminate, but only for a short time.
+    \item If a parent terminates without calling
+          \mintinline{text}|wait()|, the child processes are
+          \textbf{orphaned}. In this scenario, the operating system
+          assigns the \mintinline{text}|systemd| process as the parent
+          of any orphaned processes.
+\end{itemize}
+\subsection{Interprocess Communication}
+Processes executing concurrently may either be \textbf{independent} or
+\textbf{cooperating} processes. Independent processes do not share data
+with other processes that are executing in the system, whereas
+cooperating processes can affect or be affected by other processes that
+are executing in the system.
+
+There are several reasons for providing an environment that allows
+process cooperation:
+\begin{itemize}
+    \item \textbf{Information sharing} --- processes may access the same
+          piece of information
+    \item \textbf{Computation speedup} --- tasks may be subdivided and
+          executed in parallel on multiple cores
+    \item \textbf{Modularity} --- dividing a system function into
+          separate processes allows different parts of the system to be
+          implemented independently
+\end{itemize}
+Cooperating processes require an \textbf{interprocess communication}
+(IPC) mechanism that allows them to exchange data and information.
+There are two models of IPC:
+\begin{itemize}
+    \item \textbf{Shared memory} --- processes exchange information by
+          reading and writing data to a shared region of memory
+    \item \textbf{Message passing} --- processes communicate with one
+          another by exchanging messages
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/ipc_mechanisms.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Message passing is useful for exchanging small amounts of data, without
+needing to avoid conflict. Shared memory can be faster than message
+passing, as all accesses are treated as routine memory accesses, and no
+assistance from the kernel is required, aside from establishing the
+shared memory region.
+\subsection{Shared Memory}
+A common paradigm for shared memory is the \textbf{producer-consumer}
+problem. A \textbf{producer} process \textit{produces} information that
+is \textit{consumed} by the \textbf{consumer} process. For example, a
+server might provide web content, which is read by a client web
+browser.
+
+A solution to this shared memory problem is to use a \textbf{buffer}
+that is filled by the producer, and emptied by the consumer. In such a
+system, the producer and consumer must be \textbf{synchronised} to
+ensure the consumer does not try to consume data that has not yet been
+produced.
+
+Two types of buffers can be used:
+\begin{itemize}
+    \item \textbf{Unbounded buffer} --- the buffer has no fixed size;
+          the producer can keep producing data, the consumer may need
+          to wait if it is reading faster than the producer is writing
+    \item \textbf{Bounded buffer} --- the buffer has a fixed size; the
+          producer must wait if the buffer is full, and the consumer
+          may need to wait if it is reading faster than the producer
+\end{itemize}
+In either case, at least one process is waiting for the other to either
+write data, or to read data.
+
+The shared buffer can be implemented using a circular array with two
+pointers \mintinline{text}|in| and \mintinline{text}|out|.
+\inputminted{c}{code/shared_memory.c} As the producer cannot write to
+the buffer when the consumer points to the next location to be written,
+the total number of items the buffer can hold is
+\mintinline{text}|BUFFER_SIZE - 1|.
+\subsection{Message Passing}
+Message passing provides a mechanism to allow proesses to communicate
+and to synchronise their actions without sharing the same address
+space. It is particularly useful when communicating processes reside on
+different computers that are connected by a network.
+
+A message passing facility provides two operations:
+\begin{itemize}
+    \item \mintinline{text}|send(message)| --- send a message to another
+          process
+    \item \mintinline{text}|receive(message)| --- receive a message from
+          another process
+\end{itemize}
+Messages sent by a process can be either \textbf{fixed} or
+\textbf{variable} in size. If only fixed-size messages are sent, the
+system-level implementation is more straightforward, however the task
+of programming the application becomes more difficult. Conversely, if
+variable-sized messages are sent, the system-level implementation is
+more complex, but the task of programming the application becomes
+easier.
+
+If processes \(P\) and \(Q\) wish to communicate, they must
+\begin{itemize}
+    \item establish a \textbf{communication link} between them
+    \item exchange messages via \textbf{send/receive} primitives
+\end{itemize}
+These links can be implemented in a variety of ways:
+\begin{itemize}
+    \item physically --- shared memory, hardware bus
+    \item logically --- direct or indirect communication, synchronous
+          or asynchronous communication, automatic or explicit
+          buffering
+\end{itemize}
+\subsubsection{Naming}
+Processes that want to communicate must be able to refer to each other.
+This can be done either \textbf{directly} or \textbf{indirectly}.
+
+Under direct communication, each process must explicity name the
+recipient or sender of the communication:
+\begin{itemize}
+    \item \mintinline{text}|send(P, message)| --- send a message to
+          process \(P\)
+    \item \mintinline{text}|receive(Q, message)| --- receive a message
+          from process \(Q\)
+\end{itemize}
+In this scheme, a link is established between each pair of processes
+that wish to communicate. This allows for a \textbf{symmetric} or
+\textbf{asymmetric} link to be established. The above example uses
+symmetric addressing, but it is possible for the recipient to not
+name the sender:
+\begin{itemize}
+    \item \mintinline{text}|send(P, message)| --- send a message to
+          process \(P\)
+    \item \mintinline{text}|receive(id, message)| --- receive a message
+          from any process; the variable \(id\) is set to the name of
+          the sender
+\end{itemize}
+The disadvantage of direct communication is the limited modularity of
+the resulting system. If a process changes identifier, it may be
+necessary to update all processes that communicate with it.
+
+In contrast, \textbf{indirect communication} allows messages to be
+passed to and from \textbf{mailboxes} or \textbf{ports}. Messages can
+be placed into mailboxes and received by other processes that have
+access to this shared mailbox. The \mintinline{text}|send()| and
+\mintinline{text}|receive()| primitives are then extended to include
+the name of the mailbox:
+\begin{itemize}
+    \item \mintinline{text}|send(A, message)| --- send a message to
+          mailbox \(A\)
+    \item \mintinline{text}|receive(A, message)| --- receive a message
+          from mailbox \(A\)
+\end{itemize}
+In this method, we must decide how many processes can read from a
+mailbox, or if they must take turns.
+\subsubsection{Synchronisation}
+Communication can be either \textbf{synchronous} or
+\textbf{asynchronous}, also known as \textbf{blocking} and
+\textbf{non-blocking} respectively. In relation to message passing,
+this means:
+\begin{itemize}
+    \item \textbf{Blocking send}. The sending process must wait until
+          the sent message is received by the receiving process
+    \item \textbf{Non-blocking send}. The sending process can send a
+          message and resume operation immediately
+    \item \textbf{Blocking receive}. The receiving process must wait
+          until a message is available
+    \item \textbf{Non-blocking receive}. The receiving process can
+          receive a valid message or null
+\end{itemize}
+If both send and receive are blocking, there is a \textbf{rendezvous}
+between the sender and receiver.
+\subsection{POSIX Shared Memory}
+This section explores a mechanism for shared memory provided by the
+POSIX API.\ POSIX shared memory is organised using
+\textbf{memory-mapped} files that associate a region of shared memory
+with a file. A process must first create a shared-memory object using
+the \mintinline{text}|shm_open()| system call:
+\inputminted{c}{code/posix_shared_memory.c}
 \end{document}
