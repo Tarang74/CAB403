@@ -1841,8 +1841,405 @@ POSIX API.\ POSIX shared memory is organised using
 \textbf{memory-mapped} files that associate a region of shared memory
 with a file. A process must first create a shared-memory object using
 the \mintinline{text}|shm_open()| system call:
-\inputminted{c}{code/posix_shared_memory_producer.c}
-The consuming process can then read the contents of this shared memory
-using the code below.
-\inputminted{c}{code/posix_shared_memory_consumer.c}
+\inputminted{c}{code/posix_shared_memory_producer.c} The consuming
+process can then read the contents of this shared memory using the code
+below. \inputminted{c}{code/posix_shared_memory_consumer.c}
+\subsubsection{Pipes}
+Pipes allow two processes to communicate with each other through
+message passing. The producer writes to the \textbf{write end} of the
+pipe, and the consumer reads from the \textbf{read end} of the pipe. As
+a result, pipes are \textbf{unidirectional}, and only allow one-way
+communication. Below is an example of a pipe being used to communicate
+between a parent and child process.
+
+\inputminted{c}{code/pipe.c}
+\section{Threads}
+The process model described above implies that a process is a program
+with a \textbf{single thread of execution}. However, most modern
+operating systems allow processes to have multiple threads of
+execution. Identifying opportunities for parallelism in a program is a
+very important in multicore systems with multiple CPUs.
+\subsection{Overview}
+A \textbf{thread} is a basic unit of CPU utilisation, consisting of a
+thread ID, a program counter, a register set, and a stack. It shares
+with other threads belonging to the same process its code section, data
+section, and other operating-system resources, such as open files and
+signals. If a process has multiple threads of control, it can perform
+more than one task at a time.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/threads.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Motivation}
+Many modern applications are designed to leverage processing on
+multicore systems to perform multiple tasks in parallel across multiple
+computing cores. For example, a web server may have one thread to
+listen for incoming requests, and another thread to process these
+requests. Most operating system kernels are also multi-threaded.
+
+As process creation is time consuming and resource intensive, it is
+more efficient to use one process with multiple threads.
+\subsubsection{Benefits}
+There are several benefits to multi-threaded programming:
+\begin{itemize}
+    \item \textbf{Responsiveness} --- may allow continued execution if
+          part of a process is blocked. This is especially important
+          for user interfaces.
+    \item \textbf{Resource sharing} --- threads share resources of the
+          process to which they belong, including memory and files.
+          This is easier than using shared memory or message passing.
+    \item \textbf{Economy} --- creating and managing threads is
+          generally faster than creating and managing processes. Context
+          switching between threads incurs less overhead than between
+          processes.
+    \item \textbf{Scalability} --- multi-threaded programs can take
+          advantage of multiprocessor architectures, as threads can be
+          run in parallel on different processing cores.
+\end{itemize}
+\subsection{Multicore Programming}
+Consider the following application with four threads. On a system with
+a single computing core, concurrency is achieved by time slicing the
+CPU between the threads executing only one thread at a time. On a
+system with multiple cores, concurrency is achieved by running the
+threads in parallel on different cores, because the system can assign a
+separate thread to each core.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_single_core.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_multi_core.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Note the distinction between \textbf{parallelism} and \textbf{concurrency}.
+\begin{itemize}
+    \item A \textbf{concurrent} system supports more than one task by
+          allowing all tasks to make process. On a single core system,
+          the scheduler switches between tasks to achieve this.
+    \item A \textbf{parallel} system can perform more than one task
+          simultaneously.
+\end{itemize}
+Thus, a concurrent system does not imply it is also parallel.
+There are two types of parallelism:
+\begin{itemize}
+    \item \textbf{Data parallelism} --- distributes subsets of the same
+          data across multiple cores, performing the same operation on
+          each core.
+    \item \textbf{Task parallelism} --- distributes tasks (threads)
+          across multiple computing cores, each of which performs a
+          unique operation.
+\end{itemize}
+Note that these two types of parallelism are not mutually exclusive, and
+an application may use a combination of both.
+\subsubsection{Programming Challenges}
+Multicore systems introduce several challenges for programmers to make
+better use of multiple computing cores. Designers of oeprating systems
+must write their own scheduling altorithms that use multiple cores to
+allow parallel execution of threads. In general, there are five areas
+that present challenges:
+\begin{itemize}
+    \item \textbf{Identifying tasks} --- identifying tasks that can be
+          divided into separate, concurrent tasks. Ideally, these tasks
+          are independent of one another, and can run on individual
+          cores.
+    \item \textbf{Balance} --- ensuring that all cores perform an equal
+          amount of work. When one task contributes significantly less
+          value than others, it may be necessary to use a separate
+          execution core.
+    \item \textbf{Data splitting} --- dividing data into subsets that
+          can be operated on in parallel.
+    \item \textbf{Data dependency} --- ensuring that tasks which access
+          the same data are synchronised.
+    \item \textbf{Testing and debugging} --- testing and debugging
+          multi-threaded programs is more difficult than single-threaded
+          programs.
+\end{itemize}
+\begin{tcolorboxlarge}[title={Amdahl's Law}, parbox=false]
+    Amdahl's Law is a formula that identifies performance gains from
+    adding additional cores, to an application that has both serial
+    and parallel components. If \(S\) is the fraction of the application
+    that must be performed serially on a system with \(N\) cores, then
+    \begin{equation*}
+        \text{speedup} = \frac{1}{S + \frac{1 - S}{N}}.
+    \end{equation*}
+\end{tcolorboxlarge}
+\subsection{Multithreading Models}
+Support for threads can be provided either at the user level, for
+\textbf{user threads}, or at the kernel level, for \textbf{kernel
+threads}. User threads are managed by user-level threads libraries such
+as:
+\begin{itemize}
+    \item POSIX Pthreads
+    \item Windows threads
+    \item Java threads
+\end{itemize}
+Kernel threads are managed directly by the operating system, and this is
+the case for most modern operating systems, such as Windows, Linux, and
+macOS.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_user_kernel.pdf}
+    % \caption{} % \label{}
+\end{figure}
+For the user space to utilise multiple cores, a relationship must be
+established between user threads and kernel threads. The following
+sections will explore various models that achieve this.
+\subsubsection{Many-to-One Model}
+The many-to-one model maps many user-level threads to a single kernel
+thread. Thread managemen is done by the thread library in user space,
+so it is efficient. However, an entire process will be blocked if a
+thread makes a blocking system call. Additionally, because only one
+thread can access the kernel at a time, multiple threads are unable to
+run in parallel on multicore systems.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_many_to_one.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{One-to-One Model}
+The one-to-one model maps each user thread to a kernel thread, and is
+the most common approach. This allows multiple threads to run in
+parallel on multicore systems. However, creating a user thread requires
+creating a kernel thread, which is expensive and thus a large number of
+kernel threads may affect performance.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_one_to_one.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Many-to-Many Model}
+The many-to-many model multiplexes any number of user threads to an
+equal or smaller number of kernel threads. This model allows the
+operating system to create a sufficient number of kernel threads for a
+particular application or machine. Although this model is the most
+flexible, it is also the most difficult to implement.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_many_to_many.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Two-Level Model}
+A two-level model is similar to the many-to-many model, but allows a
+user thread to be bound to a kernel thread.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 7cm]{figures/threads_two_level.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsection{Thread Libraries}
+Thread libraries provide the programmer with an API for creating and
+managing threads. There are two primary ways of implementing a thread:
+\begin{itemize}
+    \item User-level library, where support is limited to the user
+          space.
+    \item Kernel-level library, which is supported by the operating
+          system.
+\end{itemize}
+Three thread libraries are in use today:
+\begin{itemize}
+    \item POSIX Pthreads --- a threads extension of the POSIX standard
+          which may be provided as either a user-level or kernel-level
+          library.
+    \item Windows threads --- a kernel-level library that is part of
+          the Windows API.
+    \item Java threads --- a user-level library provided managed
+          directly in Java programs.
+\end{itemize}
+There are two strategies for creating multiple threads:
+\begin{itemize}
+    \item \textbf{Asynchronous threading} --- the parent thread
+          continues to execute concurrently and independently with the
+          child thread it created. This is useful for tasks that
+          require little data sharing between threads.
+    \item \textbf{Synchronous threading} --- the parent thread waits
+          until the child thread completes before continuing. This is
+          useful for tasks that require significant data sharing
+          between threads, where a parent thread may need to combine the
+          results of multiple child threads.
+\end{itemize}
+\subsubsection{Pthreads}
+Pthreads refers to the POSIX standard (IEEE 1003.1c) defining an API
+for thread creation and synchronisation. This is a specification for
+thread behaviour, not an implementation. Systems that implement the
+Pthreads specification include UNIX-type operating systems such as
+Linux and macOS.
+
+The following program calculates the sum of the first \(n\) integers
+using a multi-threaded program that follows the Pthreads API.
+\inputminted{c}{code/pthreads_multithreading.c} In this program, the
+\mintinline{c}|sum| variable is shared between the parent and child
+threads. Each child thread begins control within the
+\mintinline{c}|runner| function.
+
+The parent thread waits for all child threads to complete by calling
+the \mintinline{c}|pthread_join()| function.
+\subsection{Implicit Threading}
+To address the challenges of creating and managing threads, many
+programming languages transfer these responsibilities to compilers and
+run-time libraries. This is known as \textbf{implicit threading}. The
+programmer must then identify tasks, rather than threads, that can be
+executed in parallel. These tasks are usually defined as functions that
+can be mapped to a separate thread, typically using the many-to-many
+model. Three common approaches to implicit threading are discussed
+below.
+\subsubsection{Thread Pools}
+A \textbf{thread pool} is a collection of worker threads that are
+created at start-up and placed into a pool, where they wait for work.
+When a task is to be performed, a thread is removed from the pool and
+assigned to the task. When the task is complete, the thread returns to
+the pool and waits for more work.
+
+This approach has the following advantages:
+\begin{itemize}
+    \item Overhead of thread creation is avoided by servicing requests
+          using an existing thread.
+    \item The number of threads available can be bounded to the size of
+          the pool.
+    \item The separation of task submission from thread management
+          allows for different strategies for scheduling tasks on
+          threads. For example, a task can be scheduled to execute
+          periodically.
+\end{itemize}
+Thread pools are supported by the Windows API.
+\subsubsection{OpenMP}
+OpenMP is a set of compiler directives and an API for C, C++, and
+Fortran that provides support for parallel programming in shared-memory
+environments. OpenMP identifies \textbf{parallel regions} as blocks of
+code that may run in parallel. These regions are defined using
+\mintinline{c}|#pragma| directives as shown below.
+
+\inputminted{c}{code/openmp.c}
+
+In this code, the \mintinline{c}|#pragma omp parallel| directive
+creates as many threads as cores in the system, and all threads execute
+the code within the parallel region. To parallelise loops, the
+\mintinline{c}|#pragma omp parallel for| directive can be used to
+distribute the iterations of a for loop across threads.
+
+OpenMP also allows developers to specify the number of threads
+manually, and identify whether data should be shared or private to each
+thread. OpenMP is available on several open-source and commercial
+compilers for Linux, Windows, and macOS systems.
+\subsubsection{Grand Central Dispatch}
+Grand Central Dispatch (GCD) is a technology developed by Apple for
+macOS and iOS. It is a combination of a run-time library, API, and
+language extension that allows developers to identify tasks that can be
+executed in parallel. GCD manages most of the details of threading.
+
+GCD schedules tasks for run-time execution by placing them in a
+\textbf{dispatch queue}. When a task is ready to execute, it is removed
+from this queue and assigned to an available thread from a thread pool.
+There are two types of dispatch queues:
+\begin{itemize}
+    \item \textbf{Serial queues} --- tasks are executed in FIFO order,
+          and a task must be completed before the next task is executed.
+          This queue is called the \textbf{main queue} of a process.
+    \item \textbf{Concurrent queues} --- tasks are also executed in
+          FIFO order, but multiple tasks may be removed at a time,
+          allowing them to be executed in parallel.
+          These tasks are prioritised into three system wide queues.
+\end{itemize}
+In C, GCD defines a language extension called a \textbf{block} that is a
+self-contained unit of work specified by a caret (\mintinline{c}|^|):
+\begin{minted}{c}
+^{ /* code */ }
+\end{minted}
+\subsection{Threading Issues}
+This section discusses issues that arise when designing multi-threaded
+programs.
+\subsubsection{\mintinline{c}|fork()| and \mintinline{c}|exec()| System Calls}
+The semantics of the \mintinline{c}|fork()| system call in a
+multi-threaded program may not be well defined. If a thread calls
+\mintinline{c}|fork()|, does the new process duplicate all threads, or
+is the new process single-threaded? In some UNIX systems, two versions
+of the \mintinline{c}|fork()| system call are defined to address this
+ambiguity.
+
+In the case of a thread calling \mintinline{c}|exec()|, the new program
+specified will usually replace the entire process, including all
+threads.
+\subsubsection{Signal Handling}
+Signals are used in UNIX systems to notify a process that a particular
+event has occurred. For example, illegal memory access or division by 0.
+Signals may be received both synchronously and asynchronously, and
+follow the same pattern:
+\begin{enumerate}
+    \item A signal is generated by a particular event.
+    \item The signal is delivered to a process.
+    \item The signal is handled by either a default or user-defined
+          signal handler.
+\end{enumerate}
+Every signal has a default handler that the kernel runs when handling
+that signal. This may be overriden by a user-defined signal handler.
+Some signals may be ignored, whereas some signals terminate the program.
+
+For single-threaded applications, signals are delivered to the process.
+However, it is not clear where a signal should be delivered in a
+multi-threaded application. One of the following options exist:
+\begin{itemize}
+    \item Deliver the signal to the thread to which the signal applies.
+    \item Deliver the signal to every thread in the process.
+    \item Deliver the signal to certain threads in the process.
+    \item Assign a specific thread to receive all signals for the
+          process.
+\end{itemize}
+\subsubsection{Thread Cancellation}
+Thread cancellation terminates a thread before it has completed. For
+example, if multiple threads are concurrently searching a large data
+structure, and one thread finds the result, the other threads may be
+cancelled.
+
+The thread to be cancelled is called the \textbf{target thread}, and
+there are two ways to cancel this thread:
+\begin{itemize}
+    \item \textbf{Asynchronous cancellation} --- terminates the target
+          thread immediately.
+    \item \textbf{Deferred cancellation} --- allows the target thread
+     to periodically check if it should be cancelled.
+\end{itemize}
+This poses a difficulty when resources are shared between threads.
+For example, if a thread is cancelled while it is modifying data shared
+with other threads, it is not possible to reclaim all resources used by
+the target thread, as other threads may be using them.
+
+In Pthreads, the \mintinline{c}|pthread_cancel()| function indicates a
+request to cancel the target thread, which may be deferred or
+asynchronous. Program cancellation occurs when the thread reaches its
+\textbf{cancellation point}. A cancellation point can be specified
+using \mintinline{c}|pthread_testcancel()|, which checks if a
+cancellation request has been made.
+
+A \textbf{cleanup handler} may be invoked to release any resources
+before the thread is terminated.
+\subsubsection{Thread-Local Storage}
+Thread-local storage allows threads to have a separate copy of shared
+data in a process. This is useful when the thread the developer has no
+control over the thread creation process.
+
+This data has a similar visibility to static variables, but it is unique
+to each thread.
+\subsubsection{Scheduler Activations}
+Systems implementing the many-to-many and two-level threading models
+require communication between the kernel and thread library to allow the
+number of kernel threads allocated to the program to be adjusted
+dynamically. This is done using an intermediate data structure between
+user and kernel threads, known as a \textbf{lightweight process} (LWP).
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 4cm]{figures/lwp.pdf}
+    % \caption{} % \label{}
+\end{figure}
+To the user-thread library, the LWP appears as a virtual processor on
+which the process can schedule a user thread to run. Each LWP is
+attached to a kernel thread, and it is the kernel thread that is
+scheduled by the operating system.
+
+One scheme for communication is known as \textbf{scheduler activation}.
+In this scheme, the kernel provids an application with a set of virtual
+processors (LWPs). The kernel informs an application about events using
+an \textbf{upcall} that are handled by the thread library in an
+\textbf{upcall handler}
 \end{document}
