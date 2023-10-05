@@ -2755,4 +2755,243 @@ monitor DiningPhilosophers
 This solution ensures that a philosopher only picks up a chopstick if
 both of their neighbours are not eating. This prevents deadlock as
 there will always be at least one philosopher that can eat.
+\section{Safety Critical Systems}
+Safety critical systems are systems whose failure may result in one of
+the following outcomes:
+\begin{itemize}
+    \item illness, serious injury, or death
+    \item damage to or loss of equipment or property
+    \item damage to the environment
+\end{itemize}
+The increase of software in safety critical systems necessitates the
+proper design and implementation of these systems.
+\subsection{Safety Critical Software}
+Software is not inherently safe or unsafe. However the use of software
+in a safety critical system may contribute to an unsafe situation. Such
+software is considered safety critical.
+
+Low risk systems are safety related, whereas high risk systems are
+safety critical.
+\subsection{Dependability}
+Dependability is the most important property of a system critical
+system. It reflects the user's confidence in a system. The costs of
+system failure are often very high, and so dependability covers a range
+of attributes such as:
+\begin{itemize}
+    \item \textbf{Reliability} --- The ability to deliver services as
+          specified.
+    \item \textbf{Availability} --- The ability to deliver services
+          when required.
+    \item \textbf{Safety} --- The ability to operate without
+          catastrophic failure.
+    \item \textbf{Security} --- The ability to protect itself against
+          accidental or deliberate intrusion.
+\end{itemize}
+Both reliability and availability are measured as a probability of
+failure over a given time period.
+\subsection{Achieving Safety}
+\begin{itemize}
+    \item \textbf{Hazard avoidance} --- The system should be designed
+          to avoid hazards.
+    \item \textbf{Hazard detection and removal} --- The system
+          should be designed to detect hazards and remove them
+          before they cause accidents.
+    \item \textbf{Damage limitation} --- The system should be designed
+          to limit the damage caused by hazards.
+\end{itemize}
+In complex systems, accidents typically occur as a result of multiple
+failures. As such, designing a system to be completely safe is
+difficult.\ \textbf{Dependability costs} increase exponentially as
+increasing levels of dependability are required, and therefore a
+comprimise must be made between design cost and dependability.
+\subsection{Risk Analysis}
+Failures in safety critical systems can be caused by:
+\begin{itemize}
+    \item \textbf{Hardware failure} --- Manufacturing, end-of-life,
+          or design error.
+    \item \textbf{Software failure} --- Specification, design,
+          or implementation errors.
+    \item \textbf{Operational failure} --- Human or socio-technical
+          errors.
+\end{itemize}
+\subsubsection{Hazard and Risk}
+\begin{itemize}
+    \item A \textbf{hazard} is a situation that has the potential to
+          cause harm.
+    \item \textbf{Risk} enacapsulates the probability that a hazard
+          will lead to an accident, and the severity of the consequences
+          of that accident. Risk is a product of the probability of
+          accident and the severity of the consequences.
+\end{itemize}
+Risk analysis involves identifying hazards and limiting the risks
+associated with them.
+\subsubsection{Faults and Failures}
+A \textbf{fault} is an event that may lead to a failure, whereas a
+\textbf{failure} is the inability of a system or component to perform
+its required function within specified limits.
+
+Failures may be the result of one or more faults, and there are several
+ways to trace a failure back to its cause:
+\begin{itemize}
+    \item \textbf{Failure mode and effects analysis} (FMEA) --- A
+          systematic way of identifying the possible faults that may
+          lead to a failure, and the consequences of that failure.
+    \item \textbf{Failure tree analysis} (FTA) --- A graphical technique
+          that can be used to analyse the combination of faults that may
+          lead to a failure.
+\end{itemize}
+\subsection{Safety Standards}
+Many standards have been developed to ensure the safety of software in
+particular domains. One standard is the \textbf{International
+Electrotechnical Commission} (IEC) 61508 standard, which is a generic
+standard for functional safety. This standard has the following views
+on risk:
+\begin{itemize}
+    \item Zero risk can never be reached, but the risk can be reduced
+          to an acceptable level.
+    \item Non-tolerable risks must be reduced as lot as reasonably
+          possible.
+    \item Optimal cost effective safety is achieved when addressed in
+          the entire safety lifecycle.
+\end{itemize}
+IEC 61508 defines three successive tiers of safety assessments:
+\begin{itemize}
+    \item Safety Instrumented Systems (SIS) --- The entire system that
+          is composed of Safety Instrumented Functions (SIF).
+    \item Safety Instrumented Functions (SIF) --- A function
+          implemented by the SIS that is intended to achieve or
+          maintain a safe state for the process.
+    \item Safety Integrity Level (SIL) --- A measure of the safety
+          integrity requirements of a particular SIF. SIL 1 is low risk
+          and therefore allows for a higher probability of failure, and
+          SIL 4 is high risk and therefore requires a Lower probability
+          of failure.
+\end{itemize}
+\subsection{Real-Time Operating Systems}
+Real-time operating systems (RTOS) are operating systems that are
+designed to meet the requirements of real-time applications. The
+following considerations must be made when designing an RTOS:
+\begin{itemize}
+    \item \textbf{Tasking}
+          \begin{itemize}
+              \item Tasks terminating or deleting
+              \item Overflows within a kernel's storage area for task
+                    control blocks
+              \item Tasks exceeding stack size limits
+          \end{itemize}
+    \item \textbf{Scheduling}
+          \begin{itemize}
+              \item Deadlocks
+              \item Resource starvation
+              \item Unbounded execution times
+          \end{itemize}
+    \item \textbf{Memory and I/O Access}
+          \begin{itemize}
+              \item Inappropriate pointer usage
+              \item Data erasure
+              \item Unauthorised access
+          \end{itemize}
+    \item \textbf{Queueing}
+          \begin{itemize}
+              \item Overflows
+          \end{itemize}
+    \item \textbf{Interrupt and Error Handling}
+          \begin{itemize}
+              \item Lack of error handling
+              \item Lack of interrupt handling
+              \item Improper protection of superisor tasks
+          \end{itemize}
+\end{itemize}
+\subsection{DO-178B Standard}
+The DO-178B standard is a software standard for airborne systems. It
+consists of five main processes:
+\begin{itemize}
+    \item Software planning
+    \item Software development
+    \item Software verification
+    \item Software configuration management
+    \item Software quality assurance
+\end{itemize}
+\subsubsection{Software Planning Process}
+The software planning process determins what needs to be done to
+produce safe and requirements-based software. It's expected outputs
+are:
+\begin{itemize}
+    \item A plan for software aspects of certification
+    \item A plan for software development
+    \item A plan for software verification
+    \item A plan for software configuration management
+    \item A plan for software quality assurance
+\end{itemize}
+\subsubsection{Software Development Process}
+The software development process is broken into four sub-processes:
+\begin{itemize}
+    \item \textbf{Software requirements} --- High-level requirements in
+          relation to functionality, performance, and safety.
+    \item \textbf{Software design} --- Low-level requirements used
+          to implement source code.
+    \item \textbf{Software coding} --- Production of source code from
+          the design process.
+    \item \textbf{Software integration} --- Integration of software
+          into a real-time environment.
+\end{itemize}
+This process is iterative, and the expected outputs are:
+\begin{itemize}
+    \item Software requirements data
+    \item Software design description
+    \item Source code
+    \item Executable object code
+\end{itemize}
+\subsubsection{Software Verification Process}
+Software verification consists of:
+\begin{itemize}
+    \item verification of software requirements
+    \item validation of software design
+\end{itemize}
+these can be achieved through reviews, analysis, and testing.
+This process outputs:
+\begin{itemize}
+    \item Software verification cases and procedures
+    \item Software verification results
+\end{itemize}
+\subsubsection{Software Configuration Management Process}
+The software configuration management process is used to establish
+secure and effective configuration control for all artifacts. The
+following activities may be conducted:
+\begin{itemize}
+    \item Identification of configuration items
+    \item Change control
+    \item Baseline establishment
+    \item Software archival
+\end{itemize}
+This process outputs:
+\begin{itemize}
+    \item Software configuration index
+    \item Software lifecycle environment configuration index
+\end{itemize}
+\subsubsection{Software Quality Assurance Process}
+The software quality assurance process provides assurance that the
+software life cycle process will yield quality software. Each process
+is analysed to demonstrate that processes produce expected outputs.
+Changes to originally proposed plans are reported, evaluated, and
+resolved to ensure process integrity.
+\subsection{Programming Standards}
+While many languages are used in safety critical systems, certain
+languages may be preferred for various purposes. Many C standards also
+subset the language to remove features that are considered unsafe.
+\subsubsection{MISRA C}
+MISRA C is a set of guidelines on a subset of the C language in
+critical systems. MISRA C has three levels of compliance:
+\begin{itemize}
+    \item \textbf{Mandatory} --- These rules must be followed without
+          exception.
+    \item \textbf{Required} --- These rules must be followed but may
+          be violated in certain situations. These violations must also
+          be documented.
+    \item \textbf{Advisory} --- These rules should be followed but are
+          not mandatory.
+\end{itemize}
+MISRA C is used for error prevention, rather than error detection,
+and violation of a guideline does not necessarily mean that a program
+is incorrect.
 \end{document}
