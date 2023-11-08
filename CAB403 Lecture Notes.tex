@@ -2994,4 +2994,330 @@ critical systems. MISRA C has three levels of compliance:
 MISRA C is used for error prevention, rather than error detection,
 and violation of a guideline does not necessarily mean that a program
 is incorrect.
+\section{Distributed Systems}
+A distributed system is a collection of independent processors that do
+not share memory or a clock. Each node in the system has its own local
+memory, and communicates with other nodes through various networks.
+
+A distributed system is a collection of loosely coupled nodes,
+interconnected by a communication network. The processes in a
+distributed system are called nodes, sites, machines, or hosts.
+
+Nodes can exist in a \textbf{client-server}, \textbf{peer-to-peer}, or
+\textbf{hybrid} configuration. In a client-server architecture,
+\begin{itemize}
+    \item \textbf{Site} refers to the physical location of a node
+    \item \textbf{Servers} provide resources which \textbf{clients}
+          want to use
+\end{itemize}
+\subsection{Advantages of Distributed Systems}
+\begin{itemize}
+    \item \textbf{Resource sharing} --- provides mechanisms for:
+          \begin{itemize}
+              \item sharing files at remote sites
+              \item processing information in a distributed database
+              \item printing files at remote sites
+              \item using remote specialised hardware such as
+                    supercomputers or graphical processing units
+          \end{itemize}
+    \item \textbf{Computation speedup} --- computation that can be
+          partitioned into subcomputations can be distributed among several
+          nodes. If a particular site is overloaded with requests, some
+          requests can be moved or rerouted to other lightly loaded sites.
+          This is known as \textbf{load balancing} or \textbf{job migration}.
+    \item \textbf{Reliability} --- the failure of a node does not
+          necessarily cause the failure of the entire system. The
+          failure of a node must be detected by the system and
+          appropriate actions must be taken to recover from the failure.
+          This may include transferring the function of the failed node
+          to another node.
+    \item \textbf{Communication} --- high-level functions can be
+          expanded to allow communication between processes on different
+          machines.
+\end{itemize}
+\subsection{Network Structure}
+Networks are used to connect nodes in a distributed system. There are
+two types of network:
+\begin{itemize}
+    \item \textbf{Local-area network} (LAN) --- a network that covers
+          a small geographical area, such as a single building or a
+          cluster of buildings.
+    \item \textbf{Wide-area network} (WAN) --- a network that covers
+          a large geographical area, such as a country or the world.
+\end{itemize}
+These differences imply variations in the speed and reliability of the
+communications networks, and these are reflected in the design of
+distributed systems.
+\subsubsection{Local-Area Networks}
+Local-area networks are typically found in homes and offices, where it
+is more economical to have a number of computers with their own
+self-contained applications, than to have a single large system. To
+allow some form of data sharing between these computers, a LAN is used.
+Below are some characteristics of LANs:
+\begin{itemize}
+    \item LANs can take multiple forms, such as a bus, ring, or star
+          topology.
+    \item LANs provide communication speeds from \qty{1}{Mb.s^{-1}} to
+          \qty{40}{Gb.s^{-1}} when using Ethernet over twisted pair
+          copper or optical fibres.
+    \item LANs consist of multiple different computers (including,
+          workstations, servers, laptops, mobile devices), peripherals
+          (such as printers, scanners, storage arrays), and specialised
+          network communication processors like routers that provide
+          access to other networks.
+    \item Ethernet is the most common LAN technology, and is defined by
+          the IEEE 802.3 standard.
+    \item WiFi is increasingly used for networking and is defined by
+          the IEEE 802.11 standard which is constantly evolving.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/LAN.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Wide-Area Networks}
+Wide-area networks are typically used for communication over large
+areas, such as between cities or countries. Communication links are
+controlled by routers that forward messages between sites.
+
+Hosts are generally on LANs, which are connected to the Internet
+through routers. WANs are also slower than LANs due to the distances
+they cover.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/WAN.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsection{Network and Distributed Operating Systems}
+There are two main categories of network-oriented operating systems.
+\textbf{Network operating systems} are simpler to implement but
+generally more difficult for users to access and use.
+\textbf{Distributed operating systems} provide more features.
+\subsubsection{Network Operating Systems}
+Network operating systems provide environments for users to access
+remote resources, and this is done explicitly by:
+\begin{itemize}
+    \item \textbf{Remote Login} --- Logging into machines remotely
+          through ssh or telnet.
+    \item \textbf{Remote File Transfer} --- Transferring data between
+          local and remote machines, via ftp.
+\end{itemize}
+In this model, users must establish a \textbf{session}, and provide
+network-based commands to access remote resources, through clients,
+which is potentially more difficult for users.
+\subsubsection{Distributed Operating Systems}
+Distributed operating systems allow users to access remote resources as
+if they were local. As such, users are unaware of the multiplicity of
+machines and the distribution of resources. Distributed operating
+systems implement one or more of the following:
+\begin{itemize}
+    \item \textbf{Data Migration} --- transfer data, either partially,
+          or completely, from one machine to another.
+    \item \textbf{Computation Migration} --- transfer computation across
+          the system via
+          \begin{itemize}
+              \item Remote procedure calls (RPCs)
+              \item A messaging system
+          \end{itemize}
+    \item \textbf{Process Migration} --- transfer an entire process
+          or parts of it on different sites. This may be used for several
+          reasons:
+          \begin{itemize}
+              \item \textbf{Load balancing}. Processes (or
+                    subprocesses) may be distributed across sites.
+              \item \textbf{Computation speedup}. Processes that can
+                    be divided into subprocesses can run concurrently on
+                    different sites.
+              \item \textbf{Hardware preference}. Process execution
+                    may be more suitable on specialised\linebreak processors.
+              \item \textbf{Software preference}. Processes may
+                    require software that is only available at a
+                    particular site.
+              \item \textbf{Data access}. If the data used in a
+                    computation is numerous, it may be more efficient
+                    run that process remotely.
+          \end{itemize}
+\end{itemize}
+\subsection{Communication Structure}
+The design of a communication network must address four basic issues:
+\begin{itemize}
+    \item \textbf{Naming and name resolution} --- How do two processes
+          locate each other?
+    \item \textbf{Routing strategies} --- How are messages sent through
+          the network?
+    \item \textbf{Connection strategies} --- How do two processes send a
+          sequence of messages?
+    \item \textbf{Contention} --- How are resources shared?
+\end{itemize}
+\subsubsection{Naming and Name Resolution}
+Within a computer system, processes are identified by a unique process
+identifier. As networked systems do not share memory, processes are
+identified by a \mintinline{text}|<host name, identifier>| pair, where
+the \textbf{host name} is a unique name within the network, and the
+\textbf{identifier} is a unique identifier within the host.
+
+The \textbf{domain name system} (DNS) specifies the naming structure of
+hosts, and resolves host names to IP addresses.
+\subsubsection{Routing Strategies}
+Routing strategies determine how messages are sent through the network.
+There are three main strategies:
+\begin{itemize}
+    \item \textbf{Fixed routing} --- The route is determined in advance,
+          and only changes if a link fails.
+          \begin{itemize}
+              \item As the shortest path is usually chosen,
+                    communication costs are minimised.
+              \item Cannot adapt to load changes.
+              \item Ensures that messages are delivered in the correct
+                    order.
+          \end{itemize}
+    \item \textbf{Virtual routing} --- The route is fixed for the
+          duration of the session.
+          \begin{itemize}
+              \item Can adapt to load changes for next session if the
+                    current route is overloaded.
+              \item Ensures that messages are delivered in the correct
+                    order.
+          \end{itemize}
+    \item \textbf{Dynamic routing} --- The route is determined for each
+          message.
+          \begin{itemize}
+              \item Adapts to load changes by sending messages on the
+                    least used link at that particular time.
+              \item Cannot ensure that messages are delivered in the
+                    correct order as messages may take different
+                    routes. This can be remedied by adding sequence
+                    numbers to messages.
+              \item More complex to implement.
+          \end{itemize}
+\end{itemize}
+Often a combination of these strategies are used in practise.
+\subsubsection{Connection Strategies}
+The connection between two systems can be handled in one of three ways:
+\begin{itemize}
+    \item \textbf{Circuit switching} --- A permanent physical link is
+          established for the duration of the communication.
+    \item \textbf{Message switching} --- A temporary link is established
+          for the duration of one message.
+    \item \textbf{Packet switching} --- Messages of variable lengths are
+          divided into fixed-length packets that are sent to the
+          destination.
+          \begin{itemize}
+              \item each packet may take a different route through the
+                    network
+              \item packets must be reassembled into the original
+                    message as they arrive
+          \end{itemize}
+\end{itemize}
+Circuit switching requires more setup time, but incurs less overhead for
+transmitting each message, and may waste network bandwidth.
+
+Message and packet switching require less setup time, but incur more
+overhead per message.
+\subsubsection{Design Issues}
+Several design issues must be considered when designing a communication
+network, including:
+\begin{itemize}
+    \item \textbf{Transparency} --- The distributed system should appear
+          as a conventional, centralised system to the user.
+    \item \textbf{Fault tolerance} --- The distributed system should
+          continue to function correctly in the presence of faults.
+    \item \textbf{Scalability} --- The distributed system should be
+          able to accept the addition of new resources to accommodate
+          increase in demand
+\end{itemize}
+\subsection{Socket Programming}
+Sockets are a method of IPC that allow data to be exchanged between
+applications, either on the same host, or on different hosts connected
+by a network. The following sections cover the basics of socket
+programming.
+\subsubsection{Sockets}
+In a client-server scenario, application communicate using sockets:
+\begin{itemize}
+    \item Each application creates a socket. A socket is an endpoint
+          for communication, and both applications require one.
+    \item The server application binds a name to its socket. This
+          allows the client to identify the server.
+\end{itemize}
+A socket is created using the \mintinline{c}|socket()| system call,
+which returns a socket descriptor:
+\begin{minted}{c}
+fd = socket(domain, type, protocol);
+\end{minted}
+\subsubsection{Communication Domains}
+Sockets exist in a communication domain which determines:
+\begin{itemize}
+    \item the method of identifying a socktet (the format of a socket
+          address)
+    \item the range of communication (between applications on a single
+          host, or different hosts)
+\end{itemize}
+Most operating systems support at least the following domains:
+\begin{itemize}
+    \item The \textbf{UNIX domain} (\mintinline{c}{AF_UNIX}) --- for
+          communication between processes on the same host. The address
+          structure used in this domain is \mintinline{c}{sockaddr_un}
+          where the address format consists of a pathname.
+    \item The \textbf{IPv4 domain} (\mintinline{c}{AF_INET}) --- for
+          communication between processes on different hosts connected
+          via an Internet Protocol version 4 (IPv4) network. The
+          address structure used in this domain is
+          \mintinline{c}{sockaddr_in} where the address format consists
+          of a 32-bit IP address and a 16-bit port number.
+    \item The \textbf{IPv6 domain} (\mintinline{c}{AF_INET6}) --- for
+          communication between processes on different hosts connected
+          via an Internet Protocol version 6 (IPv6) network. The
+          address structure used in this domain is
+          \mintinline{c}{sockaddr_in6} where the address format
+          consists of a 128-bit IP address and a 16-bit port number.
+\end{itemize}
+Here \mintinline{c}{AF} stands for \textbf{address family}.
+\subsubsection{Socket Types}
+Socket implementations also provide at least two types of sockets:
+\begin{itemize}
+    \item \textbf{Stream sockets} (\mintinline{c}{SOCK_STREAM}) ---
+          provide a reliable, bidirectional, connection-based byte-stream
+          (no concept of message boundaries) communication channel.
+          Socket streams can only be connected to one peer.
+    \item \textbf{Datagram sockets} (\mintinline{c}{SOCK_DGRAM}) ---
+          allow data to be exchanged in the form of datagrams, where
+          message boundaries are preserved. Datagrams don't need to be
+          connected to another socket to be used.
+\end{itemize}
+In the Internet domain, stream sockets usually employ the Transmission
+Control Protocol (TCP), and datagram sockets employ the User Datagram
+Protocol (UDP).
+\subsubsection{Socket System Calls}
+The key socket system calls are listed below:
+\begin{itemize}
+    \item \mintinline{c}{socket()} --- creates a new socket
+    \item \mintinline{c}{bind()} --- binds a socket to an address
+    \item \mintinline{c}{listen()} --- allows a stream socket to accept
+    incoming connections from other sockets
+    \item \mintinline{c}{accept()} --- accepts a connection from a peer
+    application on a listing stream socket, returning the address of the
+    peer socket
+    \item \mintinline{c}{connect()} --- establishes a connection with
+    another socket
+\end{itemize}
+Socket I/O can be performed using the \mintinline{c}{read()} and
+\mintinline{c}{write()} system calls, or the socket specific systems
+calls \mintinline{c}{send()}, \mintinline{c}{recv()},
+\mintinline{c}{sendto()}, and \mintinline{c}{recvfrom()}. By default,
+these are blocking system calls, but can be made non-blocking by
+setting the \mintinline{c}{O_NONBLOCK} flag using the \mintinline{c}{fcntl()}
+system call.
+\subsubsection{TCP Server Example}
+The following diagrams illustrate the system calls used in TCP and UDP
+socket programming.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/sockets_TCP.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/sockets_UDP.pdf}
+    % \caption{} % \label{}
+\end{figure}
 \end{document}
