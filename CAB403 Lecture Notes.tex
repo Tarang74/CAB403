@@ -408,11 +408,12 @@ idle, and can be used by another process.
 \begin{tcolorboxlarge}[title={Definitions}, parbox=false]
     This section will use the following definitions:
     \begin{description}
-        \item[Core] The basic computation unit of the CPU
-        \item[CPU] The hardware that executes instructions
+        \item[Processing Core] The basic computation unit of a CPU
+        \item[Central Processing Unit] The hardware that executes
+              instructions
         \item[Processor] A physical chip that contains one or more CPUs
-        \item[Multicore] Multiple cores on the same CPU
-        \item[Multiprocessor] Multiple processors
+        \item[Multicore] A CPU with multiple cores
+        \item[Multiprocessor] A system with multiple processors
     \end{description}
 \end{tcolorboxlarge}
 \subsubsection{Single-Processor Systems}
@@ -3293,12 +3294,12 @@ The key socket system calls are listed below:
     \item \mintinline{c}{socket()} --- creates a new socket
     \item \mintinline{c}{bind()} --- binds a socket to an address
     \item \mintinline{c}{listen()} --- allows a stream socket to accept
-    incoming connections from other sockets
+          incoming connections from other sockets
     \item \mintinline{c}{accept()} --- accepts a connection from a peer
-    application on a listing stream socket, returning the address of the
-    peer socket
+          application on a listing stream socket, returning the address of the
+          peer socket
     \item \mintinline{c}{connect()} --- establishes a connection with
-    another socket
+          another socket
 \end{itemize}
 Socket I/O can be performed using the \mintinline{c}{read()} and
 \mintinline{c}{write()} system calls, or the socket specific systems
@@ -3320,4 +3321,308 @@ socket programming.
     \includegraphics[height = 6cm]{figures/sockets_UDP.pdf}
     % \caption{} % \label{}
 \end{figure}
+\section{CPU Scheduling}
+CPU scheduling is the basis of multiprogrammed operating systems. By
+switching the CPU among processes, the operating system can make a
+computer more productive. The following sections consider scheduling
+algorithms, and the performance metrics used to evaluate them.
+\subsection{Basic Concepts}
+The objective of multiprogramming is to have a process running at all
+times, to maximise CPU utilisation. A process executes until it needs
+to wait, typically for an I/O request, entering a waiting queue, so
+that another process can be selected for execution. In this model,
+several processes are kept in memory, and the CPU is always executing
+one of these processes.
+\subsubsection{CPU-I/O Burst Cycle}
+Process execution consists of a \textbf{cycle} of CPU execution and I/O
+wait. A process alternates between these two states until it is
+terminated. Process execution begins with a \textbf{CPU burst}, is
+followed by an \textbf{I/O burst}, and so on. The duration of each
+burst depends on the process and hardware, but generally, \textbf{I/O
+bound} processes have short CPU bursts and long I/O bursts, and
+\textbf{CPU bound} processes have a few long CPU bursts.
+\subsubsection{CPU Scheduler}
+The \textbf{CPU scheduler} is responsible for selecting a process from
+the \textbf{ready queue} to be executed by the CPU.\@ The ready queue
+is a list of processes residing in main memory, waiting to be executed
+by the CPU.\@ The ready queue's implementation depends on the
+scheduling algorithm used.
+\subsubsection{Preemtive and Non-Preemtive Scheduling}
+CPU scheduling decisions may take place under the following conditions:
+\begin{enumerate}
+    \item When processes switch from the running state to the waiting
+          state.
+    \item When processes switch from the running state to the ready
+          state.
+    \item When processes switch from the waiting state to the ready
+          state.
+    \item When a process terminates.
+\end{enumerate}
+In situations 1 and 4, a new decision must be made, as the current process
+cannot continue executing. In situations 2 and 3, a choice can be made
+to continue executing the current process, or allow another process to
+execute.
+
+When scheduling decisions are made only under conditions 1 and 4, the
+scheduling scheme is \textbf{non-preemtive} or \textbf{cooperative}.
+When scheduling decisions are made under all four conditions, the
+scheduling scheme is \textbf{preemtive} or \textbf{non-cooperative}.
+
+Under non-preemtive scheduling, a process is allocated a CPU, until it
+terminates or switches to the waiting state. Under preemtive
+scheduling, a condition may cause the currently running process to move
+to the ready queue, allowing another process to run.
+
+When using preemtive scheduling it is important to consider access to
+shared data and the state of the process when that preemption occurs,
+such as when the process is in kernel mode, or if the interrupt occurs
+during a critical section.
+\subsubsection{Dispatcher}
+The \textbf{dispatcher} is the module that gives control of the CPU to
+the process selected by the CPU scheduler. This involves:
+\begin{itemize}
+    \item Switching context from one process to another
+    \item Switching to user mode
+    \item Jumping to the proper location in the user program to restart
+          that program
+\end{itemize}
+The dispatcher should be as fast as possible, as it is invoked during
+every context switch. The time it takes for the dispatcher to stop one
+process and start another is known as the \textbf{dispatch latency}.
+This is illustrated below
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 6cm]{figures/dispatcher.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsection{Scheduling Criteria}
+Scheduling criteria are used to evaluate the quality of a scheduling
+algorithm. The following criteria are used:
+\begin{itemize}
+    \item \textbf{CPU utilisation} --- percentage of time the CPU is
+          busy
+    \item \textbf{Throughput} --- number of processes that complete
+          their execution per time unit
+    \item \textbf{Turnaround time} --- total amount of time to execute a
+          particular process, from submission to completion
+    \item \textbf{Waiting time} --- amount of time a process has been
+          waiting in the ready queue after submission
+    \item \textbf{Response time} --- amount of time from submission
+          until the first response
+\end{itemize}
+Submission refers to when the process arrives in the ready queue, and
+completion refers to when the process terminates or switches to the
+waiting queue.
+\subsection{Scheduling Algorithms}
+\subsubsection{First-Come, First-Served Scheduling}
+\textbf{First-come, first-served} (FCFS) scheduling is a non-preemtive
+scheduling algorithm that \linebreak schedules processes in the order of arrival.
+The implementation of this algorithm is easily managed with a FIFO
+queue. When a process enters the ready queue, its PCB is linked onto
+the tail of the queue. When the CPU is free, it is allocated to the
+process at the head of the queue. The process runs until it terminates
+or switches to the waiting state. The CPU is then allocated to the
+process at the head of the queue.
+
+The average waiting time for each process in this algorithm varies
+significantly based on the arrival order of processes.
+\subsubsection{Shortest-Job-First Scheduling}
+\textbf{Shortest-job-first} (SJF) scheduling is a non-preemtive
+scheduling algorithm that executes processes in order of CPU burst
+times. If two processes have the same next CPU burst, FCFS scheduling is
+used to break the tie.
+
+SJF scheduling is provably optimal as it yields the minimum average
+waiting time, however it cannot be implemented in practise as the
+length of the next CPU burst is generally not known in advance.
+\subsubsection{Shortest-Remaining-Time-First Scheduling}
+\textbf{Shortest-remaining-time-first} (SRTF) scheduling is a preemtive
+version of SJF scheduling. When a new process enters the ready queue,
+its CPU burst length is compared to the remaining time of the currently
+running process. If the new process has a shorter CPU burst, the
+currently running process is preempted, and the new process is
+allocated the CPU.\@ If the currently running process has a shorter CPU
+burst remaining, the new process is added to the ready queue.
+
+Both SJF and SRTF suffer from \textbf{starvation}, where a process with
+a long CPU burst may never be allocated the CPU.\@
+\subsubsection{Priority Scheduling}
+\textbf{Priority scheduling} is a scheduling algorithm that allocates
+the CPU to the process with the highest priority. Priority is an integer
+value associated with each process, where a low value indicates a high
+priority. Priority scheduling may be either preemtive or non-preemtive.
+
+Priority scheduling also suffers from \textbf{starvation}, but can use
+\textbf{aging} to prevent this. In aging, as time progresses, the
+priority of a ready process increases, preventing low priority
+processes from being starved.
+\subsubsection{Round-Robin Scheduling}
+\textbf{Round-robin} (RR) scheduling is a preemtive scheduling algorithm
+that allocates the CPU to each process for a fixed time interval known
+as a \textbf{time quantum} or \textbf{time slice}. The ready queue is
+treated as a circular queue, such that once the running process has
+exhausted its time quantum, it is preempted, and added to the tail of
+the ready queue. The process at the head of the queue is then allocated
+the CPU for the time quantum. The queue is again treated as a FIFO
+queue.
+
+Given \(n\) processes with time quantum \(q\), each process is
+allocated the CPU for \(1/n\) CPU time of at most \(q\) time units at
+once. No process waits for more than \(\left( n-1 \right) q\) time
+units.
+
+For large values of \(q\), RR scheduling degenerates to FCFS, and when
+\(q\) is too small, the overhead of context switching becomes too
+large.
+\subsubsection{Multilevel Queue Scheduling}
+In both priority and RR scheduling, all processes are placed in a
+single queue and may require \(\mathcal{O}\left( n \right)\) time to
+search for the next process to execute.\ \textbf{Multilevel queue}
+scheduling uses multiple queues to simplify this process, by
+distinguishing between various priority levels. As an example,
+processes may be divided into the queues shown in the figure below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/multilevel_queue_scheduling.pdf}
+    % \caption{} % \label{}
+\end{figure}
+A common division is a \textbf{foreground} (interactive) and
+\textbf{background} (batch) processes.
+In this approach, each queue uses a separate scheduling algorithm, such
+as RR for foreground processes and FCFS for background processes.
+
+In addition, there must be scheduling between the queues, which is
+commonly implemented as fixed-priority preemtive scheduling. Here, the
+higher priority queues are always serviced first, and lower priority
+queues are only serviced when higher priority queues are empty. Note
+that this has the possibility of starvation.
+
+Alternatively, we can time-slice the queues so that each queue is
+allocated a certain amount of CPU time which can be scheduled among its
+processes. For example, 80\% of CPU time may be allocated to foreground
+processes, and 20\% to background processes.
+\subsubsection{Multilevel Feedback Queue Scheduling}
+In multilevel queue scheduling, processes are permanently assigned to a
+queue when they enter the system. This reduces scheduling overhead, but
+is inflexible.\ \textbf{Multilevel feedback queue} scheduling allows
+processes to move between queues, by separating processes according to
+the characteristics of their CPU bursts. If a process uses too much CPU
+time, it is moved to a lower priority queue. Likewise, if a process
+waits too long in a lower-priority queue, it may be moved to a
+higher-priority queue. This form of aging prevents starvation.
+
+In general, a multilevel feedback queue scheduler is defined by the
+following parameters:
+\begin{itemize}
+    \item The number of queues
+    \item The scheduling algorithm for each queue
+    \item The method used to determine when to upgrade a process to a
+          higher-priority queue
+    \item The method used to determine when to demote a process to a
+          lower-priority queue
+    \item The method used to determine which queue a process will enter
+          when that process needs service
+\end{itemize}
+An example of a multilevel feedback queue scheduler is shown below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/multiple_feedback_queue_scheduling.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsection{Thread Scheduling}
+On most modern operating systems, kernel-level threads are scheduled
+instead of processes. User- level threads are managed by a thread
+library and are ultimately mapped to kernel-level threads to be
+executed. On systems implementing the many-to-one and many-to-many
+models, the thread library schedules user-level threads to run on an
+available LWP.\ This scheme is known as \linebreak
+\textbf{process-contention scope} (PCS) as competition for the CPU
+takes place among threads in the same process. To decide which
+kernel-level thread to schedule onto a CPU, the kernel uses
+\textbf{system-contention scope} (CSC), where competition takes place
+among all threads in the system.
+\subsection{Multi-Processor Systems}
+Multi-processor systems allow for parallel execution of processes using
+load sharing, however this increases the complexity of scheduling. The
+term multiprocessor applies to any of the following system
+architectures:
+\begin{itemize}
+    \item Multicore CPUs
+    \item Multithreaded cores
+    \item NUMA systems
+    \item Heteregeneous systems
+\end{itemize}
+The first three of these architectures have identical or homogeneous
+processors.
+\subsubsection{Multiple-Processor Scheduling}
+One approach to CPU scheduling in a multiprocessor system has all
+scheduling decisions, I/O processing, and system activities handled by
+a single processor --- the master server. The other processors only
+execute user code. This \textbf{asymmetric multiprocessing} is simple
+as only one processor accesses the system data structures, reducing the
+need for data sharing. A downfall of this approach is that the master
+server can become a bottleneck.
+
+Alternatively, each processor may perform its own scheduling, known as
+\textbf{symmetric multiprocessing} (SMP). In this approach, each
+processor is self-scheduling and processors may either share a common
+ready queue, or have their own private queue.
+
+This is illustrated below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/multiprocessor_scheduling.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Multicore Scheduling}
+Multicore processors place multiple CPUs on a single chip to increase
+performance and consume less power than multiple single-core processors.
+When scheduling on such systems, processes often spend a significant
+amount of time waiting for data to become available, as modern
+processors operate at much faster speeds than memory. This situtation is
+known as a \textbf{memory stall}. Memory stalls may also be the result
+of a \textbf{cache miss} (accessing data that is not yet in the cache).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{figures/memory_stall.pdf}
+    % \caption{} % \label{}
+\end{figure}
+Recent hardware designs implement multithreaded processing cores such
+that two (or more) \textbf{hardware threads} are assigned to each core.
+By doing so, processors can take advantage of memory stalls by switching
+to another thread while waiting for data.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{figures/memory_stall_2.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Load Balancing}
+On SMP systems, it is important to keep the workload balanced across
+all processors to fully utilise the benefits of having more than one
+processor.\ \textbf{Load balancing} is the process of redistributing
+the workload among the processors.
+
+Load balancing can be implemented in two ways:
+\begin{itemize}
+    \item \textbf{Push migration} --- a periodic task checks the load on
+          each processor and push threads from an overloaded processor to
+          idle or less busy processors.
+    \item \textbf{Pull migration} --- idle processors pull threads from
+          busy processors.
+\end{itemize}
+\subsubsection{Processor Affinity}
+To attempt to keep a thread running on the same processor and take
+advantage of a \textit{warm cache}, processes have an affinity for the
+processor they are currently running on.\ \textbf{Processor affinity}
+is the binding of a process to a particular processor, so that the
+process only executes on the designated processor.
+
+Processes may be given one of two types of affinity:
+\begin{itemize}
+    \item \textbf{Soft affinity} --- the kernel attempts to keep the
+          process on the same processor, but may move it to another
+          processor for load balancing.
+    \item \textbf{Hard affinity} --- the process is bound to a specific
+        set of processors, and will not run on any other processor.
+\end{itemize}
 \end{document}
