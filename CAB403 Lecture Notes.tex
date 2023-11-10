@@ -3396,15 +3396,15 @@ This is illustrated below
     % \caption{} % \label{}
 \end{figure}
 \subsection{Scheduling Criteria}
-Scheduling criteria are used to evaluate the quality of a scheduling
-algorithm. The following criteria are used:
+The following scheduling criteria are used to evaluate the quality of a
+scheduling algorithm:
 \begin{itemize}
     \item \textbf{CPU utilisation} --- percentage of time the CPU is
           busy
     \item \textbf{Throughput} --- number of processes that complete
           their execution per time unit
-    \item \textbf{Turnaround time} --- total amount of time to execute a
-          particular process, from submission to completion
+    \item \textbf{Turnaround time} --- amount of time to execute a
+          process, from submission to completion
     \item \textbf{Waiting time} --- amount of time a process has been
           waiting in the ready queue after submission
     \item \textbf{Response time} --- amount of time from submission
@@ -3576,12 +3576,13 @@ This is illustrated below.
 \end{figure}
 \subsubsection{Multicore Scheduling}
 Multicore processors place multiple CPUs on a single chip to increase
-performance and consume less power than multiple single-core processors.
-When scheduling on such systems, processes often spend a significant
-amount of time waiting for data to become available, as modern
-processors operate at much faster speeds than memory. This situtation is
-known as a \textbf{memory stall}. Memory stalls may also be the result
-of a \textbf{cache miss} (accessing data that is not yet in the cache).
+performance and consume less power than multiple single-core
+processors. When scheduling on such systems, processes often spend a
+significant amount of time waiting for data to become available, as
+modern processors operate at much faster speeds than memory. This
+situtation is known as a \textbf{memory stall}. Memory stalls may also
+be the result of a \textbf{cache miss} (accessing data that is not yet
+in the cache).
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\linewidth]{figures/memory_stall.pdf}
@@ -3623,6 +3624,426 @@ Processes may be given one of two types of affinity:
           process on the same processor, but may move it to another
           processor for load balancing.
     \item \textbf{Hard affinity} --- the process is bound to a specific
-        set of processors, and will not run on any other processor.
+          set of processors, and will not run on any other processor.
 \end{itemize}
+\section{Deadlocks}
+In a multiprogramming environment, several threads may compete for a
+finite number of resources. A thread requests a resource, and if it is
+not available, enters a waiting state. A \textbf{deadlock} occurs when
+a waiting thread cannot change state, because the resource it has
+requested is held by other waiting states. The following sections
+discuss how to prevent and detect deadlocks.
+\subsection{System Model}
+A system consists of a finite number of resources to be distributed
+among a number of competing threads. Resources are partitioned into
+several types, each of which consist of a number of identical
+instances. When a thread requests an instance of a resource type, it
+may receive any of the available instances of that resource type.
+
+Under normal operation, a thread may utilise a resource in the
+following order:
+\begin{enumerate}
+    \item \textbf{Request} the resource. If the resource cannot be
+          granted immediately, it must wait until it can be acquired.
+    \item \textbf{Use} the resource
+    \item \textbf{Release} the resource
+\end{enumerate}
+\subsection{Deadlock Characterisation}
+A deadlock can arise if four conditions hold simultaneously:
+\begin{enumerate}
+    \item \textbf{Mutual exclusion} --- at least one resource must be
+          held by a single thread.
+    \item \textbf{Hold and wait} --- a thread must be holding at least
+          one resource, and waiting to acquire additional resources held
+          by another thread.
+    \item \textbf{No preemption} --- a resource can only be released
+          voluntarily by the thread holding it.
+    \item \textbf{Circular wait} --- a set of threads must be waiting
+          for resources held by each other in a circular manner:
+          \(\left\{ T_0,\: T_1,\: \ldots,\: T_n \right\}\) where
+          \(T_0\) is waiting for a resource held by \(T_1\), \(T_1\) is
+          waiting for a resource held by \(T_2\), and so on, until
+          \(T_n\) is waiting for a resource held by \(T_0\).
+\end{enumerate}
+\subsubsection{Resource-Allocation Graph}
+A \textbf{resource-allocation graph} is a directed graph that
+illustrates the relationships between threads and resources. This graph
+consists of a set of vertices \(V\) and a set of edges \(E\). \(V\) is
+partitioned into two different types of vertices:
+\begin{itemize}
+    \item \(T = \left\{ T_1,\: T_2,\: \ldots,\: T_n \right\}\) for \textbf{threads}.
+    \item \(R = \left\{ R_1,\: R_2,\: \ldots,\: R_m \right\}\) for \textbf{resources}.
+\end{itemize}
+\(E\) consists of two different types of edges:
+\begin{itemize}
+    \item The directed edge \(T_i \rightarrow R_j\) is known as a
+          \textbf{request edge}, and indicates that thread \(T_i\) has
+          requested an instance of resource \(R_j\).
+    \item The directed edge \(R_j \rightarrow T_i\) is known as an
+          \textbf{assignment edge}, and indicates that an instance of
+          resource \(R_j\) has been allocated to thread \(T_i\).
+\end{itemize}
+Graphically, this may be represented by the following shapes:
+\begin{itemize}
+    \item \textbf{Threads} are represented by circles
+    \item \textbf{Resources} are represented by rectangles, with smaller
+          squares inside representing available instances of that resource.
+    \item \textbf{Request edges} are represented by arrows from a thread to a resource
+    \item \textbf{Asignment edges} are represented by arrows from an instance of a
+          resource to a thread.
+\end{itemize}
+When a thread requests an instance of a resource, a request edge is
+created from the thread to the resource. When that request is granted,
+the edge is converted to an assignment edge (reversed) instantaneously.
+
+From these definitions, it can be shown that if the graph contains on
+cycles, then no thread is in a deadlock. If the graph contains a cycle,
+then a deadlock may existin one of two possibilities:
+\begin{itemize}
+    \item if each resource type has exactly one instance, then a cycle
+          implies a deadlock.
+    \item if each resource type has several instances, then a cycle
+          does not necessarily imply a deadlock.
+\end{itemize}
+The following figure illustrates the graph \(G_1\):
+\begin{align*}
+    G_1 & = \left( V,\: E \right) = \left( T \cup R,\: E \right) \\
+    T   & = \left\{ T_1,\: T_2,\: T_3 \right\}                   \\
+    R   & = \left\{ R_1,\: R_2,\: R_3,\: R_4 \right\}            \\
+    E   & = \left\{
+    T_1 \rightarrow R_1,\: T_2 \rightarrow R_3,\:
+    R_1 \rightarrow T_2,\:
+    R_2 \rightarrow T_1,\: R_2 \rightarrow T_2,\:
+    R_3 \rightarrow T_3
+    \right\}
+\end{align*}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/resource_allocation_graph_1.pdf}
+    % \caption{} % \label{}
+\end{figure}
+This graph is not deadlocked as it contains no cycles. Consider the
+addition of the directed edge \(R_3 \rightarrow T_2\):
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/resource_allocation_graph_2.pdf}
+    % \caption{} % \label{}
+\end{figure}
+This edge creates two cycles,
+\begin{gather*}
+    T_1 \rightarrow R_1 \rightarrow T_2 \rightarrow R_3 \rightarrow T_3 \rightarrow R_2 \rightarrow T_1 \\
+    T_2 \rightarrow R_3 \rightarrow T_3 \rightarrow R_2 \rightarrow T_2
+\end{gather*}
+Further analysis shows that this graph is deadlocked, as each resource
+in the cycle is held by a thread waiting for another resource in the
+cycle.
+
+The following figure illustrates the graph \(G_2\):
+\begin{align*}
+    G_2 & = \left( V,\: E \right) = \left( T \cup R,\: E \right) \\
+    T   & = \left\{ T_1,\: T_2,\: T_3,\: T_4 \right\}            \\
+    R   & = \left\{ R_1,\: R_2 \right\}                          \\
+    E   & = \left\{
+    T_1 \rightarrow R_1,\: T_3 \rightarrow R_2,\:
+    R_1 \rightarrow T_2,\: R_1 \rightarrow T_3,\:
+    R_2 \rightarrow T_1,\: R_2 \rightarrow T_4
+    \right\}
+\end{align*}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/resource_allocation_graph_3.pdf}
+    % \caption{} % \label{}
+\end{figure}
+While this graph contains a cycle, it is not deadlocked as the resources
+in the cycle are not held by threads only waiting for other resources
+in the cycle. In this case, \(T_2\) and \(T_4\) will eventually release
+resources \(R_1\) and \(R_2\) respectively, allowing threads \(T_1\)
+and \(T_3\) to acquire the resources they are waiting for.
+\subsection{Methods for Handling Deadlocks}
+There are three general approaches to handling deadlocks:
+\begin{itemize}
+    \item Ensure the system never enters the deadlock state
+    \item Allow the system to enter the deadlock state, and then
+          recover from it
+    \item Ignore the problem and pretend that deadlocks never occur in
+          the system; used by most operating systems, including Linux
+          and Windows
+\end{itemize}
+\subsection{Deadlock Prevention}
+By ensuring at least one of the four necessary conditions for deadlock
+cannot hold, deadlocks can be prevented.
+\subsubsection{Mutual Exclusion}
+Sharable resources such as read-only files do not require
+mutual-exclusion and thus cannot be involved in a deadlock. In general,
+however, mutual-exclusion cannot be prevented as some resources are
+inherently non-sharable. For example, a mutex lock cannot be shared
+between multiple threads.
+\subsubsection{Hold and Wait}
+To prevent the hold-and-wait condition, we must guarantee that when a
+thread requests a resource, it is not currently holding another
+resource. One way to do this is to require that a thread request all of
+its required resources at once, before it begins execution.
+Alternatively, we can require that a thread release all of its
+resources before requesting any new resources.
+
+Both of these approaches are impractical, as they lead to low resource
+utilisation because a resource may be unused for a long period of time,
+and starvation if a thread requires multiple resources that are in high
+contention by other threads.
+\subsubsection{No Preemption}
+By allowing preemption, we can prevent the no-preemption condition. If
+a thread is holding some resources, and requests another resource that
+cannot immediately be allocated to it, then all resources held by that
+thread are implicitly released and added to the list of resources that
+the thread is requesting. The thread will be restarted only when it
+acquires the old resources, and the new resource it is requesting.
+
+This protocol is often applied to resources whose state can be easily
+saved and restored, such as CPU registers, but is not practical for
+resources such as mutex locks and semaphores.
+\subsubsection{Circular Wait}
+One way to invalidate the circular-wait condition is to impose a total
+ordering of all resource types, and require that each thread requests
+resources in an increasing order of enumeration.
+\subsection{Deadlock Avoidance}
+The above methods for deadlock prevention are often too restrictive,
+and thus deadlock avoidance is often used instead. Deadlock avoidance
+requires that the system has some additional a priori information about
+how resources may be requested by each thread.
+
+One such model requires each thread to declare the \textbf{maximum
+number} of resources of each type that it may need. Given this
+information, it is possible to construct a \textbf{deadlock-avoidance}
+algorithm that dynamically examines the \textbf{resource-allocation
+state} to ensure there can never be a circular wait condition. The
+resource-allocation state is defined by the number of available and
+allocated resources, and the maximum demand of each thread.
+
+Two deadlock-avoidance algorithms are discussed below.
+\subsubsection{Safe State}
+A system is in \textbf{safe state} if there exists a \textbf{safe
+sequence} \(\left( T_1,\: T_2,\: \ldots,\: T_n \right)\) of all threads
+in the system such that for each thread \(T_i\), the resources that
+\(T_i\) requests can be satisfied by the currently available resources
+plus the resources held by all threads \(T_j\) with \(j < i\). When
+thread \(T_i\) has finished executing, \(T_{i+1}\) can obtain its
+resources, and so on.
+
+If no such sequence exists, the system is in an \textbf{unsafe state}
+and a deadlock may occur. Therefore to avoi d deadlocks, a system must
+never enter an unsafe state.
+\subsubsection{Resource-Allocation-Graph Algorithm}
+In a resource-allocation system with only one instance of each resource
+type, the resource-allocation graph can be used for deadlock avoidance.
+In addition to the request and assignment edges defined before,
+consider a \textbf{claim edge} from a thread to a resource. This edge
+indicates that the thread \textit{may} request that resource at some
+time in the future. On a graph, this is represented as a dashed line.
+\begin{itemize}
+    \item When a thread requests a resource, a claim edge converts to a
+          request edge.
+    \item When a thread can be allocated a resource, a request edge
+          converts to an assignment edge.
+    \item When a thread releases a resource, an assignment edge
+          converts to a claim edge.
+\end{itemize}
+The resource-allocation graph algorithm is as follows:
+
+A request for a resource can be granted only if the resulting
+conversion from a request edge to an assignment edge does not contain a
+cycle. This can be detected using a cycle-detection algorithm.
+\subsubsection{Banker's Algorithm}
+In a resource-allocation system with multiple instances of each
+resource type, the banker's algorithm can be used for deadlock
+avoidance. This algorithm uses several data structures to encode the
+state of the resource-allocation system. In a system with \(n\) threads
+and \(m\) resource types, the following data structures are used:
+\begin{itemize}
+    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resources type.
+          \begin{equation*}
+              \text{\textbf{Available}}_j = \text{\textbf{Max Available}}_j - \text{\textbf{Allocation}}_j
+          \end{equation*}
+    \item \textbf{Max} --- an \(n \times m\) matrix --- the maximum
+          demand of each thread.
+    \item \textbf{Allocation} --- an \(n \times m\) matrix --- the
+          number of resources of each type currently allocated to each
+          thread.
+    \item \textbf{Need} --- an \(n \times m\) matrix --- the remaining
+          resource need of each thread.
+          \begin{equation*}
+              \text{\textbf{Need}}_{ij} = \text{\textbf{Max}}_{ij} - \text{\textbf{Allocation}}_{ij}
+          \end{equation*}
+\end{itemize}
+To determine whether a system is in a safe state, we can use the safety
+algorithm:
+\begin{enumerate}
+    \item Initialise \textbf{Work} and \textbf{Finish}, where
+          \textbf{Work} represents the number of available resources of
+          each type, and \textbf{Finish} is a vector of length \(n\)
+          indicating whether each thread can finish.
+          \begin{align*}
+              \text{\textbf{Work}}     & \gets \text{\textbf{Available}}                                                 \\
+              \text{\textbf{Finish}}_i & \gets \text{false} \quad \forall i \in \left\{ 0,\: 1,\: \ldots,\: n-1 \right\}
+          \end{align*}
+    \item Loop over \(i\) until no thread can finish:
+
+          If \(\text{\textbf{Finish}}_i = \text{false}\) and
+          \(\text{\textbf{Need}}_i \leq \text{\textbf{Work}}\), then
+          the thread can finish, and the resources it is allocated are
+          released:
+          \begin{align*}
+              \text{\textbf{Work}}     & \gets \text{\textbf{Work}} + \text{\textbf{Allocation}}_i \\
+              \text{\textbf{Finish}}_i & \gets \text{true}
+          \end{align*}
+    \item If \(\text{\textbf{Finish}}_i = \text{true} \quad \forall i
+          \in \left\{ 0,\: 1,\: \ldots,\: n-1 \right\}\), then the
+          system is in a safe state.
+\end{enumerate}
+To determine whether a request for resources can be granted, we can use
+the resource-request algorithm:
+\begin{enumerate}
+    \item If \(\text{\textbf{Request}}_i > \text{\textbf{Need}}_i\),
+          then raise an error condition, as the thread has exceeded its
+          maximum claim.
+    \item If \(\text{\textbf{Request}}_i > \text{\textbf{Available}}\),
+          then wait, as the requested resources are not available.
+    \item Pretend to allocate the requested resources to the thread by
+          modifying the state as follows:
+          \begin{align*}
+              \text{\textbf{Available}}    & \gets \text{\textbf{Available}} - \text{\textbf{Request}}_i    \\
+              \text{\textbf{Allocation}}_i & \gets \text{\textbf{Allocation}}_i + \text{\textbf{Request}}_i \\
+              \text{\textbf{Need}}_i       & \gets \text{\textbf{Need}}_i - \text{\textbf{Request}}_i
+          \end{align*}
+          If the resulting state is safe, the resources are allocated to the thread. Otherwise, the thread must wait for the requested resources,
+          and the old resource-allocation state is restored.
+\end{enumerate}
+\subsection{Deadlock Detection}
+If a system does not employ either a deadlock-prevention or
+deadlock-avoidance algorithm, then a deadlock may occur. In this case,
+the system must provide:
+\begin{itemize}
+    \item An algorithm that examines the state of the system to
+          determine whether a deadlock has occurred
+    \item An algorithm to recover from the deadlock
+\end{itemize}
+Below we discuss two deadlock-detection algorithms for systems with
+single and multiple instances of each resource type.
+\subsubsection{Single Instance of Each Resource Type}
+We define a variant of the resource-allocation graph, that does not
+consider resources. This reduces this graph to a \textbf{wait-for}
+graph, consisting only of threads and waiting for edges. See (a) and
+(b) below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/wait_for_graph.pdf}
+    % \caption{} % \label{}
+\end{figure}
+The \textbf{waiting for} edge \(T_i \to T_j\)
+indicates that thread \(T_i\) is waiting for thread \(T_j\) to release
+a resource. In other words, the resource-allocation graph contains two
+edges \(T_i \to R_j\) and \(R_j \to T_i\), for some resource \(R_j\).
+
+In this graph, a deadlock occurs if and only if the graph contains a
+cycle. Therefore, the system needs to periodically invoke an algorithm
+to detect cycles in the wait-for graph. Such an algorithm requires
+\(O\left( n^2 \right)\) time, where \(n\) is the number of threads in
+the graph.
+\subsubsection{Multiple Instances of Each Resource Type}
+When multiple instances of each resource type are available, we can use
+data structures similar to the banker's algorithm to detect deadlocks.
+The following data structures are used:
+\begin{itemize}
+    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resources type.
+    \item \textbf{Allocation} --- an \(n \times m\) matrix --- the
+          number of resources of each type currently allocated to each
+          thread.
+    \item \textbf{Request} --- an \(n \times m\) matrix --- the
+          number of resources of each type currently requested by each
+          thread.
+\end{itemize}
+The deadlock-detection algorithm is as follows:
+\begin{enumerate}
+    \item Initialise \textbf{Work} and \textbf{Finish}, where
+          \textbf{Work} represents the number of available resources of
+          each type, and \textbf{Finish} is a vector of length \(n\)
+          indicating whether each thread can finish.
+          \begin{align*}
+              \text{\textbf{Work}}     & \gets \text{\textbf{Available}}                                                                                                           \\
+              \text{\textbf{Finish}}_i & \gets
+                                               \begin{cases}
+                                                   \text{false} & \text{if } \forall i \in \left\{ 0,\: 1,\: \ldots,\: n-1 \right\} : \text{\textbf{Allocation}}_i \neq \textbf{0} \\
+                                                   \text{true}  & \text{otherwise}
+                                               \end{cases}
+          \end{align*}
+    \item Loop over \(i\) until no thread can finish:
+
+          If \(\text{\textbf{Finish}}_i = \text{false}\) and
+          \(\text{\textbf{Request}}_i \leq \text{\textbf{Work}}\), then
+          the thread can finish, and the resources it is allocated are
+          released:
+          \begin{align*}
+              \text{\textbf{Work}}     & \gets \text{\textbf{Work}} + \text{\textbf{Allocation}}_i \\
+              \text{\textbf{Finish}}_i & \gets \text{true}
+          \end{align*}
+    \item If \(\text{\textbf{Finish}}_i = \text{false}\), then thread
+          \(T_i\) is deadlocked.
+\end{enumerate}
+\subsubsection{Detection-Algorithm Usage}
+The frequency of invoking the deadlock-detection algorithm depends on
+two factors:
+\begin{enumerate}
+    \item How often a deadlock is likely to occur
+    \item How many threads will be affected by the deadlock---how many
+          threads will need to be rolled back (one for each disjoint
+          cycle)
+\end{enumerate}
+Calling a deadlock-detection algorithm too frequently incurs
+considerable overhead in computation time, so a less alternative approach
+is to simply invoke the algorithm at dfeined defined intervals.
+
+If this detection algorithm is invoked at arbitrary points in time,
+then the resource graph may contain many cycles where it will not be
+possible to tell which of the many deadlocked threads caused the
+deadlock, meaning it will be difficult to recover from the deadlock.
+\subsection{Recovery from Deadlock}
+When a detection algorithm determines that a deadlock exists, the
+system can try to \textbf{recover} from the deadlock automatically.
+\subsubsection{Process and Thread Termination}
+One way to recover from a deadlock is to abort one or more processes or
+threads to break the circular wait condition. This can be done in one
+of two ways, each of which reclaims the resources allocated to the
+terminated processes or threads:
+\begin{itemize}
+    \item Abort all deadlocked processes --- this method will clearly
+          break the deadlocked cycle, but at the expense of discarding
+          all the work done by the aborted processes.
+    \item Abort one process at a time until the deadlock cycle is
+          eliminated.
+\end{itemize}
+The order in which processes are aborted may be determined using the following criteria:
+\begin{enumerate}
+    \item The priority of the process
+    \item How long the processes has computed and how much longer it
+          will compute before completing its task
+    \item How many and what types of resources the process has used
+          (are the resources simple to preempt)
+    \item How many more resources the process needs to complete
+    \item How many processes will need to be terminated
+    \item Whether the process interactive or batch
+\end{enumerate}
+\subsubsection{Resource Preemption}
+When preemption is required to eliminate deadlocks, the following
+issues must be considered:
+\begin{enumerate}
+    \item Selecting a victim --- what resources and processes are to be
+          preempted. This choice should minimise costs.
+    \item Rollback --- after a thread is preempted, resources must be
+          reclaimed from the thread, and the thread must be restarted.
+          Often this will require the system to keep track of a safe
+          state, so that the process is only rolled back as far as is
+          necessary.
+    \item Starvation --- the same process may be chosen as the victim,
+          so we must ensure that a process is preempted a small number
+          of times.
+\end{enumerate}
 \end{document}
