@@ -133,7 +133,7 @@ and depending on the device, may have more than one device attached. A
 device controller maintains a \textbf{local buffer} and a set of
 \textbf{special-purpose registers}. The device controller is
 responsible for moving data between the device and its local buffer,
-which is then moved to/from main memory by the CPU.
+which is then moved to/from main memory by the CPU.\@
 
 Typically, operating systems have a \textbf{device driver} for each
 device controller. This device driver understands the device controller
@@ -172,7 +172,7 @@ When an interrupt occurs, the CPU halts it's current execution and the
 interrupt architecture saves the address of the interrupted
 instruction, so that it can be resumed once the ISR has finished. The
 CPU then jumps to a fixed location in memory, which is the starting
-address of the ISR.
+address of the ISR.\@
 
 The interrupt architecture must also save the state information of the
 interrupted process, so that it can be restored once the ISR has
@@ -240,7 +240,7 @@ interacts with these memory locations through \textbf{load} or
 The operating system preserves the state of the CPU through
 \textbf{registers}.
 Registers can store data within the CPU, and are the fastest form of
-memory available to the CPU.
+memory available to the CPU.\@
 
 Registers are often used to carry out operations such as addition,
 where the two operands are stored in two registers, before their sum
@@ -640,8 +640,8 @@ interrupts.
 \subsubsection{Multiprogramming}
 Users of a system typically want to run multiple programs at the same
 time, rather than having one program keeping the CPU or I/O devices
-busy at all times. \textbf{Multiprogramming} allows an operating system
-to increase CPU utilisation, and satisfy user requirements, by
+busy at all times.\ \textbf{Multiprogramming} allows an operating
+system to increase CPU utilisation, and satisfy user requirements, by
 organising jobs (code and data) such that the CPU always has one to
 execute. In such a system, a program in execution is called a
 \textbf{process}.
@@ -852,7 +852,7 @@ and icons on the screen (the desktop). Clicking mouse buttons may
 invoke additional actions that can provide information, display
 options, execute functions, open directories (folders), and so on.
 
-Many systems now include both a CLI and GUI:
+Many systems now include both a CLI and GUI:\@
 \begin{itemize}
     \item \textbf{macOS} is implemented on the UNIX kernel, and provides
           an \textit{Aqua} GUI and a command-line interface
@@ -916,7 +916,7 @@ the operating system.
 In the case of UNIX and Linux, programs written in the C language use a
 library called \textbf{libc}.
 
-There are two main reasons for programming according to an API:
+There are two main reasons for programming according to an API:\@
 \begin{itemize}
     \item \textbf{Program portability} --- a program written to an API
           can be compiled on any system that supports that API
@@ -1274,7 +1274,7 @@ kernel to the receiving process.
 Most modern operating systems use \textbf{loadable kernel modules}
 (LKMs). Here, the kernel has a set of core components and can link in
 additional services via modules, either at boot time, or during run
-time. This design is common to modern implementatios of UNIX, such as
+time. This design is common to modern implementations of UNIX, such as
 Linux, macOS, and Solaris, and also Windows.
 
 In this structure, the kernel only provides core services, while other
@@ -1303,7 +1303,7 @@ issues. For example,
 \begin{itemize}
     \item Linux is monolithic to provide performance, and modular to
           allow dynamic loading of kernel services
-    \item Windows is also monotlithic, but retains the behaviour of a
+    \item Windows is also monolithic, but retains the behaviour of a
           microkernel system, including support for separate subsystem
           \textit{personalities} that run as user-mode processes
     \item Mac OS X is based on the Mach microkernel, and includes
@@ -1331,7 +1331,7 @@ such as memory management. Thus, the concept of a \textbf{process} was
 introduced to encapsulate these activities.
 \subsubsection{The Process}
 A process is a program in execution. The status of the current activity
-of a process is represented by the value of the \textbf{prorgam
+of a process is represented by the value of the \textbf{program
 counter} and the contents of a processor's registers. The memory layout
 of a process is divided into multiple sections, as shown in the figure
 below.
@@ -1474,7 +1474,7 @@ These queues include:
           are placed in this queue which resides in main memory, where
           they are ready and waiting to execute
     \item \textbf{Wait queue} --- The set of processes waiting for the
-          occurrenece of an event, such as I/O completion
+          occurrence of an event, such as I/O completion
 \end{itemize}
 Processes are initially placed in the \textbf{ready queue} where they
 wait to be selected by scheduler, or are \textbf{dispatched}.
@@ -1492,7 +1492,7 @@ several events may occur:
           \textit{ready queue}
 \end{itemize}
 In the first two cases, the process eventually returns to the ready queue.
-A process continutes this cycle until it terminates, at which point, it
+A process continues this cycle until it terminates, at which point, it
 is removed from all queues and has its PCB and resources deallocated.
 
 This is shown in the queueing diagram below:
@@ -1587,7 +1587,7 @@ exist:
     \item The parent waits until some or all of its children have
           terminated
 \end{itemize}
-There are also two address-space possibilites for
+There are also two address-space possibilities for
 the new process:
 \begin{itemize}
     \item The child process is a duplicate of the parent process (both
@@ -1688,7 +1688,7 @@ process cooperation:
 \begin{itemize}
     \item \textbf{Information sharing} --- processes may access the same
           piece of information
-    \item \textbf{Computation speedup} --- tasks may be subdivided and
+    \item \textbf{Computation speed-up} --- tasks may be subdivided and
           executed in parallel on multiple cores
     \item \textbf{Modularity} --- dividing a system function into
           separate processes allows different parts of the system to be
@@ -1696,7 +1696,7 @@ process cooperation:
 \end{itemize}
 Cooperating processes require an \textbf{interprocess communication}
 (IPC) mechanism that allows them to exchange data and information.
-There are two models of IPC:
+There are two models of IPC:\@
 \begin{itemize}
     \item \textbf{Shared memory} --- processes exchange information by
           reading and writing data to a shared region of memory
@@ -1743,9 +1743,9 @@ pointers \mintinline{text}|in| and \mintinline{text}|out|.
 \inputminted{c}{code/shared_memory.c} As the producer cannot write to
 the buffer when the consumer points to the next location to be written,
 the total number of items the buffer can hold is
-\mintinline{text}|BUFFER_SIZE - 1|.
+\mintinline{text}|BUFFER_SIZE - 1|. % chktex 8
 \subsection{Message Passing}
-Message passing provides a mechanism to allow proesses to communicate
+Message passing provides a mechanism to allow processes to communicate
 and to synchronise their actions without sharing the same address
 space. It is particularly useful when communicating processes reside on
 different computers that are connected by a network.
@@ -1781,7 +1781,7 @@ These links can be implemented in a variety of ways:
 Processes that want to communicate must be able to refer to each other.
 This can be done either \textbf{directly} or \textbf{indirectly}.
 
-Under direct communication, each process must explicity name the
+Under direct communication, each process must explicitly name the
 recipient or sender of the communication:
 \begin{itemize}
     \item \mintinline{text}|send(P, message)| --- send a message to
@@ -1844,7 +1844,7 @@ with a file. A process must first create a shared-memory object using
 the \mintinline{text}|shm_open()| system call:
 \inputminted{c}{code/posix_shared_memory_producer.c} The consuming
 process can then read the contents of this shared memory using the code
-below. \inputminted{c}{code/posix_shared_memory_consumer.c}
+below.\ \inputminted{c}{code/posix_shared_memory_consumer.c}
 \subsubsection{Pipes}
 Pipes allow two processes to communicate with each other through
 message passing. The producer writes to the \textbf{write end} of the
@@ -1937,8 +1937,8 @@ Note that these two types of parallelism are not mutually exclusive, and
 an application may use a combination of both.
 \subsubsection{Programming Challenges}
 Multicore systems introduce several challenges for programmers to make
-better use of multiple computing cores. Designers of oeprating systems
-must write their own scheduling altorithms that use multiple cores to
+better use of multiple computing cores. Designers of operating systems
+must write their own scheduling algorithms that use multiple cores to
 allow parallel execution of threads. In general, there are five areas
 that present challenges:
 \begin{itemize}
@@ -1964,7 +1964,7 @@ that present challenges:
     and parallel components. If \(S\) is the fraction of the application
     that must be performed serially on a system with \(N\) cores, then
     \begin{equation*}
-        \text{speedup} = \frac{1}{S + \frac{1 - S}{N}}.
+        \text{speed-up} = \frac{1}{S + \frac{1 - S}{N}}.
     \end{equation*}
 \end{tcolorboxlarge}
 \subsection{Multithreading Models}
@@ -1979,7 +1979,7 @@ as:
 \end{itemize}
 Kernel threads are managed directly by the operating system, and this is
 the case for most modern operating systems, such as Windows, Linux, and
-macOS.
+macOS.\@
 \begin{figure}[H]
     \centering
     \includegraphics[width = 7cm]{figures/threads_user_kernel.pdf}
@@ -2045,7 +2045,7 @@ Three thread libraries are in use today:
           which may be provided as either a user-level or kernel-level
           library.
     \item Windows threads --- a kernel-level library that is part of
-          the Windows API.
+          the Windows API.\@
     \item Java threads --- a user-level library provided managed
           directly in Java programs.
 \end{itemize}
@@ -2066,10 +2066,10 @@ Pthreads refers to the POSIX standard (IEEE 1003.1c) defining an API
 for thread creation and synchronisation. This is a specification for
 thread behaviour, not an implementation. Systems that implement the
 Pthreads specification include UNIX-type operating systems such as
-Linux and macOS.
+Linux and macOS.\@
 
 The following program calculates the sum of the first \(n\) integers
-using a multi-threaded program that follows the Pthreads API.
+using a multi-threaded program that follows the Pthreads API.\@
 \inputminted{c}{code/pthreads_multithreading.c} In this program, the
 \mintinline{c}|sum| variable is shared between the parent and child
 threads. Each child thread begins control within the
@@ -2104,7 +2104,7 @@ This approach has the following advantages:
           threads. For example, a task can be scheduled to execute
           periodically.
 \end{itemize}
-Thread pools are supported by the Windows API.
+Thread pools are supported by the Windows API.\@
 \subsubsection{OpenMP}
 OpenMP is a set of compiler directives and an API for C, C++, and
 Fortran that provides support for parallel programming in shared-memory
@@ -2126,7 +2126,7 @@ thread. OpenMP is available on several open-source and commercial
 compilers for Linux, Windows, and macOS systems.
 \subsubsection{Grand Central Dispatch}
 Grand Central Dispatch (GCD) is a technology developed by Apple for
-macOS and iOS. It is a combination of a run-time library, API, and
+macOS and iOS.\@ It is a combination of a run-time library, API, and
 language extension that allows developers to identify tasks that can be
 executed in parallel. GCD manages most of the details of threading.
 
@@ -2174,7 +2174,7 @@ follow the same pattern:
           signal handler.
 \end{enumerate}
 Every signal has a default handler that the kernel runs when handling
-that signal. This may be overriden by a user-defined signal handler.
+that signal. This may be overridden by a user-defined signal handler.
 Some signals may be ignored, whereas some signals terminate the program.
 
 For single-threaded applications, signals are delivered to the process.
@@ -2213,7 +2213,7 @@ asynchronous. Program cancellation occurs when the thread reaches its
 using \mintinline{c}|pthread_testcancel()|, which checks if a
 cancellation request has been made.
 
-A \textbf{cleanup handler} may be invoked to release any resources
+A \textbf{clean-up handler} may be invoked to release any resources
 before the thread is terminated.
 \subsubsection{Thread-Local Storage}
 Thread-local storage allows threads to have a separate copy of shared
@@ -2819,7 +2819,7 @@ Failures in safety critical systems can be caused by:
 \begin{itemize}
     \item A \textbf{hazard} is a situation that has the potential to
           cause harm.
-    \item \textbf{Risk} enacapsulates the probability that a hazard
+    \item \textbf{Risk} encapsulates the probability that a hazard
           will lead to an accident, and the severity of the consequences
           of that accident. Risk is a product of the probability of
           accident and the severity of the consequences.
@@ -2863,15 +2863,15 @@ IEC 61508 defines three successive tiers of safety assessments:
           implemented by the SIS that is intended to achieve or
           maintain a safe state for the process.
     \item Safety Integrity Level (SIL) --- A measure of the safety
-          integrity requirements of a particular SIF. SIL 1 is low risk
-          and therefore allows for a higher probability of failure, and
-          SIL 4 is high risk and therefore requires a Lower probability
-          of failure.
+          integrity requirements of a particular SIF.\@ SIL 1 is low
+          risk and therefore allows for a higher probability of
+          failure, and SIL 4 is high risk and therefore requires a
+          Lower probability of failure.
 \end{itemize}
 \subsection{Real-Time Operating Systems}
 Real-time operating systems (RTOS) are operating systems that are
 designed to meet the requirements of real-time applications. The
-following considerations must be made when designing an RTOS:
+following considerations must be made when designing an RTOS:\@
 \begin{itemize}
     \item \textbf{Tasking}
           \begin{itemize}
@@ -2900,7 +2900,7 @@ following considerations must be made when designing an RTOS:
           \begin{itemize}
               \item Lack of error handling
               \item Lack of interrupt handling
-              \item Improper protection of superisor tasks
+              \item Improper protection of supervisor tasks
           \end{itemize}
 \end{itemize}
 \subsection{DO-178B Standard}
@@ -3021,7 +3021,7 @@ Nodes can exist in a \textbf{client-server}, \textbf{peer-to-peer}, or
               \item using remote specialised hardware such as
                     supercomputers or graphical processing units
           \end{itemize}
-    \item \textbf{Computation speedup} --- computation that can be
+    \item \textbf{Computation speed-up} --- computation that can be
           partitioned into subcomputations can be distributed among several
           nodes. If a particular site is overloaded with requests, some
           requests can be moved or rerouted to other lightly loaded sites.
@@ -3126,7 +3126,7 @@ systems implement one or more of the following:
           \begin{itemize}
               \item \textbf{Load balancing}. Processes (or
                     subprocesses) may be distributed across sites.
-              \item \textbf{Computation speedup}. Processes that can
+              \item \textbf{Computation speed-up}. Processes that can
                     be divided into subprocesses can run concurrently on
                     different sites.
               \item \textbf{Hardware preference}. Process execution
@@ -3248,7 +3248,7 @@ fd = socket(domain, type, protocol);
 \subsubsection{Communication Domains}
 Sockets exist in a communication domain which determines:
 \begin{itemize}
-    \item the method of identifying a socktet (the format of a socket
+    \item the method of identifying a socket (the format of a socket
           address)
     \item the range of communication (between applications on a single
           host, or different hosts)
@@ -3347,7 +3347,7 @@ the \textbf{ready queue} to be executed by the CPU.\@ The ready queue
 is a list of processes residing in main memory, waiting to be executed
 by the CPU.\@ The ready queue's implementation depends on the
 scheduling algorithm used.
-\subsubsection{Preemtive and Non-Preemtive Scheduling}
+\subsubsection{preemptive and Non-preemptive Scheduling}
 CPU scheduling decisions may take place under the following conditions:
 \begin{enumerate}
     \item When processes switch from the running state to the waiting
@@ -3364,16 +3364,16 @@ to continue executing the current process, or allow another process to
 execute.
 
 When scheduling decisions are made only under conditions 1 and 4, the
-scheduling scheme is \textbf{non-preemtive} or \textbf{cooperative}.
+scheduling scheme is \textbf{non-preemptive} or \textbf{cooperative}.
 When scheduling decisions are made under all four conditions, the
-scheduling scheme is \textbf{preemtive} or \textbf{non-cooperative}.
+scheduling scheme is \textbf{preemptive} or \textbf{non-cooperative}.
 
-Under non-preemtive scheduling, a process is allocated a CPU, until it
-terminates or switches to the waiting state. Under preemtive
+Under non-preemptive scheduling, a process is allocated a CPU, until it
+terminates or switches to the waiting state. Under preemptive
 scheduling, a condition may cause the currently running process to move
 to the ready queue, allowing another process to run.
 
-When using preemtive scheduling it is important to consider access to
+When using preemptive scheduling it is important to consider access to
 shared data and the state of the process when that preemption occurs,
 such as when the process is in kernel mode, or if the interrupt occurs
 during a critical section.
@@ -3415,7 +3415,7 @@ completion refers to when the process terminates or switches to the
 waiting queue.
 \subsection{Scheduling Algorithms}
 \subsubsection{First-Come, First-Served Scheduling}
-\textbf{First-come, first-served} (FCFS) scheduling is a non-preemtive
+\textbf{First-come, first-served} (FCFS) scheduling is a non-preemptive
 scheduling algorithm that \linebreak schedules processes in the order of arrival.
 The implementation of this algorithm is easily managed with a FIFO
 queue. When a process enters the ready queue, its PCB is linked onto
@@ -3427,7 +3427,7 @@ process at the head of the queue.
 The average waiting time for each process in this algorithm varies
 significantly based on the arrival order of processes.
 \subsubsection{Shortest-Job-First Scheduling}
-\textbf{Shortest-job-first} (SJF) scheduling is a non-preemtive
+\textbf{Shortest-job-first} (SJF) scheduling is a non-preemptive
 scheduling algorithm that executes processes in order of CPU burst
 times. If two processes have the same next CPU burst, FCFS scheduling is
 used to break the tie.
@@ -3436,7 +3436,7 @@ SJF scheduling is provably optimal as it yields the minimum average
 waiting time, however it cannot be implemented in practise as the
 length of the next CPU burst is generally not known in advance.
 \subsubsection{Shortest-Remaining-Time-First Scheduling}
-\textbf{Shortest-remaining-time-first} (SRTF) scheduling is a preemtive
+\textbf{Shortest-remaining-time-first} (SRTF) scheduling is a preemptive
 version of SJF scheduling. When a new process enters the ready queue,
 its CPU burst length is compared to the remaining time of the currently
 running process. If the new process has a shorter CPU burst, the
@@ -3450,14 +3450,14 @@ a long CPU burst may never be allocated the CPU.\@
 \textbf{Priority scheduling} is a scheduling algorithm that allocates
 the CPU to the process with the highest priority. Priority is an integer
 value associated with each process, where a low value indicates a high
-priority. Priority scheduling may be either preemtive or non-preemtive.
+priority. Priority scheduling may be either preemptive or non-preemptive.
 
 Priority scheduling also suffers from \textbf{starvation}, but can use
-\textbf{aging} to prevent this. In aging, as time progresses, the
+\textbf{ageing} to prevent this. In ageing, as time progresses, the
 priority of a ready process increases, preventing low priority
 processes from being starved.
 \subsubsection{Round-Robin Scheduling}
-\textbf{Round-robin} (RR) scheduling is a preemtive scheduling algorithm
+\textbf{Round-robin} (RR) scheduling is a preemptive scheduling algorithm
 that allocates the CPU to each process for a fixed time interval known
 as a \textbf{time quantum} or \textbf{time slice}. The ready queue is
 treated as a circular queue, such that once the running process has
@@ -3492,7 +3492,7 @@ In this approach, each queue uses a separate scheduling algorithm, such
 as RR for foreground processes and FCFS for background processes.
 
 In addition, there must be scheduling between the queues, which is
-commonly implemented as fixed-priority preemtive scheduling. Here, the
+commonly implemented as fixed-priority preemptive scheduling. Here, the
 higher priority queues are always serviced first, and lower priority
 queues are only serviced when higher priority queues are empty. Note
 that this has the possibility of starvation.
@@ -3509,7 +3509,7 @@ processes to move between queues, by separating processes according to
 the characteristics of their CPU bursts. If a process uses too much CPU
 time, it is moved to a lower priority queue. Likewise, if a process
 waits too long in a lower-priority queue, it may be moved to a
-higher-priority queue. This form of aging prevents starvation.
+higher-priority queue. This form of ageing prevents starvation.
 
 In general, a multilevel feedback queue scheduler is defined by the
 following parameters:
@@ -3550,7 +3550,7 @@ architectures:
     \item Multicore CPUs
     \item Multithreaded cores
     \item NUMA systems
-    \item Heteregeneous systems
+    \item Heterogeneous systems
 \end{itemize}
 The first three of these architectures have identical or homogeneous
 processors.
@@ -3689,7 +3689,7 @@ Graphically, this may be represented by the following shapes:
     \item \textbf{Resources} are represented by rectangles, with smaller
           squares inside representing available instances of that resource.
     \item \textbf{Request edges} are represented by arrows from a thread to a resource
-    \item \textbf{Asignment edges} are represented by arrows from an instance of a
+    \item \textbf{Assignment edges} are represented by arrows from an instance of a
           resource to a thread.
 \end{itemize}
 When a thread requests an instance of a resource, a request edge is
@@ -3698,7 +3698,7 @@ the edge is converted to an assignment edge (reversed) instantaneously.
 
 From these definitions, it can be shown that if the graph contains on
 cycles, then no thread is in a deadlock. If the graph contains a cycle,
-then a deadlock may existin one of two possibilities:
+then a deadlock may existing one of two possibilities:
 \begin{itemize}
     \item if each resource type has exactly one instance, then a cycle
           implies a deadlock.
@@ -3773,10 +3773,10 @@ There are three general approaches to handling deadlocks:
 By ensuring at least one of the four necessary conditions for deadlock
 cannot hold, deadlocks can be prevented.
 \subsubsection{Mutual Exclusion}
-Sharable resources such as read-only files do not require
+Shareable resources such as read-only files do not require
 mutual-exclusion and thus cannot be involved in a deadlock. In general,
 however, mutual-exclusion cannot be prevented as some resources are
-inherently non-sharable. For example, a mutex lock cannot be shared
+inherently non-shareable. For example, a mutex lock cannot be shared
 between multiple threads.
 \subsubsection{Hold and Wait}
 To prevent the hold-and-wait condition, we must guarantee that when a
@@ -3830,7 +3830,7 @@ thread \(T_i\) has finished executing, \(T_{i+1}\) can obtain its
 resources, and so on.
 
 If no such sequence exists, the system is in an \textbf{unsafe state}
-and a deadlock may occur. Therefore to avoi d deadlocks, a system must
+and a deadlock may occur. Therefore to avoid deadlocks, a system must
 never enter an unsafe state.
 \subsubsection{Resource-Allocation-Graph Algorithm}
 In a resource-allocation system with only one instance of each resource
@@ -3968,12 +3968,12 @@ The deadlock-detection algorithm is as follows:
           each type, and \textbf{Finish} is a vector of length \(n\)
           indicating whether each thread can finish.
           \begin{align*}
-              \text{\textbf{Work}}     & \gets \text{\textbf{Available}}                                                                                                           \\
+              \text{\textbf{Work}}     & \gets \text{\textbf{Available}} \\
               \text{\textbf{Finish}}_i & \gets
-                                               \begin{cases}
-                                                   \text{false} & \text{if } \forall i \in \left\{ 0,\: 1,\: \ldots,\: n-1 \right\} : \text{\textbf{Allocation}}_i \neq \textbf{0} \\
-                                                   \text{true}  & \text{otherwise}
-                                               \end{cases}
+              \begin{cases}
+                  \text{false} & \text{if } \forall i \in \left\{ 0,\: 1,\: \ldots,\: n-1 \right\} : \text{\textbf{Allocation}}_i \neq \textbf{0} \\
+                  \text{true}  & \text{otherwise}
+              \end{cases}
           \end{align*}
     \item Loop over \(i\) until no thread can finish:
 
@@ -3999,7 +3999,7 @@ two factors:
 \end{enumerate}
 Calling a deadlock-detection algorithm too frequently incurs
 considerable overhead in computation time, so a less alternative approach
-is to simply invoke the algorithm at dfeined defined intervals.
+is to simply invoke the algorithm at defined intervals.
 
 If this detection algorithm is invoked at arbitrary points in time,
 then the resource graph may contain many cycles where it will not be
@@ -4046,4 +4046,411 @@ issues must be considered:
           so we must ensure that a process is preempted a small number
           of times.
 \end{enumerate}
+\section{Main Memory}
+\subsection{Background}
+Memory is central to the operation of a computer system. Memory
+consists of a large array of bytes each with its own address. The CPU
+fetches instructions from memory according to the value of the program
+counter, which may cause additional loading and storing to specific
+memory addresses. The memory unit only sees a stream of memory
+addresses and does not know how these addresses are generated, or what
+they are for.
+
+The following sections discuss how a sequence of memory addresses are
+generated by a running program.
+\subsubsection{Basic Hardware}
+Main memory and the registers in the CPU are the only storage that the
+CPU can access directly. Machine instructions operate on memory
+addresses, and therefore any data must be in memory to be operated on.
+Registers are built into each CPU core and are generally accessible in
+one CPU clock cycle. Some CPU cores can also decode instructions and
+perform simple operations in a clock tick. The same is not true for
+main memory, which is accessed via the memory bus. Completing a memory
+access often takes many cycles of the CPU, and the processor must
+\textbf{stall} until the memory access is complete. To improve
+performance, a \textbf{cache} is placed between the CPU and main memory
+to hold a copy of the most recently used memory locations.
+
+Another important concern of main memory is \textbf{protection}. For
+proper system operation, we must protect the operating system from
+access by user processes, as well as protect user processes from each
+other. This protection must be provided by hardware, rather than by the
+operating system, for efficiency.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/memory_base_limit.pdf}
+    % \caption{} % \label{}
+\end{figure}
+One approach is to use a
+\textbf{base register} and a \textbf{limit register} to define the
+smallest legal physical memory address, and the size of the range of
+legal addresses. Protection is achieved by having the CPU check that
+all addresses generated in user mode lie between the base and limit
+registers. Failing to do so results in a trap to the operating system.
+
+The operating system, executing in kernel mode, has unrestricted access
+to both operating system memory and user memory. This allows the
+operating system to load user programs into user memory, and to dump
+programs in case of errors, access and modify parameters of system
+calls, access I/O devices, and provide other services.
+\subsubsection{Address Binding}
+Programs reside on a disk as a binary executable file and must be
+brought into memory and placed within a process for execution. As the
+process executes, it accesses instructions and data from memory, and
+when it terminates, the memory space is reclaimed and becomes available
+to other processes.
+
+User processes can reside in any part of the physical memory and are
+represented in different ways at different stages of execution.
+\begin{enumerate}
+    \item Addresses in the source program are \textbf{symbolic} and
+          referenced using symbols (variable names, function names,
+          etc).
+    \item The compiler \textit{binds} \textbf{symbolic addresses} to
+          \textbf{relocatable addresses} that are relative to the
+          beginning of the program.
+    \item The linker or loader \textit{binds} \textbf{relocatable
+          addresses} to \textbf{absolute addresses} in memory.
+\end{enumerate}
+Address binding is a mapping from one address space to another, and this
+may take place at three different stages:
+\begin{itemize}
+    \item \textbf{Compile time} --- if memory location is known a
+          priori, the compiler can generate \textbf{absolute code}, and
+          the program must be recompiled if the starting location changes.
+    \item \textbf{Load time} --- if memory location is not known at
+          compile time, the compiler must generate \textbf{relocatable
+              code}.
+    \item \textbf{Execution time} --- if the process can be moved during
+          its execution from one memory segment to another, then binding
+          must be delayed until run time.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[height = 5cm]{figures/address_binding.pdf}
+    % \caption{} % \label{}
+\end{figure}
+\subsubsection{Logical and Physical Address Space}
+An address generated by the CPU is referred to as a \textbf{logical
+address}, whereas the address seen by the memory unit, or loaded into
+the \textbf{memory-address register} of the memory is referred to as a
+\textbf{physical address}.
+
+Binding addresses at compile time and load time generate identical
+logical and physical addresses. However, binding addresses at execution
+time results in differing logical and physical addresses. In this case
+the logical address is a \textbf{virtual address}. The set of all
+logical addresses generated by a program is referred to as the
+\textbf{logical address space}, and the set of all physical addresses
+corresponding to these logical addresses is referred to as the
+\textbf{physical address space}.
+
+The run-time mapping from virtual to physical addresses is done by the
+\textbf{memory-management unit} (MMU), which is a hardware device that
+sits between the CPU and memory. A simple MMU scheme generalises the
+base register scheme by replacing it with a \textbf{relocation
+register}. This works in the same way as before, where attempts to
+access addresses are dynamically added to the value in the relocation
+register.
+
+The user program never sees physical addresses, and execution time
+binding occurs only when a reference is made to a location in memory.
+\subsubsection{Dynamic Loading}
+When physical memory is limited, it is wasteful to load all routines
+into memory at the same time.\ \textbf{Dynamic loading} allows a
+routine to be loaded only when it is called. All routines are kept on
+disk in a relocatable load format. When a routine is called, the
+calling routine must check to see whether the routine is already in
+memory. If not, the relocatable linking loader is called to load the
+desired routine into memory and update the program's address tables to
+reflect this change.
+
+Dynamic loading does not require special support from the operating
+system and is the responsibility of the user program.
+\subsubsection{Dynamic Linking and Shared Libraries}
+\textbf{Dynamically linked libraries} (DLLs) are libraries that are
+linked to programs when programs are run. Some operating systems only
+support \textbf{static linking} where libraries are combined
+with program code by the loader into a single binary program image.
+
+Dynamic linking is more flexible, as it allows the libraries to be
+\textbf{linked}, rather than loaded, at execution time. This is often
+used with system libraries, such as the standard C library, to:
+\begin{itemize}
+    \item reduce the size of an executable
+    \item allow the library to be updated without needing to recompile
+          all programs that use it
+    \item allow multiple programs to share a single copy of the library
+          in memory
+\end{itemize}
+To ensure programs do not load incompatible versions of a library,
+version information is also included with both the program and library
+to allow multiple versions of a library to be loaded in memory.
+
+For the reasons described above, DLLs are often referred to as
+\textbf{shared libraries}.
+
+When a program references a routine in a dynamically linked library,
+the loader locates the DLL, loading it into memory if another program
+has not already done so, and adjusts addresses that reference functions
+in the dynamic library to the location in memory where the DLL is
+loaded. A small piece of code, called a \textbf{stub}, is included in
+the program to locate the DLL's routine the first time it is called.
+The stub replaces itself with the address of the routine, so that the
+next time the routine is called, the DLL is called directly.
+
+While dynamic loading in a single process is managed by the user
+program, dynamic linking generally requires operating system support as
+some processes may protect their memory from being shared with other
+processes.
+\subsection{Swapping}
+Processes, or a portion of a process, can be temporarily swapped out of
+memory to a \textbf{backing store}, and brought back into memory for
+continued execution at a later time. This is known as \textbf{swapping}
+and allows the total size of all processes to exceed the physical
+capacity of memory in a system, increasing the degree of
+multiprogramming.
+
+The backing store is a fast disk large enough to accommodate copies of
+all memory images for all users. During swapping, all data structures
+associated with the process must be written to the backing store, so
+that they can be restored when the process is swapped back into memory.
+Because memory is being written to the disk, swapping is a time
+consuming process, and should only used for small processes.
+
+The system maintains a ready queue of processes that are ready to
+execute, and swaps processes in to be executed when the CPU is idle.
+When processes using compile time and load time address binding are
+swapped in, they must be swapped back into the same location in memory
+as they were swapped out of. The same is not true for processes using
+execution time address binding, as addresses can be dynamically
+relocated when the process is swapped back in.
+
+Due to these reasons, swapping is usually disabled on some systems.
+\subsection{Contiguous Memory Allocation}
+The main memory must accommodate both the operating system and various
+user processes in the most efficient way possible. This section
+discusses one method known as contiguous memory allocation. Here memory
+is divided into two partitions: one for the OS, and one for user
+processes. The OS is usually loaded into low/high memory with the
+interrupt vector and user processes are contained in single contiguous
+sections of memory.
+\subsubsection{Memory Protection}
+To prevent processes from accessing memory outside of their allocated
+memory space, relocation and limit registers are used to define bounds
+on the addresses a process may access. Each logical adddress must fall
+within the range specified by the limit register, so that the MMU can
+map the logical address dynamically by adding it to the value in the
+relocation register.
+\subsubsection{Memory Allocation}
+One way of allocating memory is to assign processes to variably sized
+partitions in memory, where each partition contains exactly one
+process. In this \textbf{variable-partitioning scheme}, the operating
+system keeps a table indicating which parts of memory are available and
+which are occupied. Initially, there is a single large block of free
+memory, called a \textbf{hole}, and as processes are loaded and removed
+from memory, the free memory is broken into smaller holes.
+
+When a process arrives and needs memory, the system searches the set of
+available holes to allocate to each process. If a process cannot fit
+into any hole, the process may be rejected, or placed onto a waiting
+queue.
+
+The method for satisfying a request of size \(n\) from a list of free
+holes is known as the \textbf{hole-allocation problem}. There are three
+different methods for allocating holes:
+\begin{itemize}
+    \item \textbf{First fit} --- allocate the \textbf{first} hole that is big
+          enough
+    \item \textbf{Best fit} --- allocate the \textbf{smallest} hole that is big
+          enough. This requires searching the entire list and produces the smallest leftover hole
+    \item \textbf{Worst fit} --- allocate the \textbf{largest} hole. This also
+          requires searching the entire list and produces the largest leftover hole
+\end{itemize}
+It can be shown that both first fit and best fit are better than worst
+fit in terms of speed and storage utilisation, where first fit is
+generally faster to execute.
+\subsubsection{Fragmentation}
+\textbf{External fragmentation} occurs when there is enough \textit{total}
+memory space to satisfy a request, but the available spaces are not
+contiguous. This leads to many small holes in memory, which may be
+difficult to satisfy future requests. Both first fit and best fit
+suffer from this problem.
+
+One solution to external fragmentation is \textbf{compaction}, where
+memory is shuffled to place all free memory together in one large
+block, however, this is only possible if relocation is dynamic, and is
+performed at execution time.
+\subsection{Segmentation}
+\textbf{Segmentation} is a memory-management scheme that supports the
+user view of memory. A program is a collection of segments, such as
+\begin{itemize}
+    \item the main program
+    \item procedures
+    \item functions
+    \item methods
+    \item object classes
+    \item local and global variables
+    \item the stack
+    \item symbol tables
+    \item arrays
+\end{itemize}
+Here the logical address is stored as a two tuple containing a
+\textit{segment number} and \textit{offset}. A \textbf{segment table}
+maps these addresses to a segment base and segment limit.
+
+Two registers are used in this scheme. The \textbf{segment-table base
+register} (STBR) points to the segment table's location in memory, and
+the \textbf{segment-table length register} (STLR) indicates the number
+of segments used by a program.
+\subsection{Paging}
+Paging aims to reduce external fragmentation and avoid the problem of
+variable sized memory chunks, by dividing physical memory into
+fixed-sized blocks called \textbf{frames}, and dividing logical memory
+into blocks of the same size called \textbf{pages}. When a process is
+to be executed, its pages are loaded into any available memory frames
+from the backing store. The backing store is divided into fixed-sized
+blocks that are the same size as the memory frames.
+
+Given that the size of the logical address space is \(2^m\), and the
+page size is \(2^n\), the address generated by the CPU can be divided
+into two parts:
+\begin{itemize}
+    \item A \textbf{page number} \(p\) (\(m-n\) bits) --- that is used
+          as an index into a \textbf{page table}.
+    \item A \textbf{page offset} \(d\) (\(n\) bits) --- that is
+          combined with the base address to define the physical memory
+          address
+\end{itemize}
+The page number is used as an index for the \textbf{page table}, which
+maps pages to frames in physical memory. A process of size \(s\) will
+be assigned \(\ceil{s/2^n}\) pages, where the last page only uses
+\(s \bmod 2^n\) bytes.
+
+While this scheme eliminates external fragmentation, it is prone to
+internal fragmentation when processes do not coincide with page
+boundaries. This leads to \(2^n - \left( s \bmod 2^n \right)\) wasted
+bytes per process.
+
+Statistically, every process will have half a frame of internal
+fragmentation, so smaller page sizes are may be preferred. However,
+smaller page sizes also lead to larger page tables, which must be
+stored in memory. Additionally, I/O is more efficient when a large
+amount of data is transferred at once.
+
+Generally, page sizes are \qtyrange{4}{8}{\kilo\byte} in size, and some
+CPUs and kernels support multiple page sizes.
+
+When a process requests \(n\) pages, at least \(n\) frames must be
+available in memory, so that they can be allocated to the process. Each
+page is loaded into a \textbf{free frame}, and the page-frame pairs are
+added to the page table.
+\subsubsection{Hardware Support}
+The \textbf{page table} is kept in memory, and therefor requires a
+\textbf{page table base register} (PTBR) to point to the page table's
+location in memory. The \textbf{page-table length register} (PTLR)
+indicates the size of the page table.
+
+To access a location \(i\) in memory, we must first index into the page
+table using the PTBR offset by the page number for \(i\), providing us
+with the frame number for \(i\), which is combined with the page offset
+to produce the physical address. This process requires two memory
+accesses to access data. The first access is to the page table, and the
+second access is to the data.
+\paragraph{Translation Look-Aside Buffer}
+To reduce the time required to access data, a special fast-lookup
+hardware cache called a \textbf{translation look-aside buffer} (TLB) is
+used. The TLB is an associative look-up table that maps page numbers to
+frame numbers, and is generally small, containing between 32 and 1024
+entries.
+
+When a logical address is generated by the CPU, its page number is
+searched for in the TLB.\@ If the page number is found, the frame
+number is immediately available, and the physical address is produced,
+this is known as a \textbf{TLB hit}. If the page number is not found,
+the page table must be searched for the page number, and the TLB is
+updated with the new page number and frame number, this is known as a
+\textbf{TLB miss}.
+
+If a TLB is already full, a page must be removed from the TLB to make
+space for the new page. The replacement policy varies between systems,
+from removing the least recently used page, to using a round-robin
+scheme, etc. Some TLBs also allow entries to be \textbf{wired down},
+meaning they cannot be removed from the TLB.\@
+
+Some TLBs store \textbf{address-space identifiers} (ASIDs) with each
+entry to identify the process to which the entry belongs. This allows
+additional address-space protection, and also allows the TLB to contain
+entries for multiple processes, without requiring a \textbf{flush} at
+every context switch.
+
+The percentage of time a hit occurs is known as the \textbf{hit ratio}
+(\(\alpha\)), and allows us to calculate the \textbf{effective access
+time} (EAT). Given a associative lookup time \(\varepsilon\),
+\begin{align*}
+    \text{EAT} & = \alpha \left( \varepsilon + \text{memory access} \right) + \left( 1 - \alpha \right) \left( \varepsilon + 2\times\text{memory access} \right) \\
+               & = \varepsilon + \left( 2 - \alpha \right) \text{memory access}
+\end{align*}
+Therefore a higher hit ratio leads to a lower effective access time.
+\subsubsection{Protection}
+Memory protection is achieved by associating a \textbf{protection bit}
+with each frame in the page table. A bit can be set to read/write or
+read-only. An attempt to write to a read-only page, causes a trap to
+the operating system. An additional \textbf{valid-invalid} bit is also
+used to indicate whether a page is legal to access from a process in
+another address space. An attempt to access an invalid page, or an
+address that exceeds the PTLR, causes a trap to the operating system.
+This is shown as a \textbf{segmentation fault} in UNIX systems.
+\subsubsection{Shared Pages}
+An advantage of paging is that it allows the same physical address to
+be shared by multiple processes. This is useful for \textbf{re-entrant}
+code, which is code that can be safely executed by multiple processes
+at the same time. This code must never modify itself, and must not
+modify any shared data structures.
+
+Each process keeps a separate copy of all private code and data, and
+the pages for this can appear anywhere in the logical address space.
+\subsection{Page Table Structure}
+The following sections discuss three common techniques for structuring
+the page table.
+\subsubsection{Hierarchical Paging}
+Most modern systems support a large logical address space consisting of
+\(2^{32}\) or \(2^{64}\) bytes. This requires a large page table, which
+may not fit in memory. To solve this problem, we can divide the page
+table into smaller pieces. One way is to use a \textbf{two-level page
+table}, where the page number is split into \(p_1\) and \(p_2\),
+corresponding to an offset to the first-level (outer) page table, and
+an offset to the second-level (inner) page table.
+
+This scheme is known as a \textbf{forward-mapped} page table.
+
+For 64-bit systems, a two-level page table still results in a large
+page table. This may be solved using increasing the number of levels in
+the page table, however this increases the time required to access a
+frame, so an alternative method should be considered.
+\subsubsection{Hashed Page Tables}
+For systems with address spaces larger than \(2^{32}\) bytes, a hash
+table can be used to map page numbers to frame numbers. The hash table
+may be implemented as a linked list of the page number, frame number,
+and a pointer to the next entry in the list.
+
+For 64-bit systems, \textbf{clustered page tables} may be used to refer
+to several pages at once. This may be useful for \textbf{sparse}
+address spaces where memory references are non-contiguous.
+\subsubsection{Inverted Page Tables}
+Rather than having one page table per process and keeping track of all
+possible pages, we can track all frames in memory using a single
+\textbf{inverted page table}. This table contains one entry for each
+real page (frame) of memory, and each entry consists of the virtual
+address of the page associated with the real page, with information
+about the process that owns that page.
+
+This approach decreases the memory required to store the page table,
+but increases the time required to search the table. This can be alleviated
+using a hash table to limit the search to a few page table entries.
+
+To implement shared memory on a system with an inverted page table, only
+one mapping of virtual address to physical address is required, and
+a reference by another process sharing the same memory will result in a
+page fault, and will replace the entry in the inverted page table.
 \end{document}
