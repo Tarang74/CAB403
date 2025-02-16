@@ -8,7 +8,7 @@
 \usepackage{multirow}
 
 \setminted[c]{
-    linenos, frame=lines, breaklines
+    frame=lines, breaklines
 }
 
 % Header and footer
@@ -59,7 +59,7 @@ purpose of an operating system is to:
 \begin{itemize}
     \item execute user programs and make solving user problems easier
     \item make the computer system convenient to use
-    \item use computer hardware in an efficient manner
+    \item use computer hardware efficiently
 \end{itemize}
 \subsection{What Operating Systems Do}
 A computer system is divided into four components:
@@ -79,7 +79,7 @@ and data.
 This hierarchy of components is layered such that users cannot directly
 access the hardware. As there are multiple different types of computer
 hardware, applications will typically rely on the operating system to
-manage the use of computer hardware so that applications can designed
+manage the use of computer hardware so that applications can be designed
 to operate on any hardware. Due to this, the operating system will
 typically restrict direct access to hardware resources.
 
@@ -106,14 +106,14 @@ type of user, a computer system will prioritise one of the following:
     resources.
 
     An OS is also a \textbf{control program} that controls the
-    execution of programs to prevent errors and improper use of it's
+    execution of programs to prevent errors and improper use of its
     system. The OS acts as a security layer between applications, such
     that one application cannot interfere with another, or bring down
     the entire system.
 
     An OS must therefore be robust and reliable\footnote{This is far
     less onerous than requiring \underline{all applications} to be
-    error-free. }.
+    error-free.}.
 \end{definition}
 A more common definition is that the OS is the one program that runs
 at all times on the computer, which is known as the \textbf{kernel},
@@ -162,13 +162,13 @@ events as they occur.
 Interrupts \textbf{transfer control} to an \textbf{interrupt service
 routine} (ISR) through the \textbf{interrupt vector}, which contains
 the address of all service routines, stored in low memory for quick
-access. A serice routine is simply a function, or piece of code, that
+access. A service routine is simply a function, or piece of code, that
 is executed when an interrupt occurs.
 
 Hardware may trigger an interrupt at any time by sending a signal to
 the CPU, usually through the system bus.
 
-When an interrupt occurs, the CPU halts it's current execution and the
+When an interrupt occurs, the CPU halts its current execution and the
 interrupt architecture saves the address of the interrupted
 instruction, so that it can be resumed once the ISR has finished. The
 CPU then jumps to a fixed location in memory, which is the starting
@@ -572,7 +572,7 @@ system is typically a multicore system, and the system is
 
     The ability to continue providing service proportional to the level
     of surviving hardware is called \textbf{graceful degradation}. Some
-    systems are called \textbf{fault tolerant} if they can suffer a
+    systems are called \textbf{fault-tolerant} if they can suffer a
     failure of a single component and still continue operation. Fault
     tolerance requires a mechanism to allow the failure to be detected,
     diagnosed, and corrected.
@@ -628,7 +628,7 @@ it finds into memory. The order in which this search is conducted is
 known as the \textbf{boot sequence}, and can be configured in the
 \textbf{basic input/output system} (BIOS).
 
-Some services are provided outside of the kernel, by system programs,
+Some services are provided outside the kernel, by system programs,
 that are loaded into memory at boot time to become \textbf{system
 daemons}, which run while the kernel is running. On Linux, the first
 system program is ``\mintinline{text}|systemd|'', and it starts many
@@ -827,7 +827,7 @@ command interpreters as a \textbf{special program} that is running when
 a process is initiated. On systems with multiple command interpreters,
 these are known as \textbf{shells}.
 
-For example, on UNIX and Linux systems, users may choose among several
+For example, on UNIX and Linux systems, users may choose amongst several
 shells including the \textbf{C shell}, \textbf{Bourne-Again shell},
 \textbf{Korn shell}, and others.
 
@@ -934,7 +934,7 @@ made available by the operating system.
 
 The system-call interface \textbf{intercepts} function calls in the API
 and invokes the necessary system calls within the operating system.
-Typically a number is associated with each system call, and the
+Typically, a number is associated with each system call, and the
 system-call interface maintains a table indexed according to these
 numbers. The system-call interface invokes the intended system call in
 the operating system kernel and returns the status of the system call
@@ -978,8 +978,7 @@ System calls can be grouped into six major categories:
     \item Communications
     \item Protection
 \end{itemize}
-Some examples of these types of system calls are shown
-in the following sections.
+The following sections show examples of these types of system calls.
 \subsubsection{Process Control}
 % A running program needs to be able to halt its execution either normally (\mintinline{text}|end()|)
 % or abnormally (\mintinline{text}|abort()|). If a system call is made to terminate a program abnormally,
@@ -1110,7 +1109,7 @@ system programs, not the actual system calls.
           machine language are needed as well.
     \item \textbf{Communications}.
           These programs provide the mechanism for creating virtual
-          connections among processes, users, and computer systems.
+          connections amongst processes, users, and computer systems.
           They also allow users to send information to other machines.
     \item \textbf{Background services}.
           All general-purpose systems have methods for launching
@@ -1355,9 +1354,9 @@ Notice how the sizes of the text and data sections are
 When a function is called, an \textbf{activation record} containing
 function parameters, local variables, and the return address is pushed
 onto the stack. When control is returned from the function, this
-activation record is popped off the stack. Similarly, the heap will
-grow as memory is dynamically allocated, and will shrink when memory is
-returned to the system.
+activation record is popped off the stack. Similarly, the heap grows as
+memory is dynamically allocated, and shrinks when memory is returned to
+the system.
 
 The operating system must ensure that the stack and heap do not
 \textbf{overlap} in memory.
@@ -1422,11 +1421,10 @@ process to have multiple threads of execution, and thus perform more
 than one task at a time. This is especially beneficial on multicore
 systems, where multiple threads can run in parallel. On such systems,
 the PCB is expanded to include information for each thread.
-\subsubsection{Process Representation in Linux}
-In Linux, a process is represented by a \mintinline{text}|task_struct|
+\subsubsection{Process Representation on Linux}
+On Linux, a process is represented by a \mintinline{text}|task_struct|
 structure, which is defined in the \mintinline{text}|<linux/sched.h>|
-header file. This structure contains a large number of fields,
-including:
+header file. This structure contains many fields, including:
 \begin{minted}{c}
 long state;                 /* state of the process */
 struct sched entity se;     /* scheduling information */
@@ -1438,11 +1436,11 @@ struct mm struct *mm;       /* address space */
 \subsection{Process Scheduling}
 The objective of \textbf{multiprogramming} is to have some process
 running at all times, to maximise CPU utilisation. The objective of
-\textbf{time sharing} is to switch a CPU core among processes so
+\textbf{timesharing} is to switch a CPU core amongst processes so
 frequently that users can interact with each program while it is
 running.
 
-To meet these objectives, the \textbf{process scheduler} select an
+To meet these objectives, the \textbf{process scheduler} selects an
 available process for execution on a core. Each CPU core runs one
 process at a time. If there are more processes than cores, the
 scheduler must wait until a core is free and can be rescheduled. The
@@ -1478,7 +1476,7 @@ These queues include:
 \end{itemize}
 Processes are initially placed in the \textbf{ready queue} where they
 wait to be selected by scheduler, or are \textbf{dispatched}.
-When a processes is allocated to a CPU core, and is executing, one of
+When a process is allocated to a CPU core, and is executing, one of
 several events may occur:
 \begin{itemize}
     \item The process may issue an I/O request and be placed in the
@@ -1493,7 +1491,7 @@ several events may occur:
 \end{itemize}
 In the first two cases, the process eventually returns to the ready queue.
 A process continues this cycle until it terminates, at which point, it
-is removed from all queues and has its PCB and resources deallocated.
+is removed from all queues and has its PCB and resources de-allocated.
 
 This is shown in the queueing diagram below:
 \begin{figure}[H]
@@ -1504,7 +1502,7 @@ This is shown in the queueing diagram below:
 \subsubsection{CPU Scheduling}
 Processes migrate between the ready and wait queues throughout their
 lifetimes. The role of the \textbf{CPU scheduler} is to select from
-among the processes that are in the ready queue, and allocate a CPU
+amongst the processes that are in the ready queue, and allocate a CPU
 core to one of them. This is known as \textbf{CPU scheduling}.
 
 These schedulers are invoked at a different rate,
@@ -1525,7 +1523,7 @@ This process can be reintroduced into memory later.
 A processes state is ``swapped-out'' from memory to disk, where its
 current status is saved, and later ``swapped-in'' to memory, with its
 status restored.
-This is useful when memory has been overcommitted and needs to be freed
+This is useful when memory has been over-committed and needs to be freed
 up.
 \subsubsection{Context Switch}
 When the CPU switches to another process, the kernel performs a
@@ -1562,7 +1560,7 @@ integer. The pid is unique for each process in the system, and can be
 used as an index to access various attributes of a process within the
 kernel.
 
-In Linux, the \mintinline{text}|systemd| process is the first process
+On Linux, the \mintinline{text}|systemd| process is the first process
 to be created, and has a pid of 1. This process is responsible for
 starting all other processes in the system, such as the
 \mintinline{text}|logind| and \mintinline{text}|sshd| processes.
@@ -1638,7 +1636,7 @@ and asks the operating system to delete it by using the
 \mintinline{text}|exit()| system call. At this point, the process may
 return a status value to its parent, which is used to determine if the
 child process completed successfully. All resources allocated to the
-process are then deallocated and reclaimed by the operating system.
+process are then de-allocated and reclaimed by the operating system.
 
 A parent may terminate the execution of one or more of its children by
 using the \mintinline{text}|abort()| system call. This may be done for
@@ -1661,7 +1659,7 @@ Child PID 28453
 PID 28453 exited with status 0x100
 Exit code: 1
 \end{minted}
-When a process terminates, its resources are deallocated by the
+When a process terminates, its resources are de-allocated by the
 operating system. However, its entry in the process table must remain
 until the parent calls \mintinline{text}|wait()|, because the process
 table contains the process's exit status.
@@ -1743,7 +1741,7 @@ pointers \mintinline{text}|in| and \mintinline{text}|out|.
 \inputminted{c}{code/shared_memory.c} As the producer cannot write to
 the buffer when the consumer points to the next location to be written,
 the total number of items the buffer can hold is
-\mintinline{text}|BUFFER_SIZE - 1|. % chktex 8
+\mintinline{text}|BUFFER_SIZE - 1|.
 \subsection{Message Passing}
 Message passing provides a mechanism to allow processes to communicate
 and to synchronise their actions without sharing the same address
@@ -1826,7 +1824,7 @@ Communication can be either \textbf{synchronous} or
 this means:
 \begin{itemize}
     \item \textbf{Blocking send}. The sending process must wait until
-          the sent message is received by the receiving process
+          the transmitted message is received by the receiving process
     \item \textbf{Non-blocking send}. The sending process can send a
           message and resume operation immediately
     \item \textbf{Blocking receive}. The receiving process must wait
@@ -1877,12 +1875,12 @@ Many modern applications are designed to leverage processing on
 multicore systems to perform multiple tasks in parallel across multiple
 computing cores. For example, a web server may have one thread to
 listen for incoming requests, and another thread to process these
-requests. Most operating system kernels are also multi-threaded.
+requests. Most operating system kernels are also multithreaded.
 
-As process creation is time consuming and resource intensive, it is
+As process creation is time-consuming and resource intensive, it is
 more efficient to use one process with multiple threads.
 \subsubsection{Benefits}
-There are several benefits to multi-threaded programming:
+There are several benefits to multithreaded programming:
 \begin{itemize}
     \item \textbf{Responsiveness} --- may allow continued execution if
           part of a process is blocked. This is especially important
@@ -1894,7 +1892,7 @@ There are several benefits to multi-threaded programming:
           generally faster than creating and managing processes. Context
           switching between threads incurs less overhead than between
           processes.
-    \item \textbf{Scalability} --- multi-threaded programs can take
+    \item \textbf{Scalability} --- multithreaded programs can take
           advantage of multiprocessor architectures, as threads can be
           run in parallel on different processing cores.
 \end{itemize}
@@ -1955,7 +1953,7 @@ that present challenges:
     \item \textbf{Data dependency} --- ensuring that tasks which access
           the same data are synchronised.
     \item \textbf{Testing and debugging} --- testing and debugging
-          multi-threaded programs is more difficult than single-threaded
+          multithreaded programs is more difficult than single-threaded
           programs.
 \end{itemize}
 \begin{tcolorboxlarge}[title={Amdahl's Law}, parbox=false]
@@ -1990,7 +1988,7 @@ established between user threads and kernel threads. The following
 sections will explore various models that achieve this.
 \subsubsection{Many-to-One Model}
 The many-to-one model maps many user-level threads to a single kernel
-thread. Thread managemen is done by the thread library in user space,
+thread. Thread management is done by the thread library in user space,
 so it is efficient. However, an entire process will be blocked if a
 thread makes a blocking system call. Additionally, because only one
 thread can access the kernel at a time, multiple threads are unable to
@@ -2004,8 +2002,8 @@ run in parallel on multicore systems.
 The one-to-one model maps each user thread to a kernel thread, and is
 the most common approach. This allows multiple threads to run in
 parallel on multicore systems. However, creating a user thread requires
-creating a kernel thread, which is expensive and thus a large number of
-kernel threads may affect performance.
+creating a kernel thread, which is expensive and thus many kernel
+threads may affect performance.
 \begin{figure}[H]
     \centering
     \includegraphics[width = 7cm]{figures/threads_one_to_one.pdf}
@@ -2041,7 +2039,7 @@ managing threads. There are two primary ways of implementing a thread:
 \end{itemize}
 Three thread libraries are in use today:
 \begin{itemize}
-    \item POSIX Pthreads --- a threads extension of the POSIX standard
+    \item POSIX Pthreads --- a thread's extension of the POSIX standard
           which may be provided as either a user-level or kernel-level
           library.
     \item Windows threads --- a kernel-level library that is part of
@@ -2069,7 +2067,7 @@ Pthreads specification include UNIX-type operating systems such as
 Linux and macOS.\@
 
 The following program calculates the sum of the first \(n\) integers
-using a multi-threaded program that follows the Pthreads API.\@
+using a multithreaded program that follows the Pthreads API.\@
 \inputminted{c}{code/pthreads_multithreading.c} In this program, the
 \mintinline{c}|sum| variable is shared between the parent and child
 threads. Each child thread begins control within the
@@ -2141,7 +2139,7 @@ There are two types of dispatch queues:
     \item \textbf{Concurrent queues} --- tasks are also executed in
           FIFO order, but multiple tasks may be removed at a time,
           allowing them to be executed in parallel.
-          These tasks are prioritised into three system wide queues.
+          These tasks are prioritised into three system-wide queues.
 \end{itemize}
 In C, GCD defines a language extension called a \textbf{block} that is a
 self-contained unit of work specified by a caret (\mintinline{c}|^|):
@@ -2149,19 +2147,18 @@ self-contained unit of work specified by a caret (\mintinline{c}|^|):
 ^{ /* code */ }
 \end{minted}
 \subsection{Threading Issues}
-This section discusses issues that arise when designing multi-threaded
+This section discusses issues that arise when designing multithreaded
 programs.
-\subsubsection{\mintinline{c}|fork()| and \mintinline{c}|exec()| System Calls}
+\subsubsection{\texttt{fork()} and \texttt{exec()} System Calls}
 The semantics of the \mintinline{c}|fork()| system call in a
-multi-threaded program may not be well defined. If a thread calls
+multithreaded program may not be well-defined. If a thread calls
 \mintinline{c}|fork()|, does the new process duplicate all threads, or
 is the new process single-threaded? In some UNIX systems, two versions
 of the \mintinline{c}|fork()| system call are defined to address this
 ambiguity.
 
 In the case of a thread calling \mintinline{c}|exec()|, the new program
-specified will usually replace the entire process, including all
-threads.
+specified will usually replace the entire process, including all threads.
 \subsubsection{Signal Handling}
 Signals are used in UNIX systems to notify a process that a particular
 event has occurred. For example, illegal memory access or division by
@@ -2239,7 +2236,7 @@ attached to a kernel thread, and it is the kernel thread that is
 scheduled by the operating system.
 
 One scheme for communication is known as \textbf{scheduler activation}.
-In this scheme, the kernel provids an application with a set of virtual
+In this scheme, the kernel provides an application with a set of virtual
 processors (LWPs). The kernel informs an application about events using
 an \textbf{upcall} that are handled by the thread library in an
 \textbf{upcall handler}.
@@ -2327,7 +2324,7 @@ This solution must also satisfy the following three requirements:
           section before that request is granted. This prevents a
           process from waiting forever to enter its critical section.
 \end{itemize}
-Here we assume that each process executes at a nonzero speed but there
+Here we assume that each process executes at a nonzero speed, but there
 is no assumption concerning the relative speed of the \(n\) processes.
 
 There are two approaches to handle critical sections depending on the
@@ -2340,7 +2337,7 @@ kernel:
           kernel mode.
 \end{itemize}
 While the non-preemptive kernel is free of race conditions, it may be
-more repsonsive as there is no risk that a process will run forever.
+more responsive as there is no risk that a process will run forever.
 \subsection{Peterson's Solution}
 Peterson's solution is a two process solution to the critical section
 problem which uses two variables to control access to the critical
@@ -2632,7 +2629,7 @@ while (true)
 }
 \end{minted}
 \subsubsection{The Readers-Writers Problem}
-In this problem, a data set is shared among a number of concurrent
+In this problem, a data set is shared amongst a number of concurrent
 processes, where some processes only read the data, and others can both
 read and write the data. In the following solution, the data set is
 protected by two semaphores:
@@ -2767,7 +2764,7 @@ the following outcomes:
 The increase of software in safety critical systems necessitates the
 proper design and implementation of these systems.
 \subsection{Safety Critical Software}
-Software is not inherently safe or unsafe. However the use of software
+Software is not inherently safe or unsafe. However, the use of software
 in a safety critical system may contribute to an unsafe situation. Such
 software is considered safety critical.
 
@@ -2804,7 +2801,7 @@ In complex systems, accidents typically occur as a result of multiple
 failures. As such, designing a system to be completely safe is
 difficult.\ \textbf{Dependability costs} increase exponentially as
 increasing levels of dependability are required, and therefore a
-comprimise must be made between design cost and dependability.
+compromise must be made between design cost and dependability.
 \subsection{Risk Analysis}
 Failures in safety critical systems can be caused by:
 \begin{itemize}
@@ -2852,7 +2849,7 @@ on risk:
           to an acceptable level.
     \item Non-tolerable risks must be reduced as lot as reasonably
           possible.
-    \item Optimal cost effective safety is achieved when addressed in
+    \item Optimal cost-effective safety is achieved when addressed in
           the entire safety lifecycle.
 \end{itemize}
 IEC 61508 defines three successive tiers of safety assessments:
@@ -2914,7 +2911,7 @@ consists of five main processes:
     \item Software quality assurance
 \end{itemize}
 \subsubsection{Software Planning Process}
-The software planning process determins what needs to be done to
+The software planning process determines what needs to be done to
 produce safe and requirements-based software. It's expected outputs
 are:
 \begin{itemize}
@@ -2957,7 +2954,7 @@ This process outputs:
 \end{itemize}
 \subsubsection{Software Configuration Management Process}
 The software configuration management process is used to establish
-secure and effective configuration control for all artifacts. The
+secure and effective configuration control for all artefacts. The
 following activities may be conducted:
 \begin{itemize}
     \item Identification of configuration items
@@ -3022,7 +3019,7 @@ Nodes can exist in a \textbf{client-server}, \textbf{peer-to-peer}, or
                     supercomputers or graphical processing units
           \end{itemize}
     \item \textbf{Computation speed-up} --- computation that can be
-          partitioned into subcomputations can be distributed among several
+          partitioned into sub-computations can be distributed amongst several
           nodes. If a particular site is overloaded with requests, some
           requests can be moved or rerouted to other lightly loaded sites.
           This is known as \textbf{load balancing} or \textbf{job migration}.
@@ -3058,8 +3055,8 @@ Below are some characteristics of LANs:
 \begin{itemize}
     \item LANs can take multiple forms, such as a bus, ring, or star
           topology.
-    \item LANs provide communication speeds from \qty{1}{Mb.s^{-1}} to
-          \qty{40}{Gb.s^{-1}} when using Ethernet over twisted pair
+    \item LANs provide communication speeds from \qty{1}{M.b.s^{-1}} to
+          \qty{40}{G.b.s^{-1}} when using Ethernet over twisted pair
           copper or optical fibres.
     \item LANs consist of multiple different computers (including,
           workstations, servers, laptops, mobile devices), peripherals
@@ -3323,7 +3320,7 @@ socket programming.
 \end{figure}
 \section{CPU Scheduling}
 CPU scheduling is the basis of multiprogrammed operating systems. By
-switching the CPU among processes, the operating system can make a
+switching the CPU amongst processes, the operating system can make a
 computer more productive. The following sections consider scheduling
 algorithms, and the performance metrics used to evaluate them.
 \subsection{Basic Concepts}
@@ -3347,7 +3344,7 @@ the \textbf{ready queue} to be executed by the CPU.\@ The ready queue
 is a list of processes residing in main memory, waiting to be executed
 by the CPU.\@ The ready queue's implementation depends on the
 scheduling algorithm used.
-\subsubsection{preemptive and Non-preemptive Scheduling}
+\subsubsection{Preemptive and Non-preemptive Scheduling}
 CPU scheduling decisions may take place under the following conditions:
 \begin{enumerate}
     \item When processes switch from the running state to the waiting
@@ -3440,7 +3437,7 @@ length of the next CPU burst is generally not known in advance.
 version of SJF scheduling. When a new process enters the ready queue,
 its CPU burst length is compared to the remaining time of the currently
 running process. If the new process has a shorter CPU burst, the
-currently running process is preempted, and the new process is
+currently running process is pre-empted, and the new process is
 allocated the CPU.\@ If the currently running process has a shorter CPU
 burst remaining, the new process is added to the ready queue.
 
@@ -3461,7 +3458,7 @@ processes from being starved.
 that allocates the CPU to each process for a fixed time interval known
 as a \textbf{time quantum} or \textbf{time slice}. The ready queue is
 treated as a circular queue, such that once the running process has
-exhausted its time quantum, it is preempted, and added to the tail of
+exhausted its time quantum, it is pre-empted, and added to the tail of
 the ready queue. The process at the head of the queue is then allocated
 the CPU for the time quantum. The queue is again treated as a FIFO
 queue.
@@ -3498,7 +3495,7 @@ queues are only serviced when higher priority queues are empty. Note
 that this has the possibility of starvation.
 
 Alternatively, we can time-slice the queues so that each queue is
-allocated a certain amount of CPU time which can be scheduled among its
+allocated a certain amount of CPU time which can be scheduled amongst its
 processes. For example, 80\% of CPU time may be allocated to foreground
 processes, and 20\% to background processes.
 \subsubsection{Multilevel Feedback Queue Scheduling}
@@ -3521,7 +3518,7 @@ following parameters:
     \item The method used to determine when to demote a process to a
           lower-priority queue
     \item The method used to determine which queue a process will enter
-          when that process needs service
+          when that process needs servicing
 \end{itemize}
 An example of a multilevel feedback queue scheduler is shown below:
 \begin{figure}[H]
@@ -3531,18 +3528,18 @@ An example of a multilevel feedback queue scheduler is shown below:
 \end{figure}
 \subsection{Thread Scheduling}
 On most modern operating systems, kernel-level threads are scheduled
-instead of processes. User- level threads are managed by a thread
+instead of processes. User-level threads are managed by a thread
 library and are ultimately mapped to kernel-level threads to be
 executed. On systems implementing the many-to-one and many-to-many
 models, the thread library schedules user-level threads to run on an
 available LWP.\ This scheme is known as \linebreak
 \textbf{process-contention scope} (PCS) as competition for the CPU
-takes place among threads in the same process. To decide which
+takes place amongst threads in the same process. To decide which
 kernel-level thread to schedule onto a CPU, the kernel uses
 \textbf{system-contention scope} (CSC), where competition takes place
-among all threads in the system.
-\subsection{Multi-Processor Systems}
-Multi-processor systems allow for parallel execution of processes using
+amongst all threads in the system.
+\subsection{MultiProcessor Systems}
+Multiprocessor systems allow for parallel execution of processes using
 load sharing, however this increases the complexity of scheduling. The
 term multiprocessor applies to any of the following system
 architectures:
@@ -3580,7 +3577,7 @@ performance and consume less power than multiple single-core
 processors. When scheduling on such systems, processes often spend a
 significant amount of time waiting for data to become available, as
 modern processors operate at much faster speeds than memory. This
-situtation is known as a \textbf{memory stall}. Memory stalls may also
+situation is known as a \textbf{memory stall}. Memory stalls may also
 be the result of a \textbf{cache miss} (accessing data that is not yet
 in the cache).
 \begin{figure}[H]
@@ -3601,7 +3598,7 @@ to another thread while waiting for data.
 On SMP systems, it is important to keep the workload balanced across
 all processors to fully utilise the benefits of having more than one
 processor.\ \textbf{Load balancing} is the process of redistributing
-the workload among the processors.
+the workload amongst the processors.
 
 Load balancing can be implemented in two ways:
 \begin{itemize}
@@ -3635,7 +3632,7 @@ requested is held by other waiting states. The following sections
 discuss how to prevent and detect deadlocks.
 \subsection{System Model}
 A system consists of a finite number of resources to be distributed
-among a number of competing threads. Resources are partitioned into
+amongst a number of competing threads. Resources are partitioned into
 several types, each of which consist of a number of identical
 instances. When a thread requests an instance of a resource type, it
 may receive any of the available instances of that resource type.
@@ -3659,7 +3656,7 @@ A deadlock can arise if four conditions hold simultaneously:
     \item \textbf{No preemption} --- a resource can only be released
           voluntarily by the thread holding it.
     \item \textbf{Circular wait} --- a set of threads must be waiting
-          for resources held by each other in a circular manner:
+          for resources held by each other circularly:
           \(\left\{ T_0,\: T_1,\: \ldots,\: T_n \right\}\) where
           \(T_0\) is waiting for a resource held by \(T_1\), \(T_1\) is
           waiting for a resource held by \(T_2\), and so on, until
@@ -3698,7 +3695,7 @@ the edge is converted to an assignment edge (reversed) instantaneously.
 
 From these definitions, it can be shown that if the graph contains on
 cycles, then no thread is in a deadlock. If the graph contains a cycle,
-then a deadlock may existing one of two possibilities:
+then a deadlock may exist in one of two possibilities:
 \begin{itemize}
     \item if each resource type has exactly one instance, then a cycle
           implies a deadlock.
@@ -3830,7 +3827,7 @@ thread \(T_i\) has finished executing, \(T_{i+1}\) can obtain its
 resources, and so on.
 
 If no such sequence exists, the system is in an \textbf{unsafe state}
-and a deadlock may occur. Therefore to avoid deadlocks, a system must
+and a deadlock may occur. Therefore, to avoid deadlocks, a system must
 never enter an unsafe state.
 \subsubsection{Resource-Allocation-Graph Algorithm}
 In a resource-allocation system with only one instance of each resource
@@ -3859,9 +3856,9 @@ avoidance. This algorithm uses several data structures to encode the
 state of the resource-allocation system. In a system with \(n\) threads
 and \(m\) resource types, the following data structures are used:
 \begin{itemize}
-    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resources type.
+    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resource type.
           \begin{equation*}
-              \text{\textbf{Available}}_j = \text{\textbf{Max Available}}_j - \text{\textbf{Allocation}}_j
+              \text{\textbf{Available}}_j = \text{\textbf{Max Available}}_j - \mathrm{sum}\left( \text{\textbf{Allocation}}_j \right)
           \end{equation*}
     \item \textbf{Max} --- an \(n \times m\) matrix --- the maximum
           demand of each thread.
@@ -3953,7 +3950,7 @@ When multiple instances of each resource type are available, we can use
 data structures similar to the banker's algorithm to detect deadlocks.
 The following data structures are used:
 \begin{itemize}
-    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resources type.
+    \item \textbf{Available} --- a vector of length \(m\) --- the number of available instances of each resource type.
     \item \textbf{Allocation} --- an \(n \times m\) matrix --- the
           number of resources of each type currently allocated to each
           thread.
@@ -4026,7 +4023,7 @@ The order in which processes are aborted may be determined using the following c
     \item How long the processes has computed and how much longer it
           will compute before completing its task
     \item How many and what types of resources the process has used
-          (are the resources simple to preempt)
+          (are the resources simple to pre-empt)
     \item How many more resources the process needs to complete
     \item How many processes will need to be terminated
     \item Whether the process interactive or batch
@@ -4036,15 +4033,14 @@ When preemption is required to eliminate deadlocks, the following
 issues must be considered:
 \begin{enumerate}
     \item Selecting a victim --- what resources and processes are to be
-          preempted. This choice should minimise costs.
-    \item Rollback --- after a thread is preempted, resources must be
+          pre-empted. This choice should minimise costs.
+    \item Rollback --- after a thread is pre-empted, resources must be
           reclaimed from the thread, and the thread must be restarted.
           Often this will require the system to keep track of a safe
           state, so that the process is only rolled back as far as is
           necessary.
     \item Starvation --- the same process may be chosen as the victim,
-          so we must ensure that a process is preempted a small number
-          of times.
+          so we must ensure that a process is pre-empted few times.
 \end{enumerate}
 \section{Main Memory}
 \subsection{Background}
@@ -4215,8 +4211,8 @@ The backing store is a fast disk large enough to accommodate copies of
 all memory images for all users. During swapping, all data structures
 associated with the process must be written to the backing store, so
 that they can be restored when the process is swapped back into memory.
-Because memory is being written to the disk, swapping is a time
-consuming process, and should only used for small processes.
+Because memory is being written to the disk, swapping is a
+time-consuming process, and should only be used for small processes.
 
 The system maintains a ready queue of processes that are ready to
 execute, and swaps processes in to be executed when the CPU is idle.
@@ -4236,9 +4232,9 @@ processes. The OS is usually loaded into low/high memory with the
 interrupt vector and user processes are contained in single contiguous
 sections of memory.
 \subsubsection{Memory Protection}
-To prevent processes from accessing memory outside of their allocated
+To prevent processes from accessing memory outside their allocated
 memory space, relocation and limit registers are used to define bounds
-on the addresses a process may access. Each logical adddress must fall
+on the addresses a process may access. Each logical address must fall
 within the range specified by the limit register, so that the MMU can
 map the logical address dynamically by adding it to the value in the
 relocation register.
@@ -4333,7 +4329,7 @@ boundaries. This leads to \(2^n - \left( s \bmod 2^n \right)\) wasted
 bytes per process.
 
 Statistically, every process will have half a frame of internal
-fragmentation, so smaller page sizes are may be preferred. However,
+fragmentation, so smaller page sizes may be preferred. However,
 smaller page sizes also lead to larger page tables, which must be
 stored in memory. Additionally, I/O is more efficient when a large
 amount of data is transferred at once.
@@ -4346,7 +4342,7 @@ available in memory, so that they can be allocated to the process. Each
 page is loaded into a \textbf{free frame}, and the page-frame pairs are
 added to the page table.
 \subsubsection{Hardware Support}
-The \textbf{page table} is kept in memory, and therefor requires a
+The \textbf{page table} is kept in memory, and therefore requires a
 \textbf{page table base register} (PTBR) to point to the page table's
 location in memory. The \textbf{page-table length register} (PTLR)
 indicates the size of the page table.
@@ -4386,7 +4382,7 @@ every context switch.
 
 The percentage of time a hit occurs is known as the \textbf{hit ratio}
 (\(\alpha\)), and allows us to calculate the \textbf{effective access
-time} (EAT). Given a associative lookup time \(\varepsilon\),
+time} (EAT). Given an associative lookup time \(\varepsilon\),
 \begin{align*}
     \text{EAT} & = \alpha \left( \varepsilon + \text{memory access} \right) + \left( 1 - \alpha \right) \left( \varepsilon + 2\times\text{memory access} \right) \\
                & = \varepsilon + \left( 2 - \alpha \right) \text{memory access}
@@ -4438,7 +4434,7 @@ For 64-bit systems, \textbf{clustered page tables} may be used to refer
 to several pages at once. This may be useful for \textbf{sparse}
 address spaces where memory references are non-contiguous.
 \subsubsection{Inverted Page Tables}
-Rather than having one page table per process and keeping track of all
+Rather than having a single page table per process and keeping track of all
 possible pages, we can track all frames in memory using a single
 \textbf{inverted page table}. This table contains one entry for each
 real page (frame) of memory, and each entry consists of the virtual
@@ -4453,4 +4449,106 @@ To implement shared memory on a system with an inverted page table, only
 one mapping of virtual address to physical address is required, and
 a reference by another process sharing the same memory will result in a
 page fault, and will replace the entry in the inverted page table.
+\section{Protection}
+The processes in an operating system must be protected from another's
+activities. To achieve this, we can use various mechanisms to ensure
+that only processes that have proper authorisation from the operating
+system can operate on files, memory segments, CPU, networking, and
+other resources of a system.
+\subsection{Goals of Protection}
+Protection increases the reliability of a system that makes use of
+shared resources and is connected to insecure communications platforms
+such as the Internet. A system must prevent intentional violations of an
+access restriction by a user, and ensure that each process in a system
+uses resources only in accordance with the system's policies.
+
+The role of protection is to provide a mechanism for the enforcement of
+the policies governing resource use. Some may be fixed in the design
+of a system, while others are formulated by the management of a system.
+Others may be specified by individual users of a system, to protect
+resources they own. A protection system must have the flexibility to
+enforce a variety of policies.
+
+Policies are for resource use vary by application, and apply to both
+the designer of an operating system and an application programmer.
+
+Note that mechanisms determine \textit{how} something will be done;
+policies decide \textit{what} will be done. The separation of mechanism
+and policy is important for flexibility.
+\subsection{Principles of Protection}
+A guiding principle of protection is the \textbf{principle of least
+privilege}, which states that a protection system should grant a
+process only those privileges that are essential to its legitimate
+purpose. A key advantage of this principle is that it limits the damage
+that can result from an accident or error.
+
+When considering privileges, we must consider the grain of protection.
+Rough-grained privilege management is easier to implement, but may
+grant more privileges than are necessary. Fine-grained privilege
+management is more complex, and requires additional overheard, but
+can be more protective.
+\subsection{Domain Structure}
+A computer system can be treated as a collection of processes and
+objects (hardware and software). Each object has a unique name and can
+be accessed through a well-defined set of operations. A process should
+only be allowed to access objects that it has the authority to access.
+In this situation, a process should only access the objects that it
+needs to complete a task, this is known as the \textbf{need-to-know}
+principle.
+
+To facilitate this scheme, a process may operate within a
+\textbf{protection domain}, which specifies the resources that process
+may access. Each domain specifies a set of \textbf{access rights}, which
+consists of a set of operations that may be invoked on an object:
+\begin{equation*}
+    \text{access right} = \langle \text{object name},\: \text{rights set} \rangle
+\end{equation*}
+for example, the domain \(D\) might have the following access rights:
+\begin{equation*}
+    D = \left\{
+        \langle \text{file A},\: \left\{ \text{read},\: \text{write} \right\} \rangle,\:
+        \langle \text{file B},\: \left\{ \text{read} \right\} \rangle,\:
+        \langle \text{file C},\: \left\{ \text{read},\: \text{write},\: \text{execute} \right\} \rangle
+     \right\}
+\end{equation*}
+This association may be either \textbf{static}, if the set of resources
+available to a process is fixed throughout the process's lifetime, or
+\textbf{dynamic}.
+
+When an association is static, the need-to-know principle must be adhered
+to at all stages of a process's lifetime. For example, the process may
+be able to read from and write to a file, but one of these rights may
+only be required for a short period of time. In this case, the process
+should only be granted the required access rights for the required
+period of time.
+
+When an association is dynamic, it can possibly allow \textbf{domain
+switching}, enabling a process to change its access rights during its
+lifetime. This may be used as an alternative to changing the access
+rights of a domain, by instead creating a copy of a domain with the
+required access rights, and switching to this domain when required.
+\subsection{Access Matrix}
+The general model of protection can be viewed abstractly as an
+\textbf{access matrix}. The rows of this matrix represent domains,
+and columns represent objects. Each entry in the matrix consists of a
+list of object rights.
+\subsection{Access Control}
+Protection may also be applied to other aspects of a system. Oracle
+Solaris 10 provides the principle of least privilege through
+\textbf{role-based access control} (RBAC). Privilege is a right to
+execute a system call or use an option in a system call. Privileges can
+be assigned to processes, limiting their access to system resources, or
+they can be assigned to users via \textbf{roles}. In this way, a user
+can be assigned roles, or take a role using a password.
+\section{File Systems}
+The file system is the most visible aspect of an operating system. It
+provides the mechanism for the storage of and access to both data and
+programs on the operating system. The file system consists of two
+distinct parts:
+\begin{itemize}
+    \item a collection of files, each with related data
+    \item a directory structure, which organises and provides
+    information about all files in a system
+\end{itemize}
+
 \end{document}
